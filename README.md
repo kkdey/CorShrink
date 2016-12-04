@@ -1,4 +1,7 @@
 # CorShrink
+
+[![Build Status](https://travis-ci.org/kkdey/CorShrink.svg?branch=master)](https://travis-ci.org/kkdey/CorShrink)
+
 R package for adaptive correlation and covariance matrix shrinkage.
 
 [Kushal K Dey](http://kkdey.github.io/)

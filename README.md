@@ -25,6 +25,8 @@ as in the Adaptive Shrinkage (ash) framework due to Matthew Stephens (2016).
 
 - Model 3: The mixture normal component variances are assumed to have relatively flat shaped     Inverse Gamma distribution. The starting points are determined using Model 2 to remove bias    due to local optima. The mixture proportions again have Dirichlet distribution. This model is   again fitted by Variational EM. 
 
+The package fits these three correlation shrinkage models, and use these to perform covariance shrinkage and project the data from the original covariance matrix to the shrunk covariance matrix space as well.
+
 ## Installation and Loading 
 
 This package will soon have an official release on CRAN. You can currently install the working version from Github.

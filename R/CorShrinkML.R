@@ -1,18 +1,26 @@
-#' @title Adaptive shrinkage of a correlation matrix
+#' @title Adaptive shrinkage of a correlation matrix using ML estimation
 #'
-#' @description This function performs adaptive shrinkage of a correlation matrix
+#' @description This function performs adaptive shrinkage of a sample correlation matrix using a
+#' mixture normal prior on Fisher z-scores with fixed grid variances and the MLEs of
+#' mixture proportions are calculated using the EM algorithm.
 #'
-#' @param cormat The estimated sample correlation matrix
+#'
+#' @param cormat The sample correlation matrix
 #' @param nsamples The number of samples over which the correlation matrix is estimated.
 #' @param image if TRUE, plots an image of the shrunk and non-shrunk correlation matrices
 #' @param tol The tolerance to check the difference between ash-cor only and ash-cor PD matrices.
-#' @return Returns a shrunk version of the sample correlation matrix (the output is also a correlation matrix)
+#' @return Returns a shrunk version of the sample correlation matrix
+#'         (the output is also a correlation matrix)
 #'
+#' @references  False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://dx.doi.org/10.1101/038216
 #' @keywords adaptive shrinkage, correlation
+#' @importFrom reshape2 melt dcast
+#' @import Matrix
+#' @import ashr
 #' @export
 
 
-ash_cor <- function(cormat, nsamples, image=FALSE, tol=1e-06)
+CorShrinkML <- function(cormat, nsamples, image=FALSE, tol=1e-06)
 {
   cor_table <- reshape2::melt(cormat);
   cor_table_non_diag <- cor_table[which(cor_table[,1] !=cor_table[,2]),];

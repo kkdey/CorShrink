@@ -1,9 +1,38 @@
 Package: CorShrink
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
-LazyData: TRUE
+Title: Adaptive Shrinkage of Correlation and Covariance Matrix using CorShrink
+Version: 0.99.0
+Date: 2016-03-12
+Author: person("Kushal", "Dey", email = "kkdey@uchicago.edu", role =
+    c("aut","cre"))
+Maintainer: Kushal Dey <kkdey@uchicago.edu>
+Description: Performs adaptive shrinkage on correlation and covariance matrices
+    byfitting mixture model priors on Fisher Z-scores, that includes the ash prior
+    (Stephens 2016) and generalizations of it.
+Depends:
+    R (>= 3.2)
+Imports:
+    ashr,
+    SQUAREM,
+    corpcor,
+    glasso,
+    reshape2,
+    Matrix,
+    network,
+    igraph,
+    vegan,
+    limma
+Suggests:
+    knitr,
+    BiocStyle,
+    Biobase,
+    roxygen2,
+    RColorBrewer,
+    devtools,
+    xtable
+URL: https://github.com/kkdey/CorShrink
+License: GPL (>= 2)
+LazyData: true
+Encoding: UTF-8
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1

@@ -28,6 +28,6 @@ ProjectDataCorShrink <- function(data, nsamples, nullweight=10, null.comp=1,
   cov_sample <- cov(data);
   cov_shrunk <- CovShrink(data, nsamples, nullweight = nullweight,
                           null.comp = null.comp, type = type)
-  projected_dat <- expm::sqrtm(cov_shrunk)%*% expm::sqrtm(solve(cov_sample)) %*% dat
+  projected_dat <- expm::sqrtm(cov_shrunk)%*% expm::sqrtm(solve(cov_sample)) %*% data
   return(projected_dat)
 }

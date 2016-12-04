@@ -21,7 +21,8 @@ Imports:
     network,
     igraph,
     vegan,
-    limma
+    limma,
+    expm
 Suggests:
     knitr,
     BiocStyle,

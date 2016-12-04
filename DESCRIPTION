@@ -22,7 +22,9 @@ Imports:
     igraph,
     vegan,
     limma,
-    expm
+    expm,
+    clusterGeneration,
+    mvtnorm
 Suggests:
     knitr,
     BiocStyle,

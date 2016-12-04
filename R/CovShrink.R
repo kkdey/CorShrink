@@ -34,7 +34,8 @@ CovShrink <- function(data, nsamples, nullweight=10, null.comp=1,
     stop("the type provided must be one of ML, VEM and VEM2")
   }
 
-  diags <- eigen(cov_sample)$values
+  diags <- diag(cov_sample)
+  diags[diags < 0] = 0
   cov.shrunk <- diag(sqrt(diags))%*%cor.shrunk%*%diag(sqrt(diags))
   return(cov.shrunk)
 }

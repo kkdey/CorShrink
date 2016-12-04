@@ -11,62 +11,69 @@ plot(sort(pop_cov$eigen, decreasing = TRUE), type="l")
 generate_sample <- mvtnorm::rmvnorm(nsamples, rep(0, dim), pop_cov$Sigma);
 cov_sample <- cov(generate_sample)
 eigen_sample <- eigen(cov_sample, only.values = TRUE)
-plot(sort(as.numeric(eigen_sample$values), decreasing = TRUE), type="l")
-cor_sample <- cov2cor(cov_sample)
-
-
-cormat <- cor_sample
 nsamples <- nsamples
 
-ash_cor_sample <- ash_cor(cor_sample, nsamples)$ash_cor_PD;
-ash_cov_sample <- diag(sqrt(diag(cov_sample)))%*%ash_cor_sample%*%diag(sqrt(diag(cov_sample)))
-eigen_ash_sample <- eigen(ash_cov_sample, only.values = TRUE)
+cov_sample_ML <-  CorShrink::CovShrink(generate_sample, nsamples, type="ML")
+cov_sample_VEM <-  CorShrink::CovShrink(generate_sample, nsamples, type="VEM")
+cov_sample_VEM2 <-  CorShrink::CovShrink(generate_sample, nsamples, type="VEM2")
+strimmer_sample <- corpcor::cov.shrink(generate_sample)
+glasso_sample_005 <- glasso::glasso(cov_sample, rho = 0.05)
+glasso_sample_05 <- glasso::glasso(cov_sample, rho = 0.5)
+glasso_sample_1 <- glasso::glasso(cov_sample, rho = 1)
 
-ash_cor_sample2 <- ash_cor2(cor_sample, nsamples)$ash_cor_PD;
-ash_cov_sample2 <- diag(sqrt(diag(cov_sample)))%*%ash_cor_sample2%*%diag(sqrt(diag(cov_sample)))
-eigen_ash_sample2 <- eigen(ash_cov_sample2, only.values = TRUE)
 
-ash_cor_sample3 <- ash_cor3(cor_sample, nsamples)$ash_cor_PD;
-ash_cov_sample3 <- diag(sqrt(diag(cov_sample)))%*%ash_cor_sample3%*%diag(sqrt(diag(cov_sample)))
-eigen_ash_sample3 <- eigen(ash_cov_sample3, only.values = TRUE)
-
-ash_cov_master_sample <- ash_cov_master(generate_sample);
-shrinkage <- ash_cov_master_sample$shrink_intensity
-ash_cov_master <- ash_cov_master_sample$ash_cov_ledoit_wolf;
-eigen_ash_cov_master <- eigen(ash_cov_master);
+eigen_sample_ML <- eigen(cov_sample_ML, only.values = TRUE)
+eigen_sample_VEM <- eigen(cov_sample_VEM, only.values = TRUE)
+eigen_sample_VEM2 <- eigen(cov_sample_VEM2, only.values = TRUE)
+eigen_strimmer <- eigen(strimmer_sample, only.values = TRUE)
+eigen_glasso_005 <- eigen(glasso_sample_005$w, only.values = TRUE)
+eigen_glasso_05 <- eigen(glasso_sample_05$w, only.values = TRUE)
+eigen_glasso_1 <- eigen(glasso_sample_1$w, only.values = TRUE)
+eigen_sample <- eigen(cov_sample, only.values = TRUE)
 
 
 library(ggplot2)
 
 eigendata <- data.frame(
   eigen_order = 1:dim,
-  ash_cov2 = sort(log(as.numeric(eigen_ash_sample2$values)+1),  decreasing=TRUE),
-  ash_cov3 = sort(log(as.numeric(eigen_ash_sample3$values)+1),  decreasing=TRUE),
-  ash_cov = sort(log(as.numeric(eigen_ash_sample$values)+1),
+  covshrink.ML = sort(log(as.numeric(eigen_sample_ML$values)+1),  decreasing=TRUE),
+  covshrink.VEM = sort(log(as.numeric(eigen_sample_VEM$values)+1),  decreasing=TRUE),
+  covshrink.VEM2 = sort(log(as.numeric(eigen_sample_VEM2$values)+1),
                  decreasing = TRUE),
+  covshrink.strimmer = sort(log(as.numeric(eigen_strimmer$values)+1),  decreasing=TRUE),
+  glasso.cov.005 = sort(log(as.numeric(eigen_glasso_005$values)+1),  decreasing=TRUE),
+  glasso.cov.05 = sort(log(as.numeric(eigen_glasso_05$values)+1),  decreasing=TRUE),
+  glasso.cov.1 = sort(log(as.numeric(eigen_glasso_1$values)+1),  decreasing=TRUE),
   sample_cov = sort(log(as.numeric(eigen_sample$values)+1),
                     decreasing=TRUE),
-#  shafer_strimmer_cov= sort(log(as.numeric(shafer_eigen$values)+1),                   decreasing = TRUE),
   pop_cov = sort(log(as.numeric(pop_cov$eigen)+1), decreasing=TRUE))
 
 colnames(eigendata) <- c("eigenorder",
-                         "ash_cov2",
-                         "ash_cov3",
-                         "ash_cov",
-                         "sample_cov",
-                         "pop_cov")
+                         "covshrinkML",
+                         "covshrinkVEM",
+                         "covshrinkVEM2",
+                         "cov.strimmer",
+                         "cov.glasso.005",
+                         "cov.glasso.05",
+                         "cov.glasso.1",
+                         "sample.cov",
+                         "pop.cov")
 
 library(ggplot2)
 ggplot(eigendata, aes(eigenorder)) +
-  geom_line(aes(y = ash_cov2, colour = "ash cov2")) +
-  geom_line(aes(y = ash_cov3, colour = "ash cov3")) +
-  geom_line(aes(y = ash_cov, colour = "ash cov"))+
-  geom_line(aes(y = sample_cov, colour = "sample cov"))+
-  geom_line(aes(y = pop_cov, colour = "pop cov"))+
+  geom_line(aes(y = covshrinkML, colour = "covshrinkML")) +
+  geom_line(aes(y = covshrinkVEM, colour = "covshrinkVEM")) +
+  geom_line(aes(y = covshrinkVEM2, colour = "covshrinkVEM2"))+
+  geom_line(aes(y = cov.strimmer, colour = "cov.strimmer"))+
+  geom_line(aes(y = cov.glasso.005, colour = "cov.glasso.rho.0.05"))+
+  geom_line(aes(y = cov.glasso.05, colour = "cov.glasso.rho.0.5"))+
+  geom_line(aes(y = cov.glasso.1, colour = "cov.glasso.rho.1"))+
+  geom_line(aes(y = sample.cov, colour = "sample.cov"))+
+  geom_line(aes(y = pop.cov, colour = "pop.cov"))+
   xlab("Order of eigenvalues (sorted)")+
   ylab("log(Eigenvalues + 1)")+
-  scale_colour_manual(values=c("blue", "grey", "red", "green", "orange"))+
-  ggtitle(paste0("Eigenvalues distribution n/p=", round(nsamples/dim, 4),"\n for different shrinkage methods"))+
+  scale_colour_manual(values=c("blue", "purple", "magenta", "pink", "orange", "red", "green", "yellow", "black", "grey"))+
+  ggtitle(paste0("Eigenvalues distribution n/p=", round(nsamples/dim, 4)," for different shrinkage methods"))+
   theme(plot.title = element_text(lineheight=.8, face="bold"))
 
 

@@ -19,7 +19,7 @@
 #' @importFrom reshape2 melt dcast
 #' @import Matrix
 #' @import ashr
-#' @import expm
+#' @importFrom expm sqrtm
 #' @export
 #'
 

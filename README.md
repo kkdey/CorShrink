@@ -147,7 +147,7 @@ ggplot(eigendata, aes(eigenorder)) +
   theme(plot.title = element_text(lineheight=.8, face="bold"))
 ```
 
-<img src="vignettes/eigenvalue_distribution.png" alt="Structure Plot" height="800" width="600">
+<img src="vignettes/eigenvalue_distribution.png" alt="Structure Plot" height="650" width="700">
 
 
 

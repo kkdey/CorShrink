@@ -1,0 +1,43 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{mathptmx}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[margin=2cm]{geometry}
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+\usepackage{nameref, hyperref}
+\usepackage{float}
+\usepackage{cite}
+\setlength{\parskip}{1em}
+\bibliographystyle{plos2015}
+
+
+\begin{document}
+
+\begin{flushleft}
+{\Large
+\textbf\newline{\textit{CorShrink}: A random multi-target adaptive shrinkage method for correlation matrix estimation} 
+}
+
+Kushal K Dey \\
+University of Chicago, Dept. of Statistics, \\
+5220 S Kenwood Ave, \\
+Chicago, IL, 60615 \\
+\end{flushleft}
+
+\begin{center}
+\textbf{Abstract} \\ \vspace{0.2 in}
+\end{center}
+\begin{flushleft}
+{\small Shrinkage estimation of correlation matrices provides well conditioned and more accurate estimators of the population correlation matrix, specially in `small n, large p` contexts. In this paper, we propose a multi target shrinkage method called \textit{CorShrink} where the targets are noisy versions of identity matrix and which learns adaptively the optimal amount of shrinkage from the data. We compare the performance of our method under different $(n,p)$ scenarios with respect to the standard approaches and also provides a demonstration of the performance of our approach on a single cell RNA-seq data from mouse pre-implantation and we show the method indeed extracts useful biological features from the data. The methods are implemented in a Github R package \textbf{CorShrink}. } \\ \vspace{0.2 in}
+
+\textbf{Keywords}: shrinkage, covariance matrix estimation, variational EM, single cell RNA-seq
+\end{flushleft}
+
+\normalsize
+\input{introduction.tex}
+\input{methods.tex}
+\input{results.tex}
+\end{document}

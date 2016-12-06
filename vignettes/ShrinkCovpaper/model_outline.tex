@@ -1,0 +1,178 @@
+\documentclass[12pt]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+\usepackage{float}
+
+
+\begin{document}
+
+\section{Outline}
+
+\begin{itemize}
+
+\item \textbf{Coding} Run the codes for the variational models 1 and 2 using chunks from Matthew's ash code 
+\item \textbf{Results} : Simulation study (show the comparative performance of this method with the Strimmer approach). compare the largest eigenvalues and the trends for different choices of $n/p$. (Eigenvalues comparison plots + Eigenvector distance plot + a table of distance between original and the projected from the various approaches)
+\item \textbf{Results}: Real data application (Deng et al correlation network)- before and after shrinkage. (If possible, we talk briefly about causation networks too). First do PCA to scale down the data to a small number of dimensions and then use this method on the samples to build the correlation network.
+\item \textbf{Results}: Tree construction on the samples along the developmental phases by applying PCA on the S matrix and by applying PCA on the shrunken S matrix. 
+\item \textbf{Discussion}: How this can be used as part of linear regression framework.  
+\item \textbf{Discussion}: Why variational framework was used (size of the data and speed of computation), alternate versions based on MCMC can also be recommended when the number of features to handle is small.
+\item \textbf{Discussion}: Other types of shrinkage methods that can be used (Global local shrinkage priors etc etc). Discuss the flexibility of the prior chosen.
+\item \textbf{Introduction}: Depends on what results we get, will be frame accordingly 
+
+\end{itemize}
+
+
+
+\section{Correlation Matrix Shrinkage Model}
+
+Let $X_{N \times J}$ be a data matrix where $N$ denotes the number of samples and $J$ denotes the number of features. Let $W =  ((\rho_{ij}))_{i, j = 1,2, \cdots, J} $ denote  the population correlation matrix 
+
+\begin{equation}
+W = E \left (X_{n *}  X_{n *}^{T} \right)  \forall n
+\end{equation}
+
+Let us denote the sample correlation matrix by $R = ((r_{ij}))_{i, j = 1,2, \cdots, J} $ where
+
+$$ r_{ij} = \frac{s_{ij}}{\sqrt{s_{ii} s_{jj}}} $$
+
+where $s_{ij}$ be the sample covariance between the vectors $x_{*,i}$ and $x_{*,j}$, namely
+
+$$  s_{ij} = \frac{1}{n} \sum_{n=1}^{N} \left ( x_{ni} - \bar{x}_{i} \right ) \left ( x_{nj} - \bar{x}_{j} \right ) $$
+$$  s_{ii} = \frac{1}{n} \sum_{n=1}^{N} \left ( x_{ni} - \bar{x}_{i} \right )^2 $$
+
+The sample correlation matrix $R$ is widely used in various applied domains of statistics as an approximation of the unknown $W$ and in cases where $ n >> p $, the approximation works well. However, in recent times, we come across many example applications stemming from genetics, text mining, signal processing and many other applications, where $ n << p$. In  such cases, the sample correlation matrix no longer performs well as an estimate of the population correlation matrix. The biggest constraint for the sample correlation matrix is that it has rank $n$, which may be way smaller than the rank of the population correlation matrix. To solve this problem, shrinkage methods have been proposed in the literature to shrink the sample correlation matrix to the population correlation matrix. In this paper, we propose adaptive shrinkage techniques to shrink the sample correlation matrix to the population correlation matrix. 
+
+We propose the following model.
+
+For any two features $i$ and $j$ with $ i < j$ , we define a binary size K latent variable vector $Z_{ij \star}$ 
+
+$$  Pr \left [ Z_{ijk} = 1  \right ] = \pi_{k}    \hspace{1 in}  j < i $$
+
+$$ Pr \left [ Z | \pi \right ] = \prod_{i=1}^{J} \prod_{j < i} \prod_{k=1}^{K} \pi_{k}^{Z_{ijk}}  $$
+
+We define a Dirichlet distribution prior for the parameter $\pi$. 
+
+$$ Pr \left ( \pi | \alpha \right )   \propto \prod_{k=1}^{K} \pi_{k}^{\alpha_{k} - 1}  $$
+
+We define  latent variables $\rho_{ij}$, such that
+
+$$ Pr \left ( \rho |  Z, \pi  \right )  \propto \prod_{i=1}^{J} \prod_{j < i} \prod_{k=1}^{K} \left [ N \left (\rho_{ij} : 0, \sigma^2_{k} \right ) \right ]^{Z_{ijk}}  $$
+
+Then we define 
+
+$$ Pr \left (\hat{\rho} | \rho \right ) = \prod_{i=1}^{J} \prod_{j < i } N \left (\hat{\rho}_{ij} | \rho_{ij}, s^2_{ij} \right)  $$
+
+where $\hat{rho}_{ij}$ are the Fisher's z-transform of the sample correlations $r_{ij}$ given by 
+
+$$  \hat{\rho}_{ij} = \frac{1}{2} \log \left ( \frac{1+r_{ij}}{1- r_{ij}} \right )  $$
+
+The model implies that we shrink the $ \hat{\rho}_{ij}$ to $0$ but the amount of shrinkage is decided globally by $s^2_{ij}$ and locally by the posterior distribution of $Z_{ijk} | \hat{\rho_{ij}} $ and the choices of the $\sigma_{k}$. We propose two different prior assumptions on the $\sigma_{k}$.
+
+
+$$ Pr \left ( \hat{\rho} |  Z, \pi  \right )  \propto \prod_{i=1}^{J} \prod_{j < i} \prod_{k=1}^{K} \left [ N \left (\hat{\rho}_{ij} : 0, \sigma^2_{k} + s^{2}_{ij} \right ) \right ]^{Z_{ijk}}  $$
+
+This reduces the problem to a single latent variable $Z$. The parameters of the model are $\pi$ and $\sigma_{k}$. We present two approaches, one with a fixed grid of user defined values for $\sigma_{k}$ and the other where we have a relatively flat prior on the $\sigma_{k}$. 
+
+The Fisher's z-transform is a variance stabilizing transform and if all the samples are independent, for $n$ large, the asymptotic variance of $\hat{\rho}_{ij}$  would be equal to $ s^2_{ij} = s^2 = \frac{1}{n-3}$ for all $i$ and $j$. We define a refined parameter 
+
+$$ \xi_{k}= \sigma^2_{k} + s^2 = \sigma^2_{k} + \frac{1}{n-3}  $$
+
+
+\begin{itemize}
+
+\item \textbf{Model 1}:  $\sigma_{k}$ or $\xi_{k}$ are fixed apriori, usually uniformly placed on a grid of values. Here we take the grid as in the adaptive shrinkage framework proposed in Stephens 2016 (ashr paper).
+
+\item \textbf{Model 2}: We introduce an additional layer of randomness by assuming a distribution on $\xi_{k}$. For the sake of technical advantage we assume an Inverse-Gamma distribution on $\xi_{k}$, and we choose the prior paramaters of the Inverse Gamma distribution such that it is very flat and allows for a wide range of possible values of $\xi_{k}$ and hence $\sigma_{k}$. It must be emphasized here that $\xi_{k}$'s are bounded below by $\frac{1}{n-3}$ while an Inverse gamma distribution has support from $0$ to $\infty$. However we consider $n$ to be moderately large, so $\frac{1}{n-3}$ would be a small number, which together with the flat shape of the inverse gamma prior will nullify the effect of the lower bound.
+
+
+
+\end{itemize}
+
+
+For model inference, we use a Variational EM algorithm. Let us consider the complete probability distribution involving the data, latent variables, parameters etc .
+
+
+$$  p (\hat{\rho}, Z, \pi, \xi ) = p (\hat{\rho} | Z, \xi, \pi) p (Z | \pi) p(\pi) p (\xi)  $$
+
+$$  \log p (\hat{\rho}, Z, \pi, \xi ) = \log p (\hat{\rho} | Z, \xi, \pi) + \log p (Z | \pi) + \log p(\pi) + \log p(\xi) $$
+
+We consider the mean field variational distribution over the latent variable $Z$ and the parameters $\pi$ and $\sigma$ are given by 
+
+$$  q(Z, \pi, \xi) = q(Z) q(\pi) \prod_{k=1}^{K} q(\xi_{k})   $$
+
+where $ \xi = \left (\xi_1, \xi_2, \cdots, \xi_K \right ) $.
+
+\begin{align}
+\log q^{\star} (\pi)  & = E_{Z, \xi} \left [   \log p (\hat{\rho}, Z, \pi, \xi ) \right ]   \\
+			    & = E_{Z} \left [ \sum_{k=1}^{K} \left (\alpha_{k} - 1\right) \log (\pi_k) + \sum_{i=1}^{J} \sum_{j < i} \sum_{k=1}^{K} z_{ijk} \log (\pi_{k} ) \right ]  + const. \\
+			    & =  \left [ \sum_{k=1}^{K} \left (\alpha_{k} - 1\right) \log (\pi_k) +  \sum_{i=1}^{J} \sum_{j < i}  \sum_{k=1}^{K} E_{Z} (z_{ijk}) \log (\pi_{k}) \right ] + const \\
+			    & = \left [ \sum_{k=1}^{K} \left (\alpha_{k} - 1\right) \log (\pi_k) +  \sum_{i=1}^{J} \sum_{j < i} \sum_{k=1}^{K} \delta_{ijk} \log (\pi_{k}) \right ]  \\
+			    & = \sum_{k=1}^{K} \left [   \left (\alpha_{k} - 1\right)  + \sum_{i=1}^{J} \sum_{j < i}  \delta_{ijk} \right]\log (\pi_{k})  \\
+\end{align}
+
+
+So, we get 
+
+$$  \pi \sim Dir \left (   \pi | \beta_1, \beta_2, \cdots, \beta_{K} \right ) $$
+
+where  $ \beta_{k} = \alpha_{k} + \sum_{i=1}^{J} \sum_{j < i} \delta_{ijk}$.  Now we determine the variational distribution of the latent variable $Z$. 
+
+\begin{align}
+\log q^{\star} (Z)  & = E_{\pi, \xi} \left [  \log p ( \hat{\rho}, Z, \pi, \xi ) \right ]   \\
+			  & = E_{\pi, \xi} \left [   \log p(Z | \pi) +  \log p (\hat{\rho} | Z, \xi, \pi) \right ] \\
+			  & = E_{\pi, \xi} \left [  \sum_{i=1}^{J} \sum_{j < i} \sum_{k=1}^{K} z_{ijk} \log (\pi_{k} ) + \sum_{i=1}^{J} \sum_{j < i} \sum_{k=1}^{K} z_{ijk} \left [   - \log ( \xi_{k} )  - 0.5 \log (2 \pi) - \frac{\hat{\rho}^2_{ij}}{2 \xi_{k}} \right ]  \right]  \\
+			  & =  \sum_{i=1}^{J} \sum_{j < i}  \sum_{k=1}^{K} z_{ijk} E_{\pi} \left (  \log (\pi_{k}) \right)  + \sum_{i=1}^{J} \sum_{j < i}  \sum_{k=1}^{K} z_{ijk}  \left [ \frac{1}{2}  E_{\xi} \left [ \log \frac{1}{\xi_{k}} \right] - \frac{\hat{\rho}^2_{ij}}{2}  E_{\xi} \left [ \frac{1}{\xi} \right ] \right] \\
+\end{align}
+
+If $\xi_{k} \sim Inv-Gamma(a,b)$, then $\frac{1}{\xi_{k}} \sim Gamma(a,b)$, and it can be shown that 
+
+$$  E_{\xi_{k}} \left [ \log \frac{1}{\xi_{k}} \right]  =  E_{U} \left [ \log (U) \right ] $$
+
+where $ U \sim Gamma(a,b)$. It can be checked that 
+
+$$  E_{U} \left [ \log (U) \right ]  = - \log (b) + \psi (a)  $$
+
+$$  E_{\xi_{k}} \left [ \log \frac{1}{\xi_{k}} \right]  = - \log (\nu_{2k}) + \psi(\nu_{1k}) $$
+
+$$  E_{\xi_{k}} \left [ \frac{1}{\xi_{k}} \right ]  = \frac{\nu_{1k}}{\nu_{2k}} $$
+
+$$ E_{\pi} \left (  \log (\pi_{k}) \right)  = \psi (\beta_{k}) - \psi (\sum_{l=1}^{K} \beta_{l} ) $$
+
+
+$$ \log q^{\star} (Z) \propto \sum_{i=1}^{J} \sum_{j < i}  \sum_{k=1}^{K} z_{ijk} \left \{ \psi (\beta_{k}) - \psi (\sum_{l=1}^{K} \beta_{l} ) + 0.5 \times ( \psi(\nu_{1k}) - \log (\nu_{2k}) )-  \frac{\hat{\rho}^2_{ij}}{2} \frac{\nu_{1k}}{\nu_{2k}}  \right \}  $$
+
+$$  q^{\star}(Z) = \prod_{i=1}^{J} \prod_{j < i} \prod_{k=1}^{K} \delta_{ijk}^{Z_{ijk}}  $$
+
+where 
+
+$$ \delta_{ijk} \propto \exp \left (   \left \{ \psi (\beta_{k}) - \psi (\sum_{l=1}^{K} \beta_{l} ) + 0.5 \times ( \psi(\nu_{1k}) - \log (\nu_{2k}) ) -  \frac{\hat{\rho}^2_{ij}}{2} \frac{\nu_{1k}}{\nu_{2k}} \right \}  \right ) $$
+
+
+Finally we derive the variational distribution for $\xi_{k}$. In the mean field definition, we assume that the variational distribution of all the $\xi_{k}$ are independent.
+
+\begin{align}
+\log q^{\star} \left ( \xi_{k} \right ) & = E_{Z, \pi, \xi_{\neq k} } \left [  \log p ( \hat{\rho}, Z, \pi, \sigma^2 ) \right ]   \\
+				& = E_{Z, \pi, \xi_{\neq k} } \left [  \log p (\hat{\rho} | Z, \sigma, \pi) + \log p(\sigma^2 )  \right ] \\
+				& =  - \sum_{i=1}^{J} \sum_{j < i}  E_{Z} (Z_{ijk}) \left \{ 0.5* \log (\xi_{k}) + \frac{\hat{\rho_{ij}}^2}{2 \xi_{k}} \right \}  - (a+1) log (\xi_{k}) - \frac{b}{\xi_{k}} \\
+				& =  -  log (\xi_{k}) \left \{  (a+1) +  0.5 \times \sum_{i=1}^{J} \sum_{j < i}  \delta_{ijk} \right \}  -   \frac{  0.5 \times \sum_{i=1}^{J} \sum_{j < i} \delta_{ijk} \hat{\rho}^2_{ij} + b}{ \xi_{k}} \\
+\end{align}
+				
+So, we get 
+
+$$ q^{\star}(\xi_{k})  \sim Inv-Gamma \left (  a +  0.5 \times \sum_{i=1}^{J} \sum_{j < i}  \delta_{ijk}, 0.5 \times \sum_{i=1}^{J} \sum_{j < i}  \delta_{ijk} \hat{\rho}^2_{nj} + b \right ) $$
+
+$$ \nu_{1k} = a +  0.5 \times \sum_{i=1}^{J} \sum_{j < i}  \delta_{ijk} $$
+$$ \nu_{2k} = 0.5 \times \sum_{i=1}^{J} \sum_{j < i}  \delta_{ijk} \hat{\rho}^2_{nj} + b $$
+
+
+
+
+
+
+
+\end{document}

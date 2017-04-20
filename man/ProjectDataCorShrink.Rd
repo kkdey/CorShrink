@@ -34,4 +34,3 @@ False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://
 \keyword{adaptive}
 \keyword{correlation}
 \keyword{shrinkage,}
-

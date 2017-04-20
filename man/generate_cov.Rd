@@ -18,4 +18,3 @@ Wrapper for genPositiveDefMat function in clusterGeneration package to generate 
 \keyword{covariance}
 \keyword{eigenvalues}
 \keyword{matrix,}
-

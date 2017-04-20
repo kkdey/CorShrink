@@ -4,21 +4,22 @@
 \alias{CorShrinkVEM}
 \title{Adaptive shrinkage of a correlation matrix with Variational EM on the mixture proportions}
 \usage{
-CorShrinkVEM(cormat, nsamples, image = FALSE, tol = 1e-06,
-  nullweight = 10, null.comp = 1)
+CorShrinkVEM(cormat, nsamples, sd_boot = FALSE, cor_transform_sd_vec = NULL,
+  nullweight = 10, null.comp = 1, thresh_up = 0.999,
+  thresh_down = 0.001, image = FALSE, tol = 1e-06)
 }
 \arguments{
 \item{cormat}{The sample correlation matrix}
 
 \item{nsamples}{The number of samples over which the correlation matrix is estimated.}
 
-\item{image}{if TRUE, plots an image of the shrunk and non-shrunk correlation matrices}
-
-\item{tol}{The tolerance to check the difference between ash-cor only and ash-cor PD matrices.}
-
 \item{nullweight}{The weight of the null component of the ash prior.}
 
 \item{null.comp}{The number of null components. Default is 1.}
+
+\item{image}{if TRUE, plots an image of the shrunk and non-shrunk correlation matrices}
+
+\item{tol}{The tolerance to check the difference between ash-cor only and ash-cor PD matrices.}
 }
 \value{
 Returns a shrunk version of the sample correlation matrix (the output is also a correlation matrix)
@@ -34,4 +35,3 @@ False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://
 \keyword{adaptive}
 \keyword{correlation}
 \keyword{shrinkage,}
-

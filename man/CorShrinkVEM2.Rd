@@ -32,4 +32,3 @@ null component. The model is estimated using Variational EM.
 \keyword{adaptive}
 \keyword{correlation}
 \keyword{shrinkage,}
-

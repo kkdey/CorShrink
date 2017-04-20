@@ -4,19 +4,20 @@
 \alias{CovShrink}
 \title{Adaptive shrinkage of a covariance matrix through shrinking of correlations.}
 \usage{
-CovShrink(data, nsamples, nullweight = 10, null.comp = 1, type = c("ML",
-  "VEM", "VEM2"))
+CovShrink(data, nsamples, sd_boot = FALSE, type = c("ML", "VEM", "VEM2"),
+  nboot = 50, nullweight = 10, null.comp = 1, thresh_up = 0.999,
+  thresh_down = 0.001, tol = 1e-06)
 }
 \arguments{
 \item{data}{The samples by features data matrix.}
 
 \item{nsamples}{The number of samples used for estimating correlation matrix.}
 
+\item{type}{The type of adaptive correlation matrix shrinkage to be used.}
+
 \item{nullweight}{The weight on the null component for the mixture normal prior used. Defaults to 10.}
 
 \item{null.comp}{The number of null components chosen. Defaults to 1.}
-
-\item{type}{The type of adaptive correlation matrix shrinkage to be used.}
 }
 \value{
 Returns a shrunk version of the sample covariance matrix (the output is also a covariance matrix)
@@ -32,4 +33,3 @@ False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://
 \keyword{adaptive}
 \keyword{correlation}
 \keyword{shrinkage,}
-

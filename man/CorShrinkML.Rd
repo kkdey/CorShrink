@@ -4,12 +4,18 @@
 \alias{CorShrinkML}
 \title{Adaptive shrinkage of a correlation matrix using ML estimation}
 \usage{
-CorShrinkML(cormat, nsamples, image = FALSE, tol = 1e-06)
+CorShrinkML(cormat, nsamples, sd_boot = FALSE, cor_transform_sd_vec = NULL,
+  thresh_up = 0.999, thresh_down = 0.001, image = FALSE, tol = 1e-06)
 }
 \arguments{
 \item{cormat}{The sample correlation matrix}
 
 \item{nsamples}{The number of samples over which the correlation matrix is estimated.}
+
+\item{sd_boot}{Boolean variable indicating if bootstrap sd to be used or not.}
+
+\item{cor_transform_sd_vec}{If \code{sd_boot} is not NULL, the bootstrap standard errors
+need to be provided. These standard errors can be obtained from \code{bootcorSE_calc()} function.}
 
 \item{image}{if TRUE, plots an image of the shrunk and non-shrunk correlation matrices}
 
@@ -30,4 +36,3 @@ False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://
 \keyword{adaptive}
 \keyword{correlation}
 \keyword{shrinkage,}
-

@@ -19,15 +19,30 @@
 #' @import ashr
 #' @export
 
-CorShrinkVEM <- function(cormat, nsamples, image=FALSE, tol=1e-06,
-                     nullweight = 10, null.comp =1){
+CorShrinkVEM <- function(cormat, nsamples, sd_boot = FALSE,
+                          cor_transform_sd_vec = NULL,
+                          nullweight = 10, null.comp =1, thresh_up = 0.999,
+                          thresh_down = 0.001, image=FALSE, tol=1e-06){
 
   cor_table <- reshape2::melt(cormat);
   cor_table_non_diag <- cor_table[which(cor_table[,1] !=cor_table[,2]),];
+
   cor_table_non_diag.val <- cor_table_non_diag[,3];
-  cor_table_non_diag.val[which(cor_table_non_diag.val==1)]=(1- 1e-7);
+  cor_table_non_diag.val[which(cor_table_non_diag.val >= thresh_up)]= thresh_up;
+  cor_table_non_diag.val[which(cor_table_non_diag.val <= thresh_down)]= thresh_down;
+
   cor_transform_mean_vec=0.5*log((1+cor_table_non_diag.val)/(1-cor_table_non_diag.val))
-  cor_transform_sd_vec=rep(sqrt(1/(nsamples-3)), dim(cor_table_non_diag)[1]);
+
+  if(!sd_boot){
+    cor_transform_sd_vec=rep(sqrt(1/(nsamples-3)), dim(cor_table_non_diag)[1]);
+  }else{
+    if(is.null(cor_transform_sd_vec)){
+      stop("if sd_boot is not NULL, the user needs to provide a cor trasform sd vector")
+    }
+    cor_transform_sd_vec = cor_transform_sd_vec
+  }
+
+ # cor_transform_sd_vec=rep(sqrt(1/(nsamples-3)), dim(cor_table_non_diag)[1]);
   options(warn=-1)
 
   betahat <- cor_transform_mean_vec
@@ -60,7 +75,7 @@ CorShrinkVEM <- function(cormat, nsamples, image=FALSE, tol=1e-06,
   newdata.table[,3] <- ash_cor_vec;
   ash_cor_only <- reshape2::dcast(newdata.table, Var1~Var2, value.var = "value")[,-1];
   ash_cor_only[is.na(ash_cor_only)]=1;
-  pd_completion <- Matrix::nearPD(as.matrix(ash_cor_only), conv.tol=1e-06);
+  pd_completion <- Matrix::nearPD(as.matrix(ash_cor_only), conv.tol=tol);
   ash_cor_PD2 <- sweep(pd_completion$mat,diag(as.matrix(pd_completion$mat)), MARGIN=1,"/")
 
   if(image) {

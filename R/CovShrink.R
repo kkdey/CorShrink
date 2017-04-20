@@ -20,16 +20,37 @@
 #' @export
 
 
-CovShrink <- function(data, nsamples, nullweight=10, null.comp=1,
-                      type = c("ML", "VEM", "VEM2")){
+CovShrink <- function(data, nsamples, sd_boot = FALSE,
+                      type = c("ML", "VEM", "VEM2"), nboot = 50,
+                      nullweight = 10, null.comp = 1, thresh_up = 0.999,
+                      thresh_down = 0.001, tol = 1e-06){
   cov_sample <- cov(data);
   cor_sample <- cov2cor(cov_sample);
+  if(sd_boot){
+    cor_transform_sd_vec <- bootcorSE_calc(data, nboot=nboot)
+  }else{
+    cor_transform_sd_vec <- NULL
+  }
   if(type=="ML"){
-    cor.shrunk <- CorShrinkML(cor_sample, nsamples)$ash_cor_PD
+    cor.shrunk <- CorShrinkML(cor_sample, nsamples, sd_boot = sd_boot,
+                              cor_transform_sd_vec = cor_transform_sd_vec,
+                              image = FALSE, thresh_up = thresh_up,
+                              thresh_down = thresh_down, tol=tol)$ash_cor_PD
   }else if (type == "VEM"){
-    cor.shrunk <- CorShrinkVEM(cor_sample, nsamples, nullweight = nullweight, null.comp =null.comp)$ash_cor_PD
+    cor.shrunk <- CorShrinkVEM(cor_sample, nsamples,
+                               sd_boot = sd_boot,
+                               cor_transform_sd_vec = cor_transform_sd_vec,
+                               nullweight = nullweight,
+                               null.comp =null.comp,
+                               thresh_up = thresh_up,
+                               thresh_down = thresh_down, tol=tol)$ash_cor_PD
   }else if (type == "VEM2"){
-    cor.shrunk <- CorShrinkVEM2(cor_sample, nsamples, nullweight = nullweight, null.comp =null.comp)$ash_cor_PD
+    cor.shrunk <- CorShrinkVEM2(cor_sample, nsamples,
+                                sd_boot = sd_boot,
+                                cor_transform_sd_vec = cor_transform_sd_vec,
+                                nullweight = nullweight, null.comp =null.comp,
+                                thresh_up = thresh_up,
+                                thresh_down = thresh_down)$ash_cor_PD
   }else{
     stop("the type provided must be one of ML, VEM and VEM2")
   }

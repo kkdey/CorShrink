@@ -4,9 +4,9 @@
 \alias{CovShrink}
 \title{Adaptive shrinkage of a covariance matrix through shrinking of correlations.}
 \usage{
-CovShrink(data, nsamples, sd_boot = FALSE, type = c("ML", "VEM", "VEM2"),
-  nboot = 50, nullweight = 10, null.comp = 1, thresh_up = 0.999,
-  thresh_down = 0.001, tol = 1e-06)
+CovShrink(data, nsamples, sd_boot = FALSE, partial = FALSE, type = c("ML",
+  "VEM"), nboot = 50, nullweight = 10, null.comp = 1, thresh_up = 0.999,
+  thresh_down = 0.001, tol = 1e-06, ash.control = list())
 }
 \arguments{
 \item{data}{The samples by features data matrix.}
@@ -18,6 +18,8 @@ CovShrink(data, nsamples, sd_boot = FALSE, type = c("ML", "VEM", "VEM2"),
 \item{nullweight}{The weight on the null component for the mixture normal prior used. Defaults to 10.}
 
 \item{null.comp}{The number of null components chosen. Defaults to 1.}
+
+\item{ash.control}{The control parameters for adaptive shrinkage}
 }
 \value{
 Returns a shrunk version of the sample covariance matrix (the output is also a covariance matrix)

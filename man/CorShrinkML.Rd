@@ -4,13 +4,14 @@
 \alias{CorShrinkML}
 \title{Adaptive shrinkage of a correlation matrix using ML estimation}
 \usage{
-CorShrinkML(cormat, nsamples, sd_boot = FALSE, cor_transform_sd_vec = NULL,
-  thresh_up = 0.999, thresh_down = 0.001, image = FALSE, tol = 1e-06)
+CorShrinkML(cormat, nsamp_mat, sd_boot = FALSE, cor_transform_sd_vec = NULL,
+  thresh_up = 0.999, thresh_down = 0.001, image = FALSE, tol = 1e-06,
+  ash.control = list())
 }
 \arguments{
 \item{cormat}{The sample correlation matrix}
 
-\item{nsamples}{The number of samples over which the correlation matrix is estimated.}
+\item{nsamp_mat}{The number of samples/ matrix of samples over which the correlation matrix is estimated.}
 
 \item{sd_boot}{Boolean variable indicating if bootstrap sd to be used or not.}
 
@@ -20,6 +21,8 @@ need to be provided. These standard errors can be obtained from \code{bootcorSE_
 \item{image}{if TRUE, plots an image of the shrunk and non-shrunk correlation matrices}
 
 \item{tol}{The tolerance to check the difference between ash-cor only and ash-cor PD matrices.}
+
+\item{ash.control}{The control parameters for adaptive shrinkage}
 }
 \value{
 Returns a shrunk version of the sample correlation matrix

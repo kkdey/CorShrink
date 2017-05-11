@@ -6,12 +6,14 @@
 #'
 #'
 #' @param cormat The sample correlation matrix
-#' @param nsamples The number of samples over which the correlation matrix is estimated.
+#' @param nsamp_mat The number of samples/ matrix of samples over which the correlation matrix is estimated.
 #' @param sd_boot Boolean variable indicating if bootstrap sd to be used or not.
 #' @param cor_transform_sd_vec If \code{sd_boot} is not NULL, the bootstrap standard errors
 #' need to be provided. These standard errors can be obtained from \code{bootcorSE_calc()} function.
 #' @param image if TRUE, plots an image of the shrunk and non-shrunk correlation matrices
 #' @param tol The tolerance to check the difference between ash-cor only and ash-cor PD matrices.
+#' @param ash.control The control parameters for adaptive shrinkage
+#'
 #' @return Returns a shrunk version of the sample correlation matrix
 #'         (the output is also a correlation matrix)
 #'
@@ -23,11 +25,18 @@
 #' @export
 
 
-CorShrinkML <- function(cormat, nsamples, sd_boot = FALSE,
+CorShrinkML <- function(cormat, nsamp_mat, sd_boot = FALSE,
                         cor_transform_sd_vec = NULL,
                         thresh_up = 0.999, thresh_down = 0.001,
-                        image=FALSE, tol=1e-06)
+                        image=FALSE, tol=1e-06,
+                        ash.control = list())
 {
+  cormat[is.na(cormat)] = 0
+  ash.control.default = list(pointmass = TRUE, prior = "nullbiased", gridmult = 2,
+                             mixcompdist = "normal", nullweight = 10,
+                             outputlevel = 2, fixg = FALSE, optmethod="mixEM")
+  ash.control <- modifyList(ash.control.default, ash.control)
+
   cor_table <- reshape2::melt(cormat);
   cor_table_non_diag <- cor_table[which(cor_table[,1] != cor_table[,2]),];
 
@@ -36,17 +45,31 @@ CorShrinkML <- function(cormat, nsamples, sd_boot = FALSE,
   cor_table_non_diag.val[which(cor_table_non_diag.val <= thresh_down)]= thresh_down;
 
   cor_transform_mean_vec=0.5*log((1+cor_table_non_diag.val)/(1-cor_table_non_diag.val))
-  if(!sd_boot){
+
+  if(!sd_boot && !is.matrix(nsamp_mat)){
+    nsamples <- as.numeric(nsamp_mat)
     cor_transform_sd_vec=rep(sqrt(1/(nsamples-3)), dim(cor_table_non_diag)[1]);
+  }else if(!sd_boot && is.matrix(nsamp_mat)){
+
+    nsamp_tab <- reshape2::melt(nsamp_mat)
+    nsamp_tab_non_diag <- nsamp_tab[which(nsamp_tab[,1] != nsamp_tab[,2]),];
+    nsamp_vec <- nsamp_tab_non_diag[,3]
+    index_zeros <- which(nsamp_vec == 0)
+    cor_transform_mean_vec[index_zeros] = 0;
+    nsamp_vec[index_zeros] = 5
+    cor_transform_sd_vec <- sqrt(1/(nsamp_vec));
+
   }else{
     if(is.null(cor_transform_sd_vec)){
       stop("if sd_boot is not NULL, the user needs to provide a cor trasform sd vector")
     }
     cor_transform_sd_vec = cor_transform_sd_vec
   }
+
   options(warn=-1)
-  fit=ashr::ash(cor_transform_mean_vec,cor_transform_sd_vec,
-                mixcompdist="normal", optmethod="mixVBEM");
+  fit=do.call(ashr::ash, append(list(betahat = cor_transform_mean_vec,
+                                     sebetahat = cor_transform_sd_vec),
+                                ash.control))
 
   ash_cor_vec=(exp(2*fit$result$PosteriorMean)-1)/(exp(2*fit$result$PosteriorMean)+1);
 

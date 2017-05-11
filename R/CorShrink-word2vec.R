@@ -4,7 +4,13 @@
 
 
 CorShrink_word2vec <- function(model_true, model_boot_list,
-                               word_vec, num_related_words = 50){
+                               word_vec, num_related_words = 50,
+                               ash.control = list()){
+
+  ash.control.default = list(pointmass = TRUE, prior = "nullbiased", gridmult = 2,
+                             mixcompdist = "normal", nullweight = 10,
+                             outputlevel = 2, fixg = FALSE, optmethod="mixEM")
+  ash.control <- modifyList(ash.control.default, ash.control)
 
   ############  We initialize the list which we will return at end containing the results
   ##########  from the analysis
@@ -39,9 +45,9 @@ CorShrink_word2vec <- function(model_true, model_boot_list,
 
          cosine_transform_sd_vec <- array(0, length(listed_words))
          cosine_boot_extended <- array(0, length(listed_words))
-         
+
          mat_temp <- matrix(0, numboot, length(listed_words))
-         
+
          for(i in 1:numboot){
            cosine_boot <- unlist(as.data.frame(cosineSimilarity(model_boot_list[[i]][[word, average = FALSE]],model_boot_list[[i]][[listed_words, average = FALSE]])))
            match_indices <- match(names(cosine_boot), listed_words)
@@ -49,9 +55,9 @@ CorShrink_word2vec <- function(model_true, model_boot_list,
            cosine_transform_boot_extended <- 0.5*log((1+cosine_boot_extended)/(1-cosine_boot_extended))
            mat_temp[i,] <- cosine_transform_boot_extended
         }
-         
+
          cosine_transform_sd_vec <- apply(mat_temp, 2, function(x) return(sd(x)))
-         
+
 
          # cosine_transform_sd_list <- parallel::mclapply(1:length(listed_words),
          #                                    function(l){
@@ -64,7 +70,7 @@ CorShrink_word2vec <- function(model_true, model_boot_list,
          #                                              cosine_transform_sd <- sd(cosine_transform_boot)
          #                                              return(cosine_transform_sd)
          #                                          }, mc.cores = parallel::detectCores())
-         # 
+         #
          # cosine_transform_sd_vec <- unlist(cosine_transform_sd_list)
 
 
@@ -84,13 +90,13 @@ CorShrink_word2vec <- function(model_true, model_boot_list,
          ##########  estimation for the original data  #################
 
          cosine_est_extended <- array(0, length(listed_words))
-         
+
          cosine_est <- unlist(as.data.frame(cosineSimilarity(model_true[[word, average = FALSE]], model_true[[listed_words, average = FALSE]])))
          match_indices <- match(names(cosine_est), listed_words)
-         cosine_est_extended[match_indices] <- cosine_est         
+         cosine_est_extended[match_indices] <- cosine_est
          cosine_transform_est_extended <- 0.5*log((1+cosine_est_extended)/(1-cosine_est_extended))
          names(cosine_est_extended) <- listed_words
-         
+
          # for(m in 1:length(cosine_est)){
          #   cosine_est[m] <- model_true[[paste0(word)]] %>% cosineSimilarity(model_true[[paste0(listed_words[m])]])
          #   cosine_est[which(cosine_est == "NaN")] = 0
@@ -100,7 +106,9 @@ CorShrink_word2vec <- function(model_true, model_boot_list,
          ##########   Applying the ash shrinkage on cosine transform and inverting back
          #########  the posterior
 
-         ash_out <- ashr::ash(as.vector(cosine_transform_est_extended), as.vector(cosine_transform_sd_vec))
+         ash_out <- do.call(ashr::ash, append(list(as.vector(cosine_transform_est_extended),
+                              as.vector(cosine_transform_sd_vec)),
+                              ash.control))
          fitted_cos <- (exp(2*ash_out$result$PosteriorMean)-1)/(exp(2*ash_out$result$PosteriorMean)+1)
          names(fitted_cos) <- listed_words
          return_list[[numvec]] = list(similar_words = listed_words,

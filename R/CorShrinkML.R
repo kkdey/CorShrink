@@ -53,10 +53,10 @@ CorShrinkML <- function(cormat, nsamp_mat, sd_boot = FALSE,
 
     nsamp_tab <- reshape2::melt(nsamp_mat)
     nsamp_tab_non_diag <- nsamp_tab[which(nsamp_tab[,1] != nsamp_tab[,2]),];
-    nsamp_vec <- nsamp_tab_non_diag[,3]
-    index_zeros <- which(nsamp_vec == 0)
+    nsamp_vec <- nsamp_tab_non_diag[,3] - 3
+    index_zeros <- which(nsamp_vec < 0)
     cor_transform_mean_vec[index_zeros] = 0;
-    nsamp_vec[index_zeros] = 5
+    nsamp_vec[index_zeros] = 0.00001
     cor_transform_sd_vec <- sqrt(1/(nsamp_vec));
 
   }else{

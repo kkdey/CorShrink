@@ -27,7 +27,7 @@
 
 CorShrinkML <- function(cormat, nsamp_mat, sd_boot = FALSE,
                         cor_transform_sd_vec = NULL,
-                        thresh_up = 0.999, thresh_down = 0.001,
+                        thresh_up = 0.99, thresh_down = - 0.99,
                         image=FALSE, tol=1e-06,
                         ash.control = list())
 {

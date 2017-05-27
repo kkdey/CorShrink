@@ -5,7 +5,7 @@
 \title{Adaptive shrinkage of a correlation matrix using ML estimation}
 \usage{
 CorShrinkML(cormat, nsamp_mat, sd_boot = FALSE, cor_transform_sd_vec = NULL,
-  thresh_up = 0.999, thresh_down = 0.001, image = FALSE, tol = 1e-06,
+  thresh_up = 0.99, thresh_down = -0.99, image = FALSE, tol = 1e-06,
   ash.control = list())
 }
 \arguments{

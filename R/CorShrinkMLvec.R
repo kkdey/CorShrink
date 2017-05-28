@@ -51,7 +51,7 @@ CorShrinkMLvec <- function (corvec, nsamp_vec, sd_boot = FALSE,
     nsamp_vec_2 <- nsamp_vec
     nsamp_vec_2[index_zeros] <- 1.0001
     corvec_trans[index_zeros] <- 0
-    corvec_trans_sd =rep(sqrt(1/(nsamp_vec_2-1) + 2/(nsamp_vec_2 - 1)^2), length(corvec_trans));
+    corvec_trans_sd =sqrt(1/(nsamp_vec_2-1) + 2/(nsamp_vec_2 - 1)^2);
   }else{
     if(is.null(cor_transform_sd_vec)){
       stop("if sd_boot is not NULL, the user needs to provide a cor trasform sd vector")

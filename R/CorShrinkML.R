@@ -48,16 +48,20 @@ CorShrinkML <- function(cormat, nsamp_mat, sd_boot = FALSE,
 
   if(!sd_boot && !is.matrix(nsamp_mat)){
     nsamples <- as.numeric(nsamp_mat)
-    cor_transform_sd_vec=rep(sqrt(1/(nsamples-3)), dim(cor_table_non_diag)[1]);
+    if(nsamples <= 2){
+      stop("the number of samples <=2 for all cells, will result in 0 correlation matrix")
+    }
+    cor_transform_sd_vec=rep(sqrt(1/(nsamples-1) + 2/(nsamples - 1)^2), dim(cor_table_non_diag)[1]);
   }else if(!sd_boot && is.matrix(nsamp_mat)){
 
     nsamp_tab <- reshape2::melt(nsamp_mat)
     nsamp_tab_non_diag <- nsamp_tab[which(nsamp_tab[,1] != nsamp_tab[,2]),];
-    nsamp_vec <- nsamp_tab_non_diag[,3] - 3
-    index_zeros <- which(nsamp_vec < 0)
+    nsamp_vec <- nsamp_tab_non_diag[,3]
+    index_zeros <- which(nsamp_vec <= 2)
     cor_transform_mean_vec[index_zeros] = 0;
-    nsamp_vec[index_zeros] = 0.00000000001
-    cor_transform_sd_vec <- sqrt(1/(nsamp_vec));
+    nsamp_vec_2 <- nsamp_vec
+    nsamp_vec_2[index_zeros] <- 1.0001
+    cor_transform_sd_vec <- sqrt(1/(nsamp_vec_2-1) + 2/(nsamp_vec_2 - 1)^2);
 
   }else{
     if(is.null(cor_transform_sd_vec)){

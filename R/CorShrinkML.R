@@ -60,7 +60,7 @@ CorShrinkML <- function(cormat, nsamp_mat, sd_boot = FALSE,
     index_zeros <- which(nsamp_vec <= 2)
     cor_transform_mean_vec[index_zeros] = 0;
     nsamp_vec_2 <- nsamp_vec
-    nsamp_vec_2[index_zeros] <- 1.0001
+    nsamp_vec_2[index_zeros] <- 1.000001
     cor_transform_sd_vec <- sqrt(1/(nsamp_vec_2-1) + 2/(nsamp_vec_2 - 1)^2);
 
   }else{

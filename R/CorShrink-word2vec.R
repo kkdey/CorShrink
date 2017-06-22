@@ -1,14 +1,26 @@
-
-######################  CorShrink.word2vecc   ##########################################
-##########   corshrink on word2vec models fitted by the WordVectors package  ###############
-
+#' @title CorShrink on word rankings in word2vec model
+#'
+#' @description This function computes word rankings on the word2vec model from CorShrink
+#'              using resampling methods.
+#'
+#' @param model_true the true word2vec model
+#' @param model_boot_list a list of bootstrap word2vec models with resampling lines of text.
+#' @param word_vec A vector of words whose rankings are to be modified
+#' @param num_related_words Number of related words to consider per word in \code{word_vec}
+#' @param ash.control The control parameters for adaptive shrinkage
+#'
+#' @return Returns adaptively shrunk cosine similarity values of the words of interest in \code{word_vec}.
+#'
+#' @keywords adaptive shrinkage, correlation
+#' @import ashr
+#' @export
 
 CorShrink_word2vec <- function(model_true, model_boot_list,
                                word_vec, num_related_words = 50,
                                ash.control = list()){
 
   ash.control.default = list(pointmass = TRUE, prior = "nullbiased", gridmult = 2,
-                             mixcompdist = "normal", nullweight = 10,
+                             mixcompdist = "halfuniform", nullweight = 10,
                              outputlevel = 2, fixg = FALSE, optmethod="mixEM")
   ash.control <- modifyList(ash.control.default, ash.control)
 

@@ -1,8 +1,7 @@
 #' @title CorShrink on word rankings in word2vec model
 #'
 #' @description This function computes word rankings on the word2vec model
-#' from CorShrink
-#'              using resampling methods.The method is similar to the adaptive shrinkage method for modeling false discovery rates proposed
+#' from CorShrink using resampling methods.The method is similar to the adaptive shrinkage method for modeling false discovery rates proposed
 #' in Stephens 2016 (see reference).
 #'
 #'

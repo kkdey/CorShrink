@@ -42,7 +42,7 @@
 #' @export
 
 
-CorShrinkMatrix <- function(cormat, nsamp, sd_boot = FALSE,
+CorShrinkMatrix <- function(cormat, nsamp,
                         zscore_sd = NULL,
                         thresh_up = 0.99, thresh_down = - 0.99,
                         image=FALSE, tol=1e-06,

@@ -6,6 +6,7 @@ R package for adaptive correlation and covariance matrix shrinkage.
 
 A companion to the [ashr](https://github.com/stephens999/ashr) package by Matthew Stephens, that adaptive shrinks a vector or a matrix of correlations, where correlation between each pair is adaptively scaled based on the number of complete observations that generate the correlation. This allows the method to estimate the correlation matrix for a data matrix with large scale missing observations. 
 
+## Installation
 
 The instructions for installing and loading the package are as follows.
 
@@ -19,6 +20,8 @@ Then load the package with:
 ```
 library(CorShrink)
 ```
+
+## Examples 
 
 A demo example usage of **CorShrink** is given below. For detailed examples and methods, check [here](vignettes/corshrink.Rmd). 
 
@@ -44,6 +47,15 @@ out <- CorShrinkData(data, sd_boot = TRUE, image_original = TRUE,
 ```
 
 <img src="vignettes/test/plot2.png" alt="Structure Plot" height="700" width="1000">
+
+## Acknowledgements
+
+The authors would like to thank the GTEx Consortium, John Blischak, Sarah Urbut, Chiaowen Joyce Hsiao, Peter Carbonetto and all members of the Stephens Lab. 
+
+## Support
+
+For any queries related to the **CorShrink** package, contact Kushal K. Dey here [kkdey@uchicago.edu](kkdey@uchicago.edu)
+
 
 
 

@@ -46,9 +46,13 @@ These approaches, however,  are not  well suited for handling large scale missin
 
 # CorShrink Installation
 
-**CorShrink** is a companion package to `r CRANpkg("ashr")` R package [@stephens2016false]. 
+**CorShrink** is a companion package to `r CRANpkg("ashr")` R package [@stephens2016false]. Before installing **CorShrink**, please make sure you have the latest version of `r CRANpkg("ashr")`.
 
-The other dependencies of this package include `r CRANpkg("SQUAREM")`,`r CRANpkg("reshape2")`, `r CRANpkg("methods")` and `r CRANpkg("Matrix")`. 
+```{r install_ash, eval=FALSE}
+devtools::install_github("stephens999/ashr")
+```
+
+The other dependencies of this package include `r CRANpkg("SQUAREM")`,`r CRANpkg("reshape2")`, `r CRANpkg("methods")` and `r CRANpkg("Matrix")`. Next we install **CorShrink**. 
 
 ```{r install_corshrink_CRAN, eval=FALSE}
 install.packages("CorShrink")

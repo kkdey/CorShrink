@@ -16,20 +16,14 @@ Depends:
 Imports:
     ashr,
     SQUAREM,
-    corpcor,
-    glasso,
     reshape2,
-    Matrix,
-    network,
-    igraph,
-    vegan,
-    limma,
-    expm,
-    clusterGeneration,
-    mvtnorm
+    methods,
+    Matrix
 Suggests:
     knitr,
     BiocStyle,
+    corpcor,
+    glasso,
     Biobase,
     roxygen2,
     RColorBrewer,

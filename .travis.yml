@@ -1,21 +1,29 @@
-language: r
-r: bioc-devel
-sudo: false
+language: R
 cache: packages
+sudo: true
+dist: trusty
 
+addons:
+  apt:
+      packages:
+            - libfreetype6
+
+r:
+- 3.3
+- 3.4
+- oldrel
+- release
+- devel
 
 env:
-  global:
-        - BIOC_USE_DEVEL="FALSE"
+ global:
+  - _R_CHECK_FORCE_SUGGESTS_=false
 
-bioc_required: true
-bioc_packages:
-  - BiocInstaller
+after_success:
+  - Rscript -e 'covr::codecov()'
 
-r_packages:
-  - covr
-
-after_script:
-  - ./travis-tool.sh dump_logs
-
-warnings_are_errors: false
+before_install:
+  - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
+  - sudo apt-get --yes --force-yes update -qq
+  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
+  - Rscript -e 'update.packages(ask = FALSE)'

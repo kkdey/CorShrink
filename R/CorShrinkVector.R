@@ -15,25 +15,41 @@
 #'                 using \code{nsamp_vec}.
 #' @param thresh_up Upper threshold for correlations. Defaults to 0.99
 #' @param thresh_down Lower threshold for correlations. Defaults to -0.99
+#' @param optmethod The optimization method for EM algorithm - can be one of
+#'                  two techniques \code{mixEM} (mixture EM) and \code{mixVBEM}
+#'                  (mixture Variational Bayes EM) approaches.The default approach
+#'                  is \code{mixEM}.
 #' @param ash.control The control parameters for adaptive shrinkage
 #'
 #' @return Returns an adaptively shrunk version of the vector of correlations.
 #'
 #' @references  False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://dx.doi.org/10.1101/038216
+#' @examples
+#'
+#'  cor_vec <- c(-0.56, -0.4, 0.02, 0.2, 0.9, 0.8, 0.3, 0.1, 0.4)
+#'  nsamp_vec <- c(10, 20, 30, 4, 50, 60, 20, 10, 3)
+#'  out <- CorShrinkVector(corvec = cor_vec, nsamp_vec = nsamp_vec,
+#'                         optmethod = "mixEM")
+#'
 #' @keywords adaptive shrinkage, correlation
 #' @import ashr
+#' @importFrom stats cor sd
+#' @importFrom utils modifyList
 #' @export
 
 
 CorShrinkVector <- function (corvec, nsamp_vec,
                              zscore_sd_vec = NULL,
-                            thresh_up = 0.99, thresh_down = - 0.99,
-                            ash.control = list()){
+                             thresh_up = 0.99, thresh_down = - 0.99,
+                             optmethod = "mixEM",
+                             ash.control = list()){
 
-  ash.control.default = list(pointmass = TRUE, prior = "nullbiased", gridmult = 2,
+  ash.control.default = list(pointmass = TRUE, prior = "nullbiased",
                              mixcompdist = "normal", nullweight = 10,
-                             outputlevel = 2, fixg = FALSE, mode =0,
-                             optmethod="mixEM")
+                             outputlevel = 2, fixg = FALSE, mode = 0,
+                             gridmult = sqrt(2),
+                             alpha = 0, pi_thresh = 1e-10,
+                             df = NULL)
 
   ash.control <- modifyList(ash.control.default, ash.control)
 
@@ -67,7 +83,7 @@ CorShrinkVector <- function (corvec, nsamp_vec,
     corvec_trans[index_zeros] <- 0
     corvec_trans_sd =sqrt(1/(nsamp_vec_2-1) + 2/(nsamp_vec_2 - 1)^2);
   }else{
-    if(is.null(is.null(zscore_sd_vec))){
+    if(is.null(zscore_sd_vec)){
       stop("the user needs to provide a zscore sd vector")
     }
     corvec_trans_sd = zscore_sd_vec
@@ -75,7 +91,8 @@ CorShrinkVector <- function (corvec, nsamp_vec,
 
  options(warn=-1)
  fit=do.call(ashr::ash, append(list(betahat = corvec_trans,
-                               sebetahat = corvec_trans_sd),
+                               sebetahat = corvec_trans_sd,
+                               optmethod = optmethod),
                                ash.control))
  ash_corvec=(exp(2*fit$result$PosteriorMean)-1)/(exp(2*fit$result$PosteriorMean)+1);
 

@@ -4,7 +4,8 @@
 \alias{bootcorSE_calc}
 \title{Calculate bootstrap SE for the Fisher z-scores of correlations}
 \usage{
-bootcorSE_calc(data, nboot = 50, thresh_up = 0.999, thresh_down = 0.001)
+bootcorSE_calc(data, nboot = 50, thresh_up = 0.999, thresh_down = 0.001,
+  verbose = TRUE)
 }
 \arguments{
 \item{data}{The samples by features data matrix.}
@@ -14,6 +15,8 @@ bootcorSE_calc(data, nboot = 50, thresh_up = 0.999, thresh_down = 0.001)
 \item{thresh_up}{The upward threshold for correlations}
 
 \item{thresh_down}{The downward threshold for correlations.}
+
+\item{verbose}{To print the status of Bootstrap runs}
 }
 \value{
 Returns standard errors for fisher z-scores for the correlations.
@@ -21,6 +24,13 @@ Returns standard errors for fisher z-scores for the correlations.
 \description{
 computes the bootstrap SE of the Fisher z-scores to be used in \code{CorShrink-ML}
 or \code{CorShrink-VEM}.
+}
+\examples{
+
+data <- get(load(system.file("extdata", "sample_by_feature_data.rda",
+                 package = "CorShrink")))
+zscoreSDmat <- bootcorSE_calc(data, verbose = FALSE)
+
 }
 \keyword{adaptive}
 \keyword{correlation}

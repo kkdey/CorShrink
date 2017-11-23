@@ -34,7 +34,7 @@ out <- CorShrinkData(data, sd_boot = FALSE, image_original = TRUE,
                      image.control = list(x.cex = 0.3, y.cex = 0.3))                             
                              
 ```
-<img src="vignettes/test/plot1.png" alt="Structure Plot" height="700" width="1000">
+<img src="vignettes/test/plot1.png" alt="Structure Plot" height="500" width="1000">
 
 
 The above approach uses an asymototic version of CorShrink. Alternatively, one can use a re-sampling based approach.
@@ -46,7 +46,7 @@ out <- CorShrinkData(data, sd_boot = TRUE, image_original = TRUE,
                      image.control = list(x.cex = 0.3, y.cex = 0.3))
 ```
 
-<img src="vignettes/test/plot2.png" alt="Structure Plot" height="700" width="1000">
+<img src="vignettes/test/plot2.png" alt="Structure Plot" height="500" width="1000">
 
 ## Acknowledgements
 

@@ -40,7 +40,7 @@ BiocStyle::markdown()
 
 Estimation of covariance or correlation matrices has widespread usage in a broad spectrum of statistical applications. The most commonly used estimator, namely the sample covariance or correlation matrix, is rank deficient and hence unstable in cases where the dimensionality of the problem (p) is greater than the number of samples (n). This problem has driven statisticians to suggest various alternative estimators in \textit{small n, large p} settings. Several estimators of correlation matrix have been proposed in such settings and their theoretical properties and performance comparisons have been studied comprehensively [@touloumis2015nonparametric, @ledoit2003improved, @bickel2008, @rothman2009]. Some of these methods are already available as R packages - `r CRANpkg("corpcor")` [@schafer2004empirical], `r CRANpkg("glasso")` [@friedman2008sparse], `r CRANpkg("PDSCE")`[@rothman2009] etc. 
 
-These approaches, however,  are not  well suited for handling large scale missingness in data. Also, some of these methods work well under some specific sets of assumptions about the underlying matrix, for e.g. - thresholding estimators assume a banded structure of the correlation matrix. In this package, ee introduce a method *CorShrink* that adapts to varying degree of missingness in observations corresponding to each pair of features. Also, *CorShrink* can be applied directly to data consisting of missing values, as well as to derived quantities like  vectors and matrices of correlations between features, and allows for two formulations - an asymptotic approach and a resampling based approach. Even in examples with no missing data, CorShrink estimated correlations are visibly closer to the true correlations compared to the standard methods. *CorShrink* is not just limited in its applicability to correlations/covariances but can also be used to generate robust cosine similarity values from word2vec models. 
+These approaches, however,  are not  well suited for handling large scale missingness in data. Also, some of these methods work well under some specific sets of assumptions about the underlying matrix, for e.g. - thresholding estimators assume a banded structure of the correlation matrix. In this package, ee introduce a method *CorShrink* that adapts to varying degree of missingness in observations corresponding to each pair of features. Also, *CorShrink* can be applied directly to data consisting of missing values, as well as to derived quantities like  vectors and matrices of correlations between features, and allows for two formulations - an asymptotic approach and a resampling based approach. Even in examples with no missing data, CorShrink estimated correlations are visibly closer to the true correlations compared to the standard methods. *CorShrink* also can be applied to other correlation-like quantities such as partial correlations, rank correlations and cosine similarity values from word2vec models. 
  
 ---
 
@@ -72,6 +72,33 @@ library(CorShrink)
 ```
 
 ---
+
+# Methods 
+
+The main steps in **CorShrink** are as follows 
+
+- Convert the correlation between variables $i$ and $j$, $R_{ij}$ into Fisher z-score $Z_{ij}$ by the following transformation.
+
+$$  Z_{ij} = 0.5 \log \left (\frac{1 + R_{ij}}{1 - R_{ij}} \right )  $$
+
+- Estimate from data, the standard errors ($s_{ij}$) of these Z-scores $Z_{ij}$. This can be done in two ways in **CorShrink**. One approach uses an asymptotic normal approximation, where the standard errors are $s_{ij} = \frac{1}{n_{ij} - 3}$, with $n_{ij}$ being the number of complete observations between pair $(i,j)$ that generates the correlation $R_{ij}$. The other approach performs a re-sampling of the observations for the $(i,j)$ pair and obtains a Bootstrap estimate of the standard errors from the re-sampled  $Z_{ij}$. 
+
+- Apply adaptive shrinkage (*ash* due to Stephens 2016 [@stephens2016false]) on the pairs $(Z_{ij}, s_{ij})$  either across all $i$ and $j$ pairs (matrix format) or along all $i$ for one $j$, or along all $j$ for one $i$ (vector formats). 
+
+$$  Z^{\star}_{ij}  : = ash \; (Z_{ij}, s_{ij})   $$
+ 
+The matrix format shrinkage is performed by the *CorShrinkMatrix* function while the vector format shrinkage is performed by the *CorShrinkVector* function. 
+
+- Reverse transform the posterior mean of the shrunk Fisher z-scores from the previous step.
+
+$$  R^{\star}_{ij} = \frac{exp \; (2 Z^{\star}_{ij}) - 1}{exp \; (2 Z^{\star}_{ij}) + 1} $$
+  
+- If the user is attempting to estimate a correlation matrix ((R_{ij})) for a number of variables $(i,j)$, then a requisite condition is positive definiteness of the estimate. However, the $((R^{\star}_{ij}))$ matrix obtained above may not be positive definite. We work around this problem by choosing a psoitive definite matrix nearest to the above estimate (see Higham 2002 [@higham2002computing]). 
+
+
+---
+
+
 
 # Illustration
 
@@ -156,7 +183,7 @@ out <- CorShrinkData(data, sd_boot = TRUE, image_original = TRUE,
                      image.control = list(x.cex = 0.3, y.cex = 0.3))
 ```
 
-The algorithm works by first computing a Bootstrap estimate of the standard error of the Fisher z-scores for each correlation and then using that ato shrink the Fisher z-scores in Equation 2. 
+The algorithm works by first computing a Bootstrap estimate of the standard error of the Fisher z-scores for each pair and then using this estimate together with the correlations to shrink the latter. 
 
 ### *CorShrinkMatrix* - resampling
 

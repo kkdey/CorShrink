@@ -18,7 +18,8 @@ Imports:
     SQUAREM,
     reshape2,
     methods,
-    Matrix
+    Matrix,
+    covr
 Suggests:
     knitr,
     BiocStyle,

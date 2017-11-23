@@ -38,7 +38,7 @@ BiocStyle::markdown()
 
 # Introduction
 
-Estimation of covariance or correlation matrices has widespread usage in a broad spectrum of statistical applications. The most commonly used estimator, namely the sample covariance or correlation matrix, is rank deficient and hence unstable in cases where the dimensionality of the problem (p) is greater than the number of samples (n). This problem has driven statisticians to suggest various alternative estimators in \textit{small n, large p} settings. Several estimators of correlation matrix have been proposed in such settings and their theoretical properties and performance comparisons have been studied comprehensively \cite{ledoit2004well,touloumis2015nonparametric,ledoit2003improved, bickel2008,rothman2009}. Some of these methods are already available as R packages - `r CRANpkg("corpcor")`, `r CRANpkg("glasso")`, `r CRANpkg("PDSCE")` etc. 
+Estimation of covariance or correlation matrices has widespread usage in a broad spectrum of statistical applications. The most commonly used estimator, namely the sample covariance or correlation matrix, is rank deficient and hence unstable in cases where the dimensionality of the problem (p) is greater than the number of samples (n). This problem has driven statisticians to suggest various alternative estimators in \textit{small n, large p} settings. Several estimators of correlation matrix have been proposed in such settings and their theoretical properties and performance comparisons have been studied comprehensively [@touloumis2015nonparametric, @ledoit2003improved, @bickel2008, @rothman2009]. Some of these methods are already available as R packages - `r CRANpkg("corpcor")` [@schafer2004empirical], `r CRANpkg("glasso")` [@friedman2008sparse], `r CRANpkg("PDSCE")`[@rothman2009] etc. 
 
 These approaches, however,  are not  well suited for handling large scale missingness in data. Also, some of these methods work well under some specific sets of assumptions about the underlying matrix, for e.g. - thresholding estimators assume a banded structure of the correlation matrix. In this package, ee introduce a method *CorShrink* that adapts to varying degree of missingness in observations corresponding to each pair of features. Also, *CorShrink* can be applied directly to data consisting of missing values, as well as to derived quantities like  vectors and matrices of correlations between features, and allows for two formulations - an asymptotic approach and a resampling based approach. Even in examples with no missing data, CorShrink estimated correlations are visibly closer to the true correlations compared to the standard methods. *CorShrink* is not just limited in its applicability to correlations/covariances but can also be used to generate robust cosine similarity values from word2vec models. 
  
@@ -46,7 +46,7 @@ These approaches, however,  are not  well suited for handling large scale missin
 
 # CorShrink Installation
 
-**CorShrink** is a companion package to `r CRANpkg("ashr")` R package [Stephens2016]. 
+**CorShrink** is a companion package to `r CRANpkg("ashr")` R package [@stephens2016false]. 
 
 The other dependencies of this package include `r CRANpkg("SQUAREM")`,`r CRANpkg("reshape2")`, `r CRANpkg("methods")` and `r CRANpkg("Matrix")`. 
 
@@ -71,7 +71,7 @@ library(CorShrink)
 
 # Illustration
 
-We load an example data matrix - the person (544) by tissue samples (53) gene expression data for the gene *ENSG00000166819*.
+We load an example data matrix - the person (544) by tissue samples (53) gene expression data for the gene *ENSG00000166819* collected from the [Genotype Tissue Expression (GTEx) Project](https://www.gtexportal.org/home/) .
 
 ```{r load_data, eval=TRUE, warning = FALSE}
 data <- get(load(system.file("extdata", "sample_by_feature_data.rda",

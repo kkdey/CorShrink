@@ -83,7 +83,7 @@ $$  Z_{ij} = 0.5 \log \left (\frac{1 + R_{ij}}{1 - R_{ij}} \right )  $$
 
 - Estimate from data, the standard errors ($s_{ij}$) of these Z-scores $Z_{ij}$. This can be done in two ways in **CorShrink**. One approach uses an asymptotic normal approximation, where the standard errors are $s_{ij} = \frac{1}{n_{ij} - 3}$, with $n_{ij}$ being the number of complete observations between pair $(i,j)$ that generates the correlation $R_{ij}$. The other approach performs a re-sampling of the observations for the $(i,j)$ pair and obtains a Bootstrap estimate of the standard errors from the re-sampled  $Z_{ij}$. 
 
-- Apply adaptive shrinkage (*ash* due to Stephens 2016 [@stephens2016false]) on the pairs $(Z_{ij}, s_{ij})$  either across all $i$ and $j$ pairs (matrix format) or along all $i$ for one $j$, or along all $j$ for one $i$ (vector formats). 
+- Apply adaptive shrinkage (*ash* due [@stephens2016false]) on the pairs $(Z_{ij}, s_{ij})$  either across all $i$ and $j$ pairs (matrix format) or along all $i$ for one $j$, or along all $j$ for one $i$ (vector formats). 
 
 $$  Z^{\star}_{ij}  : = ash \; (Z_{ij}, s_{ij})   $$
  
@@ -93,7 +93,7 @@ The matrix format shrinkage is performed by the *CorShrinkMatrix* function while
 
 $$  R^{\star}_{ij} = \frac{exp \; (2 Z^{\star}_{ij}) - 1}{exp \; (2 Z^{\star}_{ij}) + 1} $$
   
-- If the user is attempting to estimate a correlation matrix ((R_{ij})) for a number of variables $(i,j)$, then a requisite condition is positive definiteness of the estimate. However, the $((R^{\star}_{ij}))$ matrix obtained above may not be positive definite. We work around this problem by choosing a psoitive definite matrix nearest to the above estimate (see Higham 2002 [@higham2002computing]). 
+- If the user is attempting to estimate a correlation matrix ((R_{ij})) for a number of variables $(i,j)$, then a requisite condition is positive definiteness of the estimate. However, the $((R^{\star}_{ij}))$ matrix obtained above may not be positive definite. We work around this problem by choosing a psoitive definite matrix nearest to the above estimate (see  [@higham2002computing]). 
 
 
 ---
@@ -208,11 +208,13 @@ One can choose a fixed non-zero target in `mode` as well.
 par(mfrow=c(1,2))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
                      optmethod = "mixEM",
-                     image.control = list(x.cex = 0.3, y.cex = 0.3))
+                     image.control = list(x.cex = 0.3, y.cex = 0.3,
+                      main_corshrink = "CorShrink (target = 0)"))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
                      optmethod = "mixEM",
                      ash.control = list(mode = "estimate"),
-                     image.control = list(x.cex = 0.3, y.cex = 0.3))
+                     image.control = list(x.cex = 0.3, y.cex = 0.3,
+                      main_corshrink = "CorShrink (target = estimated)"))
 ```
 
 In general, *CorShrink* assumes a normal prior for the population Fisher z-scores. But under specific settings, a non-symmetric distribution , such as uniform or half-uniform could be a better fit. This can be achieved using the `mixcompdist` in `ash.control`. 
@@ -222,19 +224,23 @@ par(mfrow=c(2,2))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
                      optmethod = "mixEM",
                      ash.control = list(mixcompdist = "normal"),
-                     image.control = list(x.cex = 0.3, y.cex = 0.3))
+                     image.control = list(x.cex = 0.3, y.cex = 0.3,
+                            main_corshrink = "CorShrink (normal)"))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
                      optmethod = "mixEM",
                      ash.control = list(mixcompdist = "uniform"),
-                     image.control = list(x.cex = 0.3, y.cex = 0.3))
+                     image.control = list(x.cex = 0.3, y.cex = 0.3,
+                            main_corshrink = "CorShrink (uniform)"))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
                      optmethod = "mixEM",
                      ash.control = list(mixcompdist = "halfuniform"),
-                     image.control = list(x.cex = 0.3, y.cex = 0.3))
+                     image.control = list(x.cex = 0.3, y.cex = 0.3,
+                        main_corshrink = "CorShrink (halfuniform)"))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE,  
                      optmethod = "mixEM",
                      ash.control = list(mixcompdist = "+uniform"),
-                     image.control = list(x.cex = 0.3, y.cex = 0.3))
+                     image.control = list(x.cex = 0.3, y.cex = 0.3,
+                        main_corshrink = "CorShrink (+uniform)"))
 ```
 
 

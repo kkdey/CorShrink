@@ -71,8 +71,8 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                                 x.cex = 0.7,
                                 y.las = 2,
                                 y.cex = 0.7,
-                                main1 = "sample corr matrix",
-                                main2 = "CorShrink matrix",
+                                main_original = "sample corr matrix",
+                                main_corshrink = "CorShrink matrix",
                                 cex.main = 1,
                                 col=c(rev(rgb(seq(1,0,length=1000),1,seq(1,0,length=1000))),
                                       rgb(1,seq(1,0,length=1000),seq(1,0,length=1000))))
@@ -195,7 +195,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
   col_labs <- colnames(cormat)
 
    if(image_original) {
-      image(as.matrix(cormat), col=image.control$col, main = image.control$main1,
+      image(as.matrix(cormat), col=image.control$col, main = image.control$main_original,
             cex.main=image.control$cex.main, xaxt = "n", yaxt = "n", zlim=c(-1,1))
       axis(1, at = seq(0, 1, length.out = ncol(cormat)),
            labels = row_labs, las=image.control$x.las, cex.axis = image.control$x.cex)
@@ -204,7 +204,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
    }
 
     if(image_corshrink){
-      image(as.matrix(ash_cor_PD), col=image.control$col, main=image.control$main2,
+      image(as.matrix(ash_cor_PD), col=image.control$col, main=image.control$main_corshrink,
             cex.main=image.control$cex.main, xaxt = "n", yaxt = "n", zlim=c(-1,1))
       axis(1, at = seq(0, 1, length.out = ncol(cormat)),
            labels = row_labs, las=image.control$x.las, cex.axis = image.control$x.cex)

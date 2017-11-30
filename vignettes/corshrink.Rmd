@@ -52,7 +52,7 @@ These approaches, however,  are not  well suited for handling large scale missin
 devtools::install_github("stephens999/ashr")
 ```
 
-The other dependencies of this package include `r CRANpkg("SQUAREM")`,`r CRANpkg("reshape2")`, `r CRANpkg("methods")` and `r CRANpkg("Matrix")`. Next we install **CorShrink**. 
+The other dependencies of this package include `r CRANpkg("SQUAREM")`, `r CRANpkg("reshape2")` and `r CRANpkg("Matrix")`. Next we install **CorShrink**. 
 
 ```{r install_corshrink_CRAN, eval=FALSE}
 install.packages("CorShrink")

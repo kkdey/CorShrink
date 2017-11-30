@@ -64,7 +64,8 @@ cormat <- get(load(system.file("extdata", "corr_matrix.rda",
                    package = "CorShrink")))
 nsamp <- get(load(system.file("extdata", "common_samples.rda",
                              package = "CorShrink")))
-out <- CorShrinkMatrix(cormat, nsamp, image_corshrink  = TRUE, optmethod = "mixEM")
+out <- CorShrinkMatrix(cormat, nsamp, image_corshrink  = TRUE,
+                       optmethod = "mixEM")
 
 }
 \references{

@@ -45,7 +45,8 @@
 #'                    package = "CorShrink")))
 #' nsamp <- get(load(system.file("extdata", "common_samples.rda",
 #'                              package = "CorShrink")))
-#' out <- CorShrinkMatrix(cormat, nsamp, image_corshrink  = TRUE, optmethod = "mixEM")
+#' out <- CorShrinkMatrix(cormat, nsamp, image_corshrink  = TRUE,
+#'                        optmethod = "mixEM")
 #'
 #' @keywords adaptive shrinkage, correlation
 #' @importFrom reshape2 melt dcast
@@ -55,6 +56,7 @@
 #' @importFrom utils modifyList
 #' @import Matrix
 #' @import ashr
+#' @import SQUAREM
 #' @export
 
 
@@ -106,7 +108,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                              mixcompdist = "normal", nullweight = 10,
                              fixg = FALSE, mode = 0,
                              prior = "nullbiased", gridmult = sqrt(2),
-                             outputlevel = 2, alpha = 0, pi_thresh = 1e-10,
+                             outputlevel = 2, alpha = 0,
                              df = NULL)
   ash.control <- modifyList(ash.control.default, ash.control)
 

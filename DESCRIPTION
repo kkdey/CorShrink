@@ -1,7 +1,7 @@
 Package: CorShrink
 Type: Package
-Title: Adaptive Shrinkage of Correlation and Covariance Matrix using CorShrink
-Version: 0.1.0
+Title: Adaptive Shrinkage of Correlation and Covariance Matrix
+Version: 0.1.1
 Date: 2016-03-12
 Author: person("Kushal", "Dey", email = "kkdey@uchicago.edu", role =
     c("aut","cre"),
@@ -18,8 +18,7 @@ Imports:
     SQUAREM,
     reshape2,
     methods,
-    Matrix,
-    covr
+    Matrix
 Suggests:
     knitr,
     BiocStyle,

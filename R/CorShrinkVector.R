@@ -28,11 +28,11 @@
 #'
 #'  cor_vec <- c(-0.56, -0.4, 0.02, 0.2, 0.9, 0.8, 0.3, 0.1, 0.4)
 #'  nsamp_vec <- c(10, 20, 30, 4, 50, 60, 20, 10, 3)
-#'  out <- CorShrinkVector(corvec = cor_vec, nsamp_vec = nsamp_vec,
-#'                         optmethod = "mixEM")
+#'  out <- CorShrinkVector(corvec = cor_vec, nsamp_vec = nsamp_vec, optmethod = "mixEM")
 #'
 #' @keywords adaptive shrinkage, correlation
 #' @import ashr
+#' @import SQUAREM
 #' @importFrom stats cor sd
 #' @importFrom utils modifyList
 #' @export
@@ -44,11 +44,11 @@ CorShrinkVector <- function (corvec, nsamp_vec,
                              optmethod = "mixEM",
                              ash.control = list()){
 
-  ash.control.default = list(pointmass = TRUE, prior = "nullbiased",
+  ash.control.default = list(pointmass = TRUE,
                              mixcompdist = "normal", nullweight = 10,
-                             outputlevel = 2, fixg = FALSE, mode = 0,
-                             gridmult = sqrt(2),
-                             alpha = 0, pi_thresh = 1e-10,
+                             fixg = FALSE, mode = 0,
+                             prior = "nullbiased", gridmult = sqrt(2),
+                             outputlevel = 2, alpha = 0,
                              df = NULL)
 
   ash.control <- modifyList(ash.control.default, ash.control)

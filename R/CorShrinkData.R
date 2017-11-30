@@ -38,6 +38,7 @@
 #' @importFrom utils modifyList
 #' @import Matrix
 #' @import ashr
+#' @import SQUAREM
 #' @export
 
 

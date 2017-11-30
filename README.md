@@ -1,5 +1,10 @@
 # CorShrink
 
+[![Build Status](https://cranlogs.r-pkg.org/badges/grand-total/CorShrink)](https://cranlogs.r-pkg.org/badges/grand-total/CorShrink)
+[![Build Status](https://cranlogs.r-pkg.org/badges/CorShrink)](https://cranlogs.r-pkg.org/badges/CorShrink)
+[![Build Status](https://cranlogs.r-pkg.org/badges/last-day/CorShrink)](https://cranlogs.r-pkg.org/badges/last-day/CorShrink)
+
+
 R package for adaptive correlation and covariance matrix shrinkage.
 
 [Kushal K Dey](http://kkdey.github.io/), [Matthew Stephens](http://stephenslab.uchicago.edu/).
@@ -57,7 +62,7 @@ out <- CorShrinkData(data, sd_boot = FALSE, image_original = TRUE,
                      image.control = list(x.cex = 0.3, y.cex = 0.3))                             
                              
 ```
-<img src="vignettes/test/plot1.png" alt="Structure Plot" height="500" width="1000">
+<img src="inst/doc/plot1.png" alt="Structure Plot" height="500" width="1000">
 
 
 The above approach uses an asymototic version of CorShrink. Alternatively, one can use a re-sampling based approach.
@@ -69,7 +74,7 @@ out <- CorShrinkData(data, sd_boot = TRUE, image_original = TRUE,
                      image.control = list(x.cex = 0.3, y.cex = 0.3))
 ```
 
-<img src="vignettes/test/plot2.png" alt="Structure Plot" height="500" width="1000">
+<img src="inst/doc/plot2.png" alt="Structure Plot" height="500" width="1000">
 
 ## Acknowledgements
 

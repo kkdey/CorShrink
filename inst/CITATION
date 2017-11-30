@@ -1,0 +1,10 @@
+citHeader("We are in the process of drafting the paper.  Please use citation("package name") to cite the package now. Also for the methods, please cite the following paper")
+
+citEntry(entry="Article",
+         title = "False discovery rates: a new deal",
+	 author = c(person("Matthew", "Stephens")),
+	 year = 2016,
+	 journal = "Biostatistics",
+	 textVersion ="Stephens, M. False discovery rates: a new deal. Biostatistics, 2016, 18(2), 275-294"
+)
+						      

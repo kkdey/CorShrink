@@ -109,7 +109,9 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                              fixg = FALSE, mode = 0,
                              prior = "nullbiased", gridmult = sqrt(2),
                              outputlevel = 2, alpha = 0,
-                             df = NULL)
+                             df = NULL, control = list(K = 1,
+                             method=3, square=TRUE, step.min0=1, step.max0=1,
+                             mstep=4, kr=1, objfn.inc=1,tol=1.e-05, maxiter=100, trace=FALSE))
   ash.control <- modifyList(ash.control.default, ash.control)
 
   ##################   vectorise the correlation matrix  ###################

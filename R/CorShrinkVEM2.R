@@ -1,22 +1,22 @@
-#' @title Adaptive shrinkage of a correlation matrix using Variational EM on both mixture proportions and grid variances.
-#'
-#' @description This function performs adaptive shrinkage of a correlation matrix with a
-#' mixture normal prior on Fisher z-scores, where the variances of the components are Inverse
-#' Gamma distributed and mixture proportions are Dirichlet distributed with high weights on the
-#' null component. The model is estimated using Variational EM.
-#'
-#' @param cormat The estimated sample correlation matrix
-#' @param nsamples The number of samples over which the correlation matrix is estimated.
-#' @param image if TRUE, plots an image of the shrunk and non-shrunk correlation matrices
-#' @param tol The tolerance to check the difference between ash-cor only and ash-cor PD matrices.
-#' @param nullweight The weight of the null component of the ash prior.
-#' @param null.comp The number of null components. Default is 1.
-#'
-#' @return Returns a shrunk version of the sample correlation matrix (the output is also a correlation matrix)
-#' @importFrom reshape2 melt dcast
-#' @import Matrix
-#' @import ashr
-#' @keywords adaptive shrinkage, correlation
+# @title Adaptive shrinkage of a correlation matrix using Variational EM on both mixture proportions and grid variances.
+#
+# @description This function performs adaptive shrinkage of a correlation matrix with a
+# mixture normal prior on Fisher z-scores, where the variances of the components are Inverse
+# Gamma distributed and mixture proportions are Dirichlet distributed with high weights on the
+# null component. The model is estimated using Variational EM.
+#
+# @param cormat The estimated sample correlation matrix
+# @param nsamples The number of samples over which the correlation matrix is estimated.
+# @param image if TRUE, plots an image of the shrunk and non-shrunk correlation matrices
+# @param tol The tolerance to check the difference between ash-cor only and ash-cor PD matrices.
+# @param nullweight The weight of the null component of the ash prior.
+# @param null.comp The number of null components. Default is 1.
+#
+# @return Returns a shrunk version of the sample correlation matrix (the output is also a correlation matrix)
+# @importFrom reshape2 melt dcast
+# @import Matrix
+# @import ashr
+# @keywords adaptive shrinkage, correlation
 
 CorShrinkVEM2 <- function(cormat, nsamples, image=FALSE, tol=1e-06,
                      nullweight = 10, null.comp =1){

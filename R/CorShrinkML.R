@@ -1,27 +1,27 @@
-#' @title Adaptive shrinkage of a correlation matrix using ML estimation
-#'
-#' @description This function performs adaptive shrinkage of a sample correlation matrix using a
-#' mixture normal prior on Fisher z-scores with fixed grid variances and the MLEs of
-#' mixture proportions are calculated using the EM algorithm.
-#'
-#'
-#' @param cormat The sample correlation matrix
-#' @param nsamp_mat The number of samples/ matrix of samples over which the correlation matrix is estimated.
-#' @param sd_boot Boolean variable indicating if bootstrap sd to be used or not.
-#' @param cor_transform_sd_vec If \code{sd_boot} is not NULL, the bootstrap standard errors
-#' need to be provided. These standard errors can be obtained from \code{bootcorSE_calc()} function.
-#' @param image if TRUE, plots an image of the shrunk and non-shrunk correlation matrices
-#' @param tol The tolerance to check the difference between ash-cor only and ash-cor PD matrices.
-#' @param ash.control The control parameters for adaptive shrinkage
-#'
-#' @return Returns a shrunk version of the sample correlation matrix
-#'         (the output is also a correlation matrix)
-#'
-#' @references  False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://dx.doi.org/10.1101/038216
-#' @keywords adaptive shrinkage, correlation
-#' @importFrom reshape2 melt dcast
-#' @import Matrix
-#' @import ashr
+# @title Adaptive shrinkage of a correlation matrix using ML estimation
+#
+# @description This function performs adaptive shrinkage of a sample correlation matrix using a
+# mixture normal prior on Fisher z-scores with fixed grid variances and the MLEs of
+# mixture proportions are calculated using the EM algorithm.
+#
+#
+# @param cormat The sample correlation matrix
+# @param nsamp_mat The number of samples/ matrix of samples over which the correlation matrix is estimated.
+# @param sd_boot Boolean variable indicating if bootstrap sd to be used or not.
+# @param cor_transform_sd_vec If \code{sd_boot} is not NULL, the bootstrap standard errors
+# need to be provided. These standard errors can be obtained from \code{bootcorSE_calc()} function.
+# @param image if TRUE, plots an image of the shrunk and non-shrunk correlation matrices
+# @param tol The tolerance to check the difference between ash-cor only and ash-cor PD matrices.
+# @param ash.control The control parameters for adaptive shrinkage
+#
+# @return Returns a shrunk version of the sample correlation matrix
+#         (the output is also a correlation matrix)
+#
+# @references  False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://dx.doi.org/10.1101/038216
+# @keywords adaptive shrinkage, correlation
+# @importFrom reshape2 melt dcast
+# @import Matrix
+# @import ashr
 
 
 CorShrinkML <- function(cormat, nsamp_mat, sd_boot = FALSE,

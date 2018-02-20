@@ -19,6 +19,8 @@
 #'                  two techniques \code{mixEM} (mixture EM) and \code{mixVBEM}
 #'                  (mixture Variational Bayes EM) approaches.The default approach
 #'                  is \code{mixEM}.
+#' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
+#'                      Defaults to FALSE.
 #' @param ash.control The control parameters for adaptive shrinkage
 #'
 #' @return Returns an adaptively shrunk version of the sample correlations matrix.
@@ -48,6 +50,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                           tol=1e-06,
                           image.control = list(),
                           optmethod = "mixEM",
+                          report_model = FALSE,
                           ash.control = list()){
 
   cormat <- cor(data, use = "pairwise.complete.obs")
@@ -71,6 +74,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                            tol=tol,
                            image.control = image.control,
                            optmethod = optmethod,
+                           report_model = report_model,
                            ash.control = ash.control)
   }else{
     zscore_sd <- bootcorSE_calc(data)
@@ -81,6 +85,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                            tol=tol,
                            image.control = image.control,
                            optmethod = optmethod,
+                           report_model = report_model,
                            ash.control = ash.control)
   }
 

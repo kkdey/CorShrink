@@ -7,7 +7,7 @@
 CorShrinkMatrix(cormat, nsamp = NULL, zscore_sd = NULL, thresh_up = 0.99,
   thresh_down = -0.99, image_original = FALSE, image_corshrink = FALSE,
   tol = 1e-06, image.control = list(), optmethod = "mixEM",
-  ash.control = list())
+  report_model = FALSE, ash.control = list())
 }
 \arguments{
 \item{cormat}{A table of correlations - not necessarily a correlation matrix.
@@ -45,6 +45,9 @@ positive definite matrix before applying PD completion.}
 two techniques \code{mixEM} (mixture EM) and \code{mixVBEM}
 (mixture Variational Bayes EM) approaches.The default approach
 is \code{mixEM}.}
+
+\item{report_model}{if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
+Defaults to FALSE.}
 
 \item{ash.control}{The control parameters for adaptive shrinkage}
 }

@@ -53,3 +53,6 @@ TO DO
 
 * Why does bootcorSE_calc return a data frame? Shouldn't it be a
   matrix?
+
+* Fix use of unknown functions "tic", "toc" and "gradient" in function
+  estimate_mixprop.

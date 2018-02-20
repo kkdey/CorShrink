@@ -1,5 +1,7 @@
-^packrat/
+^packrat$
+^tests_unused$
 ^\.Rprofile$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^TODO\.txt$
+^\.travis\.yml

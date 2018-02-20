@@ -33,13 +33,10 @@
 #'  out <- CorShrinkVector(corvec = cor_vec, nsamp_vec = nsamp_vec, optmethod = "mixEM")
 #'
 #' @keywords adaptive shrinkage, correlation
-#' @import ashr
-#' @import SQUAREM
+#' @importFrom ashr ash
 #' @importFrom stats cor sd
 #' @importFrom utils modifyList
 #' @export
-
-
 CorShrinkVector <- function (corvec, nsamp_vec,
                              zscore_sd_vec = NULL,
                              thresh_up = 0.99, thresh_down = - 0.99,

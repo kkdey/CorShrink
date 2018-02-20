@@ -11,3 +11,45 @@ TO DO
 
 * Merge Installation and Examples into a "Quick Start" section (see
   Logolas package for illustration).
+
+* Remove the unnecessary @importFrom statements; e.g., function
+  CorShrinkData does not use "melt" from the reshape2 package anywhere
+  in the code.
+
+* Avoid using @import statements; use @importFrom instead. Ideally,
+  you do not want any "import" statements in NAMESPACE, only
+  "importFrom" statements.
+
+* Move "test_unused" to "tests", and create a proper "testthat" suite
+  of tests using the scripts you have in the test directory. See my
+  varbvs package (https://github.com/pcarbo/varbvs) for an example of
+  this.
+
+* Remove the unneeded Suggests in the DESCRIPTION file (e.g., Biobase
+  doesn't seem to be used anywhere.)
+
+* Consider moving some of the data sets in inst/exdata to "data" so
+  that they can be loaded with the data() function instead of a more
+  complicated call to system.file().
+
+* Do you need the packrat file? Maybe it is a good time to get rid of
+  it?
+
+* Suggestion: Merge CorShinkData and CorShrinkMatrix into one
+  function, "CorShink". Then the first argument is "dat" that could
+  either be a data frame or a correlation matrix; the former case, the
+  sample correlation matrix is computed. In this way, the user only
+  has to learn one function.
+
+* You know what I'm going to say about the plotting... return a
+  ggplot2 object! :) See this very nice package:
+  https://cran.r-project.org/package=ggcorrplot
+
+* Also, it would be great to have a legend in the plot to know what
+  the colours mean!
+
+* Fix this message: "ash cor only and ash cor PD matrices are
+  different". Is this an error? Warning? Also, difficult to read...
+
+* Why does bootcorSE_calc return a data frame? Shouldn't it be a
+  matrix?

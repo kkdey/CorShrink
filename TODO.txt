@@ -4,10 +4,10 @@ TO DO
 * Add LICENSE file so that Github recognizes the license used (see
   Logolas for example).
 
-* Add license info to README (see Logolas package).
+* Add license info to README (see Logolas package for illustration).
 
-* Add "Citing this work" section to README (see Logolas package).
+* Add "Citing this work" section to README (see Logolas package for
+  illustration).
 
-* 
-
-* Merge Installation and Examples into a "Quick Start" section.
+* Merge Installation and Examples into a "Quick Start" section (see
+  Logolas package for illustration).

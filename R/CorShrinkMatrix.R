@@ -232,8 +232,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
     return(ll)
   }else{
     ll <- list("ash_cor_only"= ash_cor_only, "ash_cor_PD"=as.matrix(ash_cor_PD))
-    return(ash_corvec)
+    return(ll)
   }
-  return(ll)
 }
 

@@ -6,8 +6,8 @@
 \usage{
 CorShrinkData(data, sd_boot = FALSE, thresh_up = 0.99,
   thresh_down = -0.99, image_original = FALSE, image_corshrink = FALSE,
-  tol = 1e-06, image.control = list(), optmethod = "mixEM",
-  report_model = FALSE, ash.control = list())
+  tol = 1e-06, image.control = list(), report_model = FALSE,
+  ash.control = list())
 }
 \arguments{
 \item{data}{The samples by features data matrix. May contain NA values.}
@@ -31,11 +31,6 @@ positive definite matrix before applying PD completion.}
 
 \item{image.control}{Control parameters for the image when \code{image = TRUE}.}
 
-\item{optmethod}{The optimization method for EM algorithm - can be one of
-two techniques \code{mixEM} (mixture EM) and \code{mixVBEM}
-(mixture Variational Bayes EM) approaches.The default approach
-is \code{mixEM}.}
-
 \item{report_model}{if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
 Defaults to FALSE.}
 
@@ -52,8 +47,9 @@ from a data matrix (possibly containing NAs).
 data <- get(load(system.file("extdata", "sample_by_feature_data.rda",
                    package = "CorShrink")))
 out <- CorShrinkData(data, sd_boot = FALSE, image_original = TRUE,
-                      image_corshrink = TRUE, optmethod = "mixEM",
-                      image.control = list(x.cex = 0.3, y.cex = 0.3))
+                      image_corshrink = TRUE,
+                      image.control = list(x.cex = 0.3,
+                                           y.cex = 0.3))
 
 }
 \references{

@@ -26,12 +26,10 @@
 #'                       of correlations.
 #' @param tol The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 #'            positive definite matrix before applying PD completion.
+#'
 #' @param image.control Control parameters for the image when
 #'                      \code{image_original = TRUE} and/or \code{image_corshrink = TRUE}.
-#' @param optmethod The optimization method for EM algorithm - can be one of
-#'                  two techniques \code{mixEM} (mixture EM) and \code{mixVBEM}
-#'                  (mixture Variational Bayes EM) approaches.The default approach
-#'                  is \code{mixEM}.
+#'
 #' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
 #'                      Defaults to FALSE.
 #' @param ash.control The control parameters for adaptive shrinkage
@@ -47,8 +45,7 @@
 #'                    package = "CorShrink")))
 #' nsamp <- get(load(system.file("extdata", "common_samples.rda",
 #'                              package = "CorShrink")))
-#' out <- CorShrinkMatrix(cormat, nsamp, image_corshrink  = TRUE,
-#'                        optmethod = "mixEM")
+#' out <- CorShrinkMatrix(cormat, nsamp, image_corshrink  = TRUE)
 #'
 #' @keywords adaptive shrinkage, correlation
 #' @importFrom reshape2 melt dcast
@@ -68,7 +65,6 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                         image_original=FALSE, image_corshrink = FALSE,
                         tol=1e-06,
                         image.control = list(),
-                        optmethod = "mixEM",
                         report_model = FALSE,
                         ash.control = list())
 {
@@ -109,7 +105,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
 
   ash.control.default = list(pointmass = TRUE,
                              mixcompdist = "normal", nullweight = 10,
-                             fixg = FALSE, mode = 0,
+                             fixg = FALSE, mode = 0, optmethod = "mixEM",
                              prior = "nullbiased", gridmult = sqrt(2),
                              outputlevel = 2, alpha = 0,
                              df = NULL, control = list(K = 1,
@@ -168,8 +164,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
   ##################   Adaptive Shrinkage (Fisher Z scores) ################
 
   fit=do.call(ashr::ash, append(list(betahat = cor_transform_mean_vec,
-                                     sebetahat = cor_transform_sd_vec,
-                                     optmethod = optmethod),
+                                     sebetahat = cor_transform_sd_vec),
                                 ash.control))
 
 

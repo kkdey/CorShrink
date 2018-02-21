@@ -15,10 +15,7 @@
 #' @param tol The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 #'            positive definite matrix before applying PD completion.
 #' @param image.control Control parameters for the image when \code{image = TRUE}.
-#' @param optmethod The optimization method for EM algorithm - can be one of
-#'                  two techniques \code{mixEM} (mixture EM) and \code{mixVBEM}
-#'                  (mixture Variational Bayes EM) approaches.The default approach
-#'                  is \code{mixEM}.
+#'
 #' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
 #'                      Defaults to FALSE.
 #' @param ash.control The control parameters for adaptive shrinkage
@@ -31,8 +28,9 @@
 #' data <- get(load(system.file("extdata", "sample_by_feature_data.rda",
 #'                    package = "CorShrink")))
 #' out <- CorShrinkData(data, sd_boot = FALSE, image_original = TRUE,
-#'                       image_corshrink = TRUE, optmethod = "mixEM",
-#'                       image.control = list(x.cex = 0.3, y.cex = 0.3))
+#'                       image_corshrink = TRUE,
+#'                       image.control = list(x.cex = 0.3,
+#'                                            y.cex = 0.3))
 #'
 #' @keywords adaptive shrinkage, correlation
 #' @importFrom reshape2 melt dcast
@@ -49,7 +47,6 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                           image_original=FALSE, image_corshrink = FALSE,
                           tol=1e-06,
                           image.control = list(),
-                          optmethod = "mixEM",
                           report_model = FALSE,
                           ash.control = list()){
 
@@ -73,7 +70,6 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                            image_corshrink = image_corshrink,
                            tol=tol,
                            image.control = image.control,
-                           optmethod = optmethod,
                            report_model = report_model,
                            ash.control = ash.control)
   }else{
@@ -84,7 +80,6 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                            image_corshrink = image_corshrink,
                            tol=tol,
                            image.control = image.control,
-                           optmethod = optmethod,
                            report_model = report_model,
                            ash.control = ash.control)
   }

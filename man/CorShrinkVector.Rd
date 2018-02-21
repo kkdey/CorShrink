@@ -5,8 +5,7 @@
 \title{Adaptive shrinkage of a vector of correlations}
 \usage{
 CorShrinkVector(corvec, nsamp_vec, zscore_sd_vec = NULL, thresh_up = 0.99,
-  thresh_down = -0.99, optmethod = "mixEM", report_model = FALSE,
-  ash.control = list())
+  thresh_down = -0.99, report_model = FALSE, ash.control = list())
 }
 \arguments{
 \item{corvec}{A vector of sample correlations (may contain NAs)}
@@ -23,11 +22,6 @@ using \code{nsamp_vec}.}
 \item{thresh_up}{Upper threshold for correlations. Defaults to 0.99}
 
 \item{thresh_down}{Lower threshold for correlations. Defaults to -0.99}
-
-\item{optmethod}{The optimization method for EM algorithm - can be one of
-two techniques \code{mixEM} (mixture EM) and \code{mixVBEM}
-(mixture Variational Bayes EM) approaches.The default approach
-is \code{mixEM}.}
 
 \item{report_model}{if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
 Defaults to FALSE.}

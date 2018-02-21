@@ -15,10 +15,7 @@
 #'                 using \code{nsamp_vec}.
 #' @param thresh_up Upper threshold for correlations. Defaults to 0.99
 #' @param thresh_down Lower threshold for correlations. Defaults to -0.99
-#' @param optmethod The optimization method for EM algorithm - can be one of
-#'                  two techniques \code{mixEM} (mixture EM) and \code{mixVBEM}
-#'                  (mixture Variational Bayes EM) approaches.The default approach
-#'                  is \code{mixEM}.
+#'
 #' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
 #'                      Defaults to FALSE.
 #' @param ash.control The control parameters for adaptive shrinkage
@@ -43,13 +40,12 @@
 CorShrinkVector <- function (corvec, nsamp_vec,
                              zscore_sd_vec = NULL,
                              thresh_up = 0.99, thresh_down = - 0.99,
-                             optmethod = "mixEM",
                              report_model = FALSE,
                              ash.control = list()){
 
   ash.control.default = list(pointmass = TRUE,
                              mixcompdist = "normal", nullweight = 10,
-                             fixg = FALSE, mode = 0,
+                             fixg = FALSE, mode = 0, optmethod = "mixEM",
                              prior = "nullbiased", gridmult = sqrt(2),
                              outputlevel = 2, alpha = 0,
                              df = NULL, control=list(K = 1, method=3,
@@ -96,8 +92,7 @@ CorShrinkVector <- function (corvec, nsamp_vec,
 
  options(warn=-1)
  fit=do.call(ashr::ash, append(list(betahat = corvec_trans,
-                               sebetahat = corvec_trans_sd,
-                               optmethod = optmethod),
+                               sebetahat = corvec_trans_sd),
                                ash.control))
  ash_corvec=(exp(2*fit$result$PosteriorMean)-1)/(exp(2*fit$result$PosteriorMean)+1);
 

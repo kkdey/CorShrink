@@ -125,7 +125,7 @@ We estimate the adaptively shrunk correlation matrix for this data using **CorSh
 ```{r corshrink_data, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=7}
 par(mfrow=c(1,2))
 out <- CorShrinkData(data, sd_boot = FALSE, image_original = TRUE, 
-                     image_corshrink = TRUE, optmethod = "mixEM",
+                     image_corshrink = TRUE, 
                      image.control = list(x.cex = 0.3, y.cex = 0.3))
 ```
 
@@ -148,14 +148,6 @@ nsamp <- get(load(system.file("extdata", "common_samples.rda",
 ```
 
 
-Besides the EM algorithm `mixEM` used for the optimization above, another option is to use a variational EM analog `mixVBEM`. 
-
-```{r corshrink_mat_VBEM, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=7}
-par(mfrow=c(1,2))
-out <- CorShrinkMatrix(cormat, nsamp, image_corshrink  = TRUE, optmethod = "mixEM")
-out <- CorShrinkMatrix(cormat, nsamp, image_corshrink = TRUE, optmethod = "mixVBEM")
-```
-
 ### *CorShrinkVector*
 
 **CorShrink** can be applied to vectors of correlations as well.
@@ -163,8 +155,7 @@ out <- CorShrinkMatrix(cormat, nsamp, image_corshrink = TRUE, optmethod = "mixVB
 ```{r corshrink_vec, eval=TRUE, warning = FALSE, message = FALSE}
 cor_vec <- c(-0.56, -0.4, 0.02, 0.2, 0.9, 0.8, 0.3, 0.1, 0.4)
 nsamp_vec <- c(10, 20, 30, 4, 50, 60, 20, 10, 3)
-out <- CorShrinkVector(corvec = cor_vec, nsamp_vec = nsamp_vec,
-                       optmethod = "mixEM")
+out <- CorShrinkVector(corvec = cor_vec, nsamp_vec = nsamp_vec)
 out
 ```
 
@@ -179,8 +170,7 @@ We have so far looked at *CorShrinkData*, *CorShrinkMatrix* and *CorShrinkVector
 ```{r corshrink_data_boot, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=7}
 par(mfrow=c(1,2))
 out <- CorShrinkData(data, sd_boot = TRUE, image_original = TRUE, 
-                     image_corshrink = TRUE, optmethod = "mixEM",
-                     image.control = list(x.cex = 0.3, y.cex = 0.3))
+                     image_corshrink = TRUE, image.control = list(x.cex = 0.3, y.cex = 0.3))
 ```
 
 The algorithm works by first computing a Bootstrap estimate of the standard error of the Fisher z-scores for each pair and then using this estimate together with the correlations to shrink the latter. 
@@ -192,8 +182,7 @@ The breakdown can be formulated at the level of a correlation matrix as follows.
 ```{r corshrink_mat_boot, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=7}
 par(mfrow = c(1,2))
 zscoreSDmat <- bootcorSE_calc(data, verbose = FALSE)
-out <- CorShrinkMatrix(cormat, zscore_sd = zscoreSDmat, image_original = TRUE,
-                       image_corshrink = TRUE, optmethod = "mixEM")
+out <- CorShrinkMatrix(cormat, zscore_sd = zscoreSDmat, image_original = TRUE, image_corshrink = TRUE)
 ```
 
 ---
@@ -207,11 +196,9 @@ One can choose a fixed non-zero target in `mode` as well.
 ```{r extras_1, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=7}
 par(mfrow=c(1,2))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
-                     optmethod = "mixEM",
                      image.control = list(x.cex = 0.3, y.cex = 0.3,
                       main_corshrink = "CorShrink (target = 0)"))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
-                     optmethod = "mixEM",
                      ash.control = list(mode = "estimate"),
                      image.control = list(x.cex = 0.3, y.cex = 0.3,
                       main_corshrink = "CorShrink (target = estimated)"))
@@ -222,22 +209,18 @@ In general, *CorShrink* assumes a normal prior for the population Fisher z-score
 ```{r extras_2, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
 par(mfrow=c(2,2))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
-                     optmethod = "mixEM",
                      ash.control = list(mixcompdist = "normal"),
                      image.control = list(x.cex = 0.3, y.cex = 0.3,
                             main_corshrink = "CorShrink (normal)"))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
-                     optmethod = "mixEM",
                      ash.control = list(mixcompdist = "uniform"),
                      image.control = list(x.cex = 0.3, y.cex = 0.3,
                             main_corshrink = "CorShrink (uniform)"))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE, 
-                     optmethod = "mixEM",
                      ash.control = list(mixcompdist = "halfuniform"),
                      image.control = list(x.cex = 0.3, y.cex = 0.3,
                         main_corshrink = "CorShrink (halfuniform)"))
 out <- CorShrinkData(data, sd_boot = FALSE, image_corshrink = TRUE,  
-                     optmethod = "mixEM",
                      ash.control = list(mixcompdist = "+uniform"),
                      image.control = list(x.cex = 0.3, y.cex = 0.3,
                         main_corshrink = "CorShrink (+uniform)"))

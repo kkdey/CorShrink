@@ -46,6 +46,32 @@ CorShrinkVector <- function (corvec, nsamp_vec,
                              report_model = FALSE,
                              ash.control = list()){
 
+
+  if(!is.numeric(corvec)){
+    stop("corvec must be a numeric vector")
+  }
+
+  if(is.null(nsamp_vec) && is.null(zscore_sd_vec)){
+    stop("One of the two vectors: nsamp_vec  or zscore_sd_vec must be non NULL")
+  }
+
+  if(!is.null(nsamp_vec) && !is.null(zscore_sd_vec)){
+    warning("Both nsamp_vec and zscore_sd_vec are non NULL : switching to nsamp_vec")
+    zscore_sd_vec <- NULL
+  }
+
+  if(!is.null(nsamp_vec) && !is.numeric(nsamp_vec)){
+    stop("nsamp_vec is specified but is not a numeric vector")
+  }
+
+  if(!is.null(zscore_sd_vec) && !is.numeric(zscore_sd_vec)){
+    stop("zscore_sd_vec is specified but is not a numeric vector")
+  }
+
+  if(max(corvec) > 1 | min(corvec) < -1){
+    stop("some values in corvec lie outside the [-1, 1] range for correlations")
+  }
+
   ash.control.default = list(pointmass = TRUE,
                              mixcompdist = "normal", nullweight = 10,
                              fixg = FALSE, mode = 0, optmethod = "mixEM",

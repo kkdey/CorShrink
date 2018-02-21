@@ -55,5 +55,5 @@ bootcorSE_calc <- function(data, nboot = 50, thresh_up = 0.999,
   rownames(sd_boot_mat)  <- temp[,1]
   diag(sd_boot_mat) <- 1
   sd_boot_mat[is.na(sd_boot_mat)] <- 10^7
-  return(sd_boot_mat)
+  return(as.matrix(sd_boot_mat))
 }

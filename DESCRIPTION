@@ -27,11 +27,8 @@ Suggests:
     BiocStyle,
     corpcor,
     glasso,
-    Biobase,
     roxygen2,
-    RColorBrewer,
-    devtools,
-    xtable
+    devtools
 URL: https://github.com/kkdey/CorShrink
 BugReports: http://github.com/kkdey/CorShrink/issues
 License: GPL (>= 2)

@@ -4,10 +4,16 @@ TO DO
 * Add LICENSE file so that Github recognizes the license used (see
   Logolas for example).
 
+  -- Added
+
 * Add license info to README (see Logolas package for illustration).
+
+  -- Added
 
 * Add "Citing this work" section to README (see Logolas package for
   illustration).
+
+  -- Added
 
 * Merge Installation and Examples into a "Quick Start" section (see
   Logolas package for illustration).
@@ -28,18 +34,27 @@ TO DO
 * Remove the unneeded Suggests in the DESCRIPTION file (e.g., Biobase
   doesn't seem to be used anywhere.)
 
+    -- Done. Biobase and a few other suggested packages are removed. Kept glasso and corpcor
+     as they are competing packages to CorShrink.
+
 * Consider moving some of the data sets in inst/exdata to "data" so
   that they can be loaded with the data() function instead of a more
   complicated call to system.file().
 
+     --  Done. data/ folder created and inst/extdata folder is deprecated.
+
 * Do you need the packrat file? Maybe it is a good time to get rid of
   it?
+     -- The package broke when I removed packrat. Can packrat be put under .Rbuildignore?
 
 * Suggestion: Merge CorShinkData and CorShrinkMatrix into one
   function, "CorShink". Then the first argument is "dat" that could
   either be a data frame or a correlation matrix; the former case, the
   sample correlation matrix is computed. In this way, the user only
   has to learn one function.
+
+    -- This part is a bit complicated. What if the user has a symmetric data matrix. It may
+       be unlikely, but would not want the function to read that as a correlation matrix.
 
 * You know what I'm going to say about the plotting... return a
   ggplot2 object! :) See this very nice package:
@@ -51,8 +66,15 @@ TO DO
 * Fix this message: "ash cor only and ash cor PD matrices are
   different". Is this an error? Warning? Also, difficult to read...
 
+   -- This message has now been removed.
+
 * Why does bootcorSE_calc return a data frame? Shouldn't it be a
   matrix?
 
+   -- Now it should return a matrix.
+
 * Fix use of unknown functions "tic", "toc" and "gradient" in function
   estimate_mixprop.
+
+    -- The scripts containing these functions have been removed during trimming
+       of the package.

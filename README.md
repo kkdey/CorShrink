@@ -29,7 +29,7 @@ the following paper:
 
 ## Methods Overview
 
-A companion package to the [ashr](https://github.com/stephens999/ashr) package by Matthew Stephens [see paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5379932/), **CorShrink** adaptive shrinks correlation between a pair of variables based on the number of pairwise complete observations. **CorShrink** can be applied to a vector or table of correlations and can also be generalized to quantities similar in nature to correlations - like partial correlations, rank correlations and cosine simialrities from word2vec model. **CorShrink** when applied to a data matrix, is able to learn an individual shrinkage intensity for a pair of variables from the number of missing observations between each such pair - which allows the method to handle large scale missing observations (a demo of which is presented in the example below). 
+A companion package to the [ashr](https://github.com/stephens999/ashr) package by Matthew Stephens [see paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5379932/), **CorShrink** adaptive shrinks correlation between a pair of variables based on the number of pairwise complete observations. **CorShrink** can be applied to a vector or matrix of pairwise correlations and can also be generalized to quantities similar in nature to correlations - like partial correlations, rank correlations and cosine simialrities from word2vec model. **CorShrink** when applied to a data matrix, is able to learn an individual shrinkage intensity for a pair of variables from the number of missing observations between each such pair - which allows the method to handle large scale missing observations (a demo of which is presented in the example below). 
 
 
 ## Quick Start

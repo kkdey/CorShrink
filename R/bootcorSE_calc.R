@@ -17,8 +17,6 @@
 #' zscoreSDmat <- bootcorSE_calc(sample_by_feature_data, verbose = FALSE)
 #'
 #' @importFrom reshape2 melt dcast
-#' @import Matrix
-#' @import ashr
 #' @export
 
 

@@ -51,12 +51,11 @@
 #' @keywords adaptive shrinkage, correlation
 #' @importFrom reshape2 melt dcast
 #' @importFrom grDevices rgb
-#' @importFrom graphics axis
+#' @importFrom graphics image axis
 #' @importFrom stats cor sd
 #' @importFrom utils modifyList
-#' @import Matrix
-#' @import ashr
-#' @import SQUAREM
+#' @importFrom Matrix nearPD
+#' @importFrom ashr ash
 #' @export
 
 
@@ -80,7 +79,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                                 cex.main = 1,
                                 col=c(rev(rgb(seq(1,0,length=1000),1,seq(1,0,length=1000))),
                                       rgb(1,seq(1,0,length=1000),seq(1,0,length=1000))))
-  image.control <- modifyList(image.control.default, image.control)
+  image.control <- utils::modifyList(image.control.default, image.control)
 
   if(is.null(zscore_sd) && is.null(nsamp)){
     stop("User must provide wither an nsamp or a zscore_sd arguments")

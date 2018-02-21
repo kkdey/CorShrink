@@ -32,9 +32,7 @@
 #'                                            y.cex = 0.3))
 #'
 #' @keywords adaptive shrinkage, correlation
-#' @importFrom reshape2 melt dcast
 #' @importFrom stats cor sd
-#' @importFrom utils modifyList
 #' @export
 CorShrinkData <- function(data,  sd_boot = FALSE,
                           thresh_up = 0.99, thresh_down = - 0.99,

@@ -81,7 +81,7 @@ CorShrinkVector <- function (corvec, nsamp_vec,
                              square=TRUE, step.min0=1, step.max0=1, mstep=4, kr=1,
                              objfn.inc=1,tol=1.e-05, maxiter=100, trace=FALSE))
 
-  ash.control <- modifyList(ash.control.default, ash.control)
+  ash.control <- utils::modifyList(ash.control.default, ash.control)
 
   corvec[is.na(corvec)] = 0
 

@@ -27,9 +27,8 @@ or \code{CorShrink-VEM}.
 }
 \examples{
 
-data <- get(load(system.file("extdata", "sample_by_feature_data.rda",
-                 package = "CorShrink")))
-zscoreSDmat <- bootcorSE_calc(data, verbose = FALSE)
+data("sample_by_feature_data")
+zscoreSDmat <- bootcorSE_calc(sample_by_feature_data, verbose = FALSE)
 
 }
 \keyword{adaptive}

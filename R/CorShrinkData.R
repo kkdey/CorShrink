@@ -38,12 +38,7 @@
 #' @importFrom reshape2 melt dcast
 #' @importFrom stats cor sd
 #' @importFrom utils modifyList
-#' @import Matrix
-#' @import ashr
-#' @import SQUAREM
 #' @export
-
-
 CorShrinkData <- function(data,  sd_boot = FALSE,
                           thresh_up = 0.99, thresh_down = - 0.99,
                           image_original=FALSE, image_corshrink = FALSE,

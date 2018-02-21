@@ -1,25 +1,25 @@
-#' @title Adaptive shrinkage of a matrix of correlations.
+#' @title Adaptive shrinkage of a matrix of pairwise correlations.
 #'
-#' @description This function performs adaptive shrinkage of a sample correlation matrix using a
-#' mixture normal prior on Fisher z-scores with wide range of grid variances.
-#' The method is similar to the adaptive shrinkage method for modeling false discovery rates proposed
-#' in Stephens 2016 (see reference).
+#' @description This function performs adaptive shrinkage of a matrix of pairwise correlations
+#' using a mixture normal prior on Fisher z-scores, with each component centered at the
+#' same base level z-score value (0 for 0 base correlation) but a wide range of
+#' data-driven component variances. The method is similar to the adaptive shrinkage method for
+#' modeling false discovery rates proposed in Stephens 2016 (see reference).
 #'
 #'
-#' @param cormat A table of correlations - not necessarily a correlation matrix.
-#'               May contain NAs as well.
+#' @param cormat A matrix of pairwise correlations - not necessarily a correlation matrix.
+#'               NAs in this matrix are treated as 0.
 #' @param nsamp An integer or a matrix denoting the number of samples for
 #'              each pair of variables over which the correlation has been computed.
-#'              If the user specifies \code{zscore_sd}, then \code{nsamp} is set
-#'              to NULL and is no longer used.
+#'              Only used when \code{zscore_sd} is not provided.
 #' @param zscore_sd A matrix of the sandard error of the Fisher z-scores for each pair of
 #'                 variables. May contain NA-s as well. The NA-s in this matrix must
 #'                 match with the NAs in the \code{cormat} matrix. If provided, it is
 #'                 used as default over the the asymptotic formulation using \code{nsamp}.
 #'                 When set to NULL, asymptotic distribution of the Fisher z-scores is used
 #'                 using \code{nsamp}.
-#' @param thresh_up Upper threshold for correlations. Defaults to 0.99
-#' @param thresh_down Lower threshold for correlations. Defaults to -0.99
+#' @param thresh_up Upper threshold for correlations in \code{cormat}. Defaults to 0.99
+#' @param thresh_down Lower threshold for correlations in \code{cormat}. Defaults to -0.99
 #' @param image_original if TRUE, plots an image of the non-shrunk original matrix
 #'                       of correlations.
 #' @param image_corshrink if TRUE, plots an image of the shrunk matrix
@@ -34,10 +34,13 @@
 #'                      Defaults to FALSE.
 #' @param ash.control The control parameters for adaptive shrinkage
 #'
-#' @return Returns a adaptively shrunk version of the sample correlation matrix before
-#'         and after PD completion.
+#' @return If \code{report_model = FALSE}, returns a list with adaptively shrunk version
+#'         of the sample correlation matrix both before (\code{ash_cor_only}) and after
+#'         PD completion (\code{ash_cor_PD}). If \code{report_model = TRUE}, then the
+#'         function also returns all the details of the adaptive shrinkage model output.
 #'
-#' @references  False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://dx.doi.org/10.1101/038216
+#' @references  False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216;
+#'              doi: http://dx.doi.org/10.1101/038216
 #'
 #' @examples
 #'

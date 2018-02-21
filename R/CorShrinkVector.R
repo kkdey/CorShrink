@@ -2,27 +2,33 @@
 #'
 #' @description This function performs adaptive shrinkage of a
 #' vector of sample correlations using a mixture normal prior on
-#' Fisher z-scores with a wide range of grid variances.
-#'
+#' Fisher z-scores , with each component centered at the
+#' same base level z-score value (0 for 0 base correlation) but a
+#' wide range of data-driven component variances. The method is similar to the
+#' adaptive shrinkage method for modeling false discovery rates proposed in
+#' Stephens 2016 (see reference).
 #'
 #' @param corvec A vector of sample correlations (may contain NAs)
 #' @param nsamp_vec A vector of the number of samples over which correlations
 #' for each cell of the vector are estimated.
 #' @param zscore_sd_vec A vector of the sandard error of the Fisher z-scores for each cell
 #'                 in the vector. May contain NA-s as well. The NA-s in this matrix must
-#'                 match with the NAs in the \code{corvec} matrix. If provided, it is
-#'                 used as default. When set to NULL, asymptotic distribution of the Fisher z-scores is used
-#'                 using \code{nsamp_vec}.
-#' @param thresh_up Upper threshold for correlations. Defaults to 0.99
-#' @param thresh_down Lower threshold for correlations. Defaults to -0.99
+#'                 match with the NAs in \code{corvec}. If provided, it is
+#'                 used as default. When set to NULL, asymptotic distribution of the
+#'                 Fisher z-scores is used using \code{nsamp_vec}.
+#' @param thresh_up Upper threshold for correlations in \code{corvec}. Defaults to 0.99
+#' @param thresh_down Lower threshold for correlations in \code{corvec}. Defaults to -0.99
 #'
-#' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
-#'                      Defaults to FALSE.
+#' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs
+#'                      the shrunken vector. Defaults to FALSE.
 #' @param ash.control The control parameters for adaptive shrinkage
 #'
-#' @return Returns an adaptively shrunk version of the vector of correlations.
+#' @return If \code{report_model = FALSE}, returns an adaptively shrunk version
+#'         of the vector of correlations. If \code{report_model = TRUE}, then the
+#'         function also returns all the details of the adaptive shrinkage model output.
 #'
-#' @references  False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://dx.doi.org/10.1101/038216
+#' @references  False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216;
+#'              doi: http://dx.doi.org/10.1101/038216
 #' @examples
 #'
 #'  cor_vec <- c(-0.56, -0.4, 0.02, 0.2, 0.9, 0.8, 0.3, 0.1, 0.4)

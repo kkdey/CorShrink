@@ -15,26 +15,32 @@ for each cell of the vector are estimated.}
 
 \item{zscore_sd_vec}{A vector of the sandard error of the Fisher z-scores for each cell
 in the vector. May contain NA-s as well. The NA-s in this matrix must
-match with the NAs in the \code{corvec} matrix. If provided, it is
-used as default. When set to NULL, asymptotic distribution of the Fisher z-scores is used
-using \code{nsamp_vec}.}
+match with the NAs in \code{corvec}. If provided, it is
+used as default. When set to NULL, asymptotic distribution of the
+Fisher z-scores is used using \code{nsamp_vec}.}
 
-\item{thresh_up}{Upper threshold for correlations. Defaults to 0.99}
+\item{thresh_up}{Upper threshold for correlations in \code{corvec}. Defaults to 0.99}
 
-\item{thresh_down}{Lower threshold for correlations. Defaults to -0.99}
+\item{thresh_down}{Lower threshold for correlations in \code{corvec}. Defaults to -0.99}
 
-\item{report_model}{if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
-Defaults to FALSE.}
+\item{report_model}{if TRUE, outputs the full adaptive shrinkage output, else outputs
+the shrunken vector. Defaults to FALSE.}
 
 \item{ash.control}{The control parameters for adaptive shrinkage}
 }
 \value{
-Returns an adaptively shrunk version of the vector of correlations.
+If \code{report_model = FALSE}, returns an adaptively shrunk version
+        of the vector of correlations. If \code{report_model = TRUE}, then the
+        function also returns all the details of the adaptive shrinkage model output.
 }
 \description{
 This function performs adaptive shrinkage of a
 vector of sample correlations using a mixture normal prior on
-Fisher z-scores with a wide range of grid variances.
+Fisher z-scores , with each component centered at the
+same base level z-score value (0 for 0 base correlation) but a
+wide range of data-driven component variances. The method is similar to the
+adaptive shrinkage method for modeling false discovery rates proposed in
+Stephens 2016 (see reference).
 }
 \examples{
 
@@ -44,7 +50,8 @@ Fisher z-scores with a wide range of grid variances.
 
 }
 \references{
-False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://dx.doi.org/10.1101/038216
+False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216;
+             doi: http://dx.doi.org/10.1101/038216
 }
 \keyword{adaptive}
 \keyword{correlation}

@@ -41,11 +41,9 @@
 #'
 #' @examples
 #'
-#' cormat <- get(load(system.file("extdata", "corr_matrix.rda",
-#'                    package = "CorShrink")))
-#' nsamp <- get(load(system.file("extdata", "common_samples.rda",
-#'                              package = "CorShrink")))
-#' out <- CorShrinkMatrix(cormat, nsamp, image_corshrink  = TRUE)
+#' data("pairwise_corr_matrix")
+#' data("common_samples")
+#' out <- CorShrinkMatrix(pairwise_corr_matrix, common_samples, image_corshrink  = TRUE)
 #'
 #' @keywords adaptive shrinkage, correlation
 #' @importFrom reshape2 melt dcast

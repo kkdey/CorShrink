@@ -25,9 +25,8 @@
 #' @references  False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216; doi: http://dx.doi.org/10.1101/038216
 #'
 #' @examples
-#' data <- get(load(system.file("extdata", "sample_by_feature_data.rda",
-#'                    package = "CorShrink")))
-#' out <- CorShrinkData(data, sd_boot = FALSE, image_original = TRUE,
+#' data("sample_by_feature_data")
+#' out <- CorShrinkData(sample_by_feature_data, image_original = TRUE,
 #'                       image_corshrink = TRUE,
 #'                       image.control = list(x.cex = 0.3,
 #'                                            y.cex = 0.3))

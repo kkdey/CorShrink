@@ -5,3 +5,4 @@
 ^\.Rproj\.user$
 ^TODO\.txt$
 ^\.travis\.yml
+^packrat/

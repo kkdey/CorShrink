@@ -40,7 +40,7 @@ Fisher z-scores with a wide range of grid variances.
 
  cor_vec <- c(-0.56, -0.4, 0.02, 0.2, 0.9, 0.8, 0.3, 0.1, 0.4)
  nsamp_vec <- c(10, 20, 30, 4, 50, 60, 20, 10, 3)
- out <- CorShrinkVector(corvec = cor_vec, nsamp_vec = nsamp_vec, optmethod = "mixEM")
+ out <- CorShrinkVector(corvec = cor_vec, nsamp_vec = nsamp_vec)
 
 }
 \references{

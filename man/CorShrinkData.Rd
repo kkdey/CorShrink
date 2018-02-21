@@ -44,9 +44,8 @@ Performs adaptive shrinkage of the sample correlations starting
 from a data matrix (possibly containing NAs).
 }
 \examples{
-data <- get(load(system.file("extdata", "sample_by_feature_data.rda",
-                   package = "CorShrink")))
-out <- CorShrinkData(data, sd_boot = FALSE, image_original = TRUE,
+data("sample_by_feature_data")
+out <- CorShrinkData(sample_by_feature_data, image_original = TRUE,
                       image_corshrink = TRUE,
                       image.control = list(x.cex = 0.3,
                                            y.cex = 0.3))

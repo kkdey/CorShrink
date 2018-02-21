@@ -69,6 +69,8 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                         report_model = FALSE,
                         ash.control = list())
 {
+
+
   image.control.default <- list(x.las = 2,
                                 x.cex = 0.7,
                                 y.las = 2,
@@ -215,11 +217,11 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
            labels = col_labs, las=image.control$y.las, cex.axis = image.control$y.cex)
     }
 
-  if(all.equal(target=ash_cor_only, current=ash_cor_PD, tolerance=tol)==TRUE){
-    message("ash cor only and ash cor PD matrices are same")
-  }else{
-    message("ash cor only and ash cor PD matrices are different")
-  }
+  # if(all.equal(target=ash_cor_only, current=ash_cor_PD, tolerance=tol)==TRUE){
+  #   message("ash cor only and ash cor PD matrices are same")
+  # }else{
+  #   message("ash cor only and ash cor PD matrices are different")
+  # }
 
   if(report_model){
     ll <- list("ash_cor_only"= ash_cor_only,

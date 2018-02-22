@@ -20,10 +20,13 @@
 #'                 using \code{nsamp}.
 #' @param thresh_up Upper threshold for correlations in \code{cormat}. Defaults to 0.99
 #' @param thresh_down Lower threshold for correlations in \code{cormat}. Defaults to -0.99
-#' @param image_original if TRUE, plots an image of the non-shrunk original matrix
-#'                       of correlations.
-#' @param image_corshrink if TRUE, plots an image of the shrunk matrix
-#'                       of correlations.
+#' @param image character. options for plotting the original or the corshrink matrix.
+#'              If \code{image = "both"}, then the function outputs both the plot
+#'              for original and shrunk correlationmatrix. If \code{image = "original"},
+#'              then the function outputs the correlation plot for the original matrix only.
+#'              If \code{image = "corshrink"}, then the function outputs the correlation plot
+#'              for the CorShrink matrix only.If \code{image = "output"}, then the function
+#'              outputs the saved ggplot2 figure without displaying it. Defaults to "both".
 #' @param tol The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 #'            positive definite matrix before applying PD completion.
 #'
@@ -46,13 +49,13 @@
 #'
 #' data("pairwise_corr_matrix")
 #' data("common_samples")
-#' out <- CorShrinkMatrix(pairwise_corr_matrix, common_samples, image_corshrink  = TRUE)
+#' out <- CorShrinkMatrix(pairwise_corr_matrix, common_samples)
 #'
 #' @keywords adaptive shrinkage, correlation
 #' @importFrom reshape2 melt dcast
-#' @importFrom grDevices rgb
-#' @importFrom graphics image axis
 #' @importFrom stats cor sd
+#' @importFrom ggcorrplot ggcorrplot
+#' @importFrom gridExtra grid.arrange
 #' @importFrom utils modifyList
 #' @importFrom Matrix nearPD
 #' @importFrom ashr ash
@@ -62,23 +65,39 @@
 CorShrinkMatrix <- function(cormat, nsamp = NULL,
                         zscore_sd = NULL,
                         thresh_up = 0.99, thresh_down = - 0.99,
-                        image_original=FALSE, image_corshrink = FALSE,
+                        image = c("both", "original", "corshrink", "output"),
                         tol=1e-06,
                         image.control = list(),
                         report_model = FALSE,
                         ash.control = list())
 {
 
+  if(length(image) > 1){
+    image <- "both"
+  }
 
-  image.control.default <- list(x.las = 2,
-                                x.cex = 0.7,
-                                y.las = 2,
-                                y.cex = 0.7,
-                                main_original = "sample corr matrix",
-                                main_corshrink = "CorShrink matrix",
-                                cex.main = 1,
-                                col=c(rev(rgb(seq(1,0,length=1000),1,seq(1,0,length=1000))),
-                                      rgb(1,seq(1,0,length=1000),seq(1,0,length=1000))))
+  image.control.default <- list(method = c("square", "circle"),
+                                type = c("full", "lower", "upper"),
+                                ggtheme = ggplot2::theme_minimal,
+                                title = "",
+                                show.legend = TRUE,
+                                legend.title = "Corr",
+                                show.diag = FALSE,
+                                colors = c("blue", "white", "red"),
+                                outline.color = "gray",
+                                hc.order = FALSE, hc.method = "complete", lab = FALSE,
+                                lab_col = "black", lab_size = 4, p.mat = NULL, sig.level = 0.05,
+                                insig = c("pch", "blank"), pch = 4, pch.col = "black", pch.cex = 5,
+                                tl.cex = 5, tl.col = "black", tl.srt = 45)
+  # image.control.default <- list(x.las = 2,
+  #                               x.cex = 0.7,
+  #                               y.las = 2,
+  #                               y.cex = 0.7,
+  #                               main_original = "sample corr matrix",
+  #                               main_corshrink = "CorShrink matrix",
+  #                               cex.main = 1,
+  #                               col=c(rev(rgb(seq(1,0,length=1000),1,seq(1,0,length=1000))),
+  #                                     rgb(1,seq(1,0,length=1000),seq(1,0,length=1000))))
   image.control <- utils::modifyList(image.control.default, image.control)
 
   if(is.null(zscore_sd) && is.null(nsamp)){
@@ -198,38 +217,51 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
   row_labs <- rownames(cormat)
   col_labs <- colnames(cormat)
 
+  if(image == "original"){
+     image_original <- TRUE
+     image_corshrink <- FALSE
+   }
+  if(image == "corshrink"){
+     image_corshrink <- TRUE
+     image_original <- FALSE
+  }
+  if(image == "output"){
+    image_original = TRUE
+    image_corshrink = TRUE
+  }
+  if(image == "both"){
+    image_original = TRUE
+    image_corshrink = TRUE
+  }
+
    if(image_original) {
-      image(as.matrix(cormat), col=image.control$col, main = image.control$main_original,
-            cex.main=image.control$cex.main, xaxt = "n", yaxt = "n", zlim=c(-1,1))
-      axis(1, at = seq(0, 1, length.out = ncol(cormat)),
-           labels = row_labs, las=image.control$x.las, cex.axis = image.control$x.cex)
-      axis(2, at = seq(0, 1, length.out = ncol(cormat)),
-           labels = col_labs, las=image.control$y.las, cex.axis = image.control$y.cex)
+      out1 <- do.call(ggcorrplot::ggcorrplot, append(list(corr = as.matrix(cormat)),
+                                            image.control))
    }
 
     if(image_corshrink){
-      image(as.matrix(ash_cor_PD), col=image.control$col, main=image.control$main_corshrink,
-            cex.main=image.control$cex.main, xaxt = "n", yaxt = "n", zlim=c(-1,1))
-      axis(1, at = seq(0, 1, length.out = ncol(cormat)),
-           labels = row_labs, las=image.control$x.las, cex.axis = image.control$x.cex)
-      axis(2, at = seq(0, 1, length.out = ncol(cormat)),
-           labels = col_labs, las=image.control$y.las, cex.axis = image.control$y.cex)
+      out2 <- do.call(ggcorrplot::ggcorrplot, append(list(corr = as.matrix(ash_cor_PD)),
+                                             image.control))
     }
-
-  # if(all.equal(target=ash_cor_only, current=ash_cor_PD, tolerance=tol)==TRUE){
-  #   message("ash cor only and ash cor PD matrices are same")
-  # }else{
-  #   message("ash cor only and ash cor PD matrices are different")
-  # }
 
   if(report_model){
     ll <- list("ash_cor_only"= ash_cor_only,
                "ash_cor_PD"=as.matrix(ash_cor_PD),
                "model" = fit)
-    return(ll)
   }else{
     ll <- list("ash_cor_only"= ash_cor_only, "ash_cor_PD"=as.matrix(ash_cor_PD))
-    return(ll)
   }
+
+   if(image == "both"){
+     gridExtra::grid.arrange(out1, out2, nrow = 1)
+   }else if (image == "original"){
+     print(out1)
+   }else if (image == "corshrink"){
+     print(out2)
+   }else if (image == "output"){
+     ll[["image"]] = out2
+   }
+
+  return(ll)
 }
 

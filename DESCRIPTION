@@ -21,7 +21,9 @@ Imports:
     SQUAREM,
     reshape2,
     methods,
-    Matrix
+    Matrix,
+    gridExtra,
+    ggcorrplot
 Suggests:
     knitr,
     BiocStyle,

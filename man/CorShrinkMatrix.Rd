@@ -34,7 +34,7 @@ for original and shrunk correlationmatrix. If \code{image = "original"},
 then the function outputs the correlation plot for the original matrix only.
 If \code{image = "corshrink"}, then the function outputs the correlation plot
 for the CorShrink matrix only.If \code{image = "output"}, then the function
-outputs the saved ggplot2 figure without displaying it. Defaults to "both".}
+outputs the saved ggplot figure without displaying it. Defaults to "both".}
 
 \item{tol}{The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 positive definite matrix before applying PD completion.}

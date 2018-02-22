@@ -23,7 +23,8 @@ Imports:
     methods,
     Matrix,
     gridExtra,
-    ggcorrplot
+    ggcorrplot,
+    ggplot2
 Suggests:
     knitr,
     BiocStyle,

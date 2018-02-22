@@ -89,7 +89,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                                 hc.order = FALSE, hc.method = "complete", lab = FALSE,
                                 lab_col = "black", lab_size = 4, p.mat = NULL, sig.level = 0.05,
                                 insig = c("pch", "blank"), pch = 4, pch.col = "black", pch.cex = 5,
-                                tl.cex = 5, tl.col = "black", tl.srt = 45)
+                                tl.cex = 7, tl.col = "black", tl.srt = 45)
   # image.control.default <- list(x.las = 2,
   #                               x.cex = 0.7,
   #                               y.las = 2,
@@ -245,12 +245,21 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                                              image.control))
     }
 
+  ash_cor_PD <- as.matrix(ash_cor_PD)
+
+  if(!is.null(rownames(cormat)) && !is.null(colnames(cormat))){
+    rownames(ash_cor_only) <- rownames(cormat)
+    colnames(ash_cor_only) <- colnames(cormat)
+    rownames(ash_cor_PD) <- rownames(cormat)
+    colnames(ash_cor_PD) <- colnames(cormat)
+  }
+
   if(report_model){
     ll <- list("ash_cor_only"= ash_cor_only,
-               "ash_cor_PD"=as.matrix(ash_cor_PD),
+               "ash_cor_PD"= ash_cor_PD,
                "model" = fit)
   }else{
-    ll <- list("ash_cor_only"= ash_cor_only, "ash_cor_PD"=as.matrix(ash_cor_PD))
+    ll <- list("ash_cor_only"= ash_cor_only, "ash_cor_PD"= ash_cor_PD)
   }
 
    if(image == "both"){

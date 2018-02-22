@@ -66,8 +66,12 @@ TO DO
   ggplot2 object! :) See this very nice package:
   https://cran.r-project.org/package=ggcorrplot
 
+   -- Done
+
 * Also, it would be great to have a legend in the plot to know what
   the colours mean!
+
+   -- Legend added
 
 * Fix this message: "ash cor only and ash cor PD matrices are
   different". Is this an error? Warning? Also, difficult to read...

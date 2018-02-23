@@ -6,6 +6,10 @@
 #' @param sd_boot A Boolean variable indicating if the standard errors of the
 #'                Fisher z-scores should be computed via Bootstrap methods or
 #'                through asymptotic formulation of the problem.
+#' @param type character. Either "cor" or "pcor" - depending on whether to use
+#'             correlation or partial correlation. Default is "cor".
+#' @param cor_method The method of correlation used. May be "pearson", "spearman" or "kendall"
+#'                   depending on the type of correlation to be used by the user.
 #' @param thresh_up Upper threshold for correlations. Defaults to 0.99
 #' @param thresh_down Lower threshold for correlations. Defaults to -0.99.
 #' @param image character. options for plotting the original or the corshrink matrix.
@@ -17,8 +21,8 @@
 #'              outputs the saved ggplot figure without displaying it. Defaults to "both".
 #' @param tol The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 #'            positive definite matrix before applying PD completion.
+#' @param nboot The number of bootstrap samples if \code{sd_boot = TRUE}.
 #' @param image.control Control parameters for the image when \code{image = TRUE}.
-#'
 #' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
 #'                      Defaults to FALSE.
 #' @param ash.control The control parameters for adaptive shrinkage
@@ -33,14 +37,34 @@
 #'
 #' @keywords adaptive shrinkage, correlation
 #' @importFrom stats cor sd
+#' @importFrom corpcor cor2pcor
 #' @export
 CorShrinkData <- function(data,  sd_boot = FALSE,
+                          type = "cor",
+                          cor_method,
                           thresh_up = 0.99, thresh_down = - 0.99,
                           image = c("both", "original", "corshrink", "output"),
                           tol=1e-06,
+                          nboot = 50,
                           image.control = list(),
                           report_model = FALSE,
                           ash.control = list()){
+
+  if(missing(cor_method)){
+    cor_method = "pearson"
+  }else{
+    if(length(cor_method) > 1){
+      stop("cor_method must be either `pearson`, `kendall` or `spearman`")
+    }else{
+      if(!(cor_method %in% c("pearson", "spearman"))){
+        stop("cor_method must be either `pearson`, `kendall` or `spearman`")
+      }
+    }
+  }
+
+  if(!(type %in% c("cor", "pcor"))){
+    stop("type can either be `cor` or `pcor`")
+  }
 
   cormat <- cor(data, use = "pairwise.complete.obs")
 
@@ -56,23 +80,45 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
            does not match with the correlation matrix")
     }
 
-    out <- CorShrinkMatrix(cormat, nsamp, zscore_sd = NULL,
-                           thresh_up = thresh_up, thresh_down = thresh_down,
-                           image = image,
-                           tol=tol,
-                           image.control = image.control,
-                           report_model = report_model,
-                           ash.control = ash.control)
+    if(type == "cor"){
+      out <- CorShrinkMatrix(cormat, nsamp, zscore_sd = NULL,
+                             thresh_up = thresh_up, thresh_down = thresh_down,
+                             image = image,
+                             tol=tol,
+                             image.control = image.control,
+                             report_model = report_model,
+                             ash.control = ash.control)
+    }else if (type == "pcor"){
+      out <- CorShrinkMatrix(cormat, nsamp, zscore_sd = NULL,
+                             thresh_up = thresh_up, thresh_down = thresh_down,
+                             image = image,
+                             tol=tol,
+                             image.control = image.control,
+                             report_model = report_model,
+                             ash.control = ash.control)
+      out$ash_cor_PD <- cor2pcor(out$ash_cor_PD)
+    }
   }else{
-    zscore_sd <- bootcorSE_calc(data)
-    out <- CorShrinkMatrix(cormat, nsamp=NULL, zscore_sd = zscore_sd,
-                           thresh_up = thresh_up, thresh_down = thresh_down,
-                           image = image,
-                           tol=tol,
-                           image.control = image.control,
-                           report_model = report_model,
-                           ash.control = ash.control)
+    if(type == "pcor"){
+      zscore_sd <- bootpcorSE_calc(data, cor_method = cor_method, nboot = nboot)
+      pcormat <- cor2pcor(cormat)
+      out <- CorShrinkMatrix(pcormat, nsamp=NULL, zscore_sd = zscore_sd,
+                             thresh_up = thresh_up, thresh_down = thresh_down,
+                             image = image,
+                             tol=tol,
+                             image.control = image.control,
+                             report_model = report_model,
+                             ash.control = ash.control)
+    }else if (type == "cor"){
+      zscore_sd <- bootcorSE_calc(data, cor_method = cor_method, nboot = nboot)
+      out <- CorShrinkMatrix(cormat, nsamp=NULL, zscore_sd = zscore_sd,
+                             thresh_up = thresh_up, thresh_down = thresh_down,
+                             image = image,
+                             tol=tol,
+                             image.control = image.control,
+                             report_model = report_model,
+                             ash.control = ash.control)
+    }
   }
-
   return(out)
 }

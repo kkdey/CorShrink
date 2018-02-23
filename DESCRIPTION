@@ -24,11 +24,11 @@ Imports:
     Matrix,
     gridExtra,
     ggcorrplot,
+    corpcor,
     ggplot2
 Suggests:
     knitr,
     BiocStyle,
-    corpcor,
     glasso,
     roxygen2,
     devtools

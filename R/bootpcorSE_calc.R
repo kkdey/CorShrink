@@ -1,33 +1,29 @@
-#' @title Calculate bootstrap SE for the Fisher z-scores of correlations
+#' @title Calculate bootstrap SE for the Fisher z-scores of partial correlations
 #'
-#' @description computes the bootstrap SE of the Fisher z-scores to be used in \code{CorShrink-ML}
-#' or \code{CorShrink-VEM}.
+#' @description computes the bootstrap SE of the Fisher z-scores of partial correlations for
+#'              a fixed number of resamples
 #'
 #' @param data The samples by features data matrix.
 #' @param nboot The number of bootstrap samples.
 #' @param cor_method The method of correlation used. May be "pearson", "spearman" or "kendall"
 #'                   depending on the type of correlation to be used by the user.
-#' @param thresh_up The upward threshold for correlations
-#' @param thresh_down The downward threshold for correlations.
+#' @param thresh_up The upward threshold for partial correlations
+#' @param thresh_down The downward threshold for partial correlations.
 #' @param verbose To print the status of Bootstrap runs
 #'
-#' @return Returns standard errors for fisher z-scores for the correlations.
-#' @keywords adaptive shrinkage, correlation
-#' @examples
-#'
-#' data("sample_by_feature_data")
-#' zscoreSDmat <- bootcorSE_calc(sample_by_feature_data, verbose = FALSE)
+#' @return Returns standard errors for fisher z-scores for the partial correlations.
+#' @keywords adaptive shrinkage, partial correlation
 #'
 #' @importFrom reshape2 melt dcast
+#' @importFrom corpcor cor2pcor
 #' @export
 
 
 
-bootcorSE_calc <- function(data, nboot = 50,
-                           cor_method,
-                           thresh_up = 0.999,
-                           thresh_down = 0.001, verbose = TRUE){
-
+bootpcorSE_calc <- function(data, nboot = 50,
+                            cor_method,
+                            thresh_up = 0.999,
+                            thresh_down = 0.001, verbose = TRUE){
   if(missing(cor_method)){
     cor_method = "pearson"
   }else{
@@ -45,9 +41,11 @@ bootcorSE_calc <- function(data, nboot = 50,
   for(num in 1:nboot){
     boot_indices <- sample(1:dim(data)[1], dim(data)[1], replace = TRUE)
     data_boot <- data[boot_indices,]
-    cor_sample_boot <- cor(data_boot,
+    cor_sample_boot_1 <- cor(data_boot,
                            method = cor_method,
                            use = "pairwise.complete.obs")
+    cor_sample_boot_1[is.na(cor_sample_boot_1)] = 0
+    cor_sample_boot <- corpcor::cor2pcor(cor_sample_boot_1)
 
     cor_table_boot <- reshape2::melt(cor_sample_boot);
     cor_table_non_diag_boot <- cor_table_boot[which(cor_table_boot[,1] != cor_table_boot[,2]),];

@@ -4,13 +4,16 @@
 \alias{bootcorSE_calc}
 \title{Calculate bootstrap SE for the Fisher z-scores of correlations}
 \usage{
-bootcorSE_calc(data, nboot = 50, thresh_up = 0.999, thresh_down = 0.001,
-  verbose = TRUE)
+bootcorSE_calc(data, nboot = 50, cor_method, thresh_up = 0.999,
+  thresh_down = 0.001, verbose = TRUE)
 }
 \arguments{
 \item{data}{The samples by features data matrix.}
 
 \item{nboot}{The number of bootstrap samples.}
+
+\item{cor_method}{The method of correlation used. May be "pearson", "spearman" or "kendall"
+depending on the type of correlation to be used by the user.}
 
 \item{thresh_up}{The upward threshold for correlations}
 

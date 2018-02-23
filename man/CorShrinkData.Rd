@@ -4,10 +4,10 @@
 \alias{CorShrinkData}
 \title{Adaptive shrinkage of correlations from a data matrix}
 \usage{
-CorShrinkData(data, sd_boot = FALSE, thresh_up = 0.99,
-  thresh_down = -0.99, image = c("both", "original", "corshrink", "output"),
-  tol = 1e-06, image.control = list(), report_model = FALSE,
-  ash.control = list())
+CorShrinkData(data, sd_boot = FALSE, type = "cor", cor_method,
+  thresh_up = 0.99, thresh_down = -0.99, image = c("both", "original",
+  "corshrink", "output"), tol = 1e-06, nboot = 50, image.control = list(),
+  report_model = FALSE, ash.control = list())
 }
 \arguments{
 \item{data}{The samples by features data matrix. May contain NA values.}
@@ -15,6 +15,12 @@ CorShrinkData(data, sd_boot = FALSE, thresh_up = 0.99,
 \item{sd_boot}{A Boolean variable indicating if the standard errors of the
 Fisher z-scores should be computed via Bootstrap methods or
 through asymptotic formulation of the problem.}
+
+\item{type}{character. Either "cor" or "pcor" - depending on whether to use
+correlation or partial correlation. Default is "cor".}
+
+\item{cor_method}{The method of correlation used. May be "pearson", "spearman" or "kendall"
+depending on the type of correlation to be used by the user.}
 
 \item{thresh_up}{Upper threshold for correlations. Defaults to 0.99}
 
@@ -30,6 +36,8 @@ outputs the saved ggplot figure without displaying it. Defaults to "both".}
 
 \item{tol}{The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 positive definite matrix before applying PD completion.}
+
+\item{nboot}{The number of bootstrap samples if \code{sd_boot = TRUE}.}
 
 \item{image.control}{Control parameters for the image when \code{image = TRUE}.}
 

@@ -5,8 +5,8 @@
 \title{Adaptive shrinkage of a matrix of pairwise correlations.}
 \usage{
 CorShrinkMatrix(cormat, nsamp = NULL, zscore_sd = NULL, thresh_up = 0.99,
-  thresh_down = -0.99, image = c("both", "original", "corshrink", "output"),
-  tol = 1e-06, image.control = list(), report_model = FALSE,
+  thresh_down = -0.99, image = c("both", "original", "corshrink", "output",
+  "null"), tol = 1e-06, image.control = list(), report_model = FALSE,
   ash.control = list())
 }
 \arguments{
@@ -34,7 +34,8 @@ for original and shrunk correlationmatrix. If \code{image = "original"},
 then the function outputs the correlation plot for the original matrix only.
 If \code{image = "corshrink"}, then the function outputs the correlation plot
 for the CorShrink matrix only.If \code{image = "output"}, then the function
-outputs the saved ggplot figure without displaying it. Defaults to "both".}
+outputs the saved ggplot figure without displaying it. If \code{image = "null"},
+no image is output. Defaults to "both".}
 
 \item{tol}{The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 positive definite matrix before applying PD completion.}

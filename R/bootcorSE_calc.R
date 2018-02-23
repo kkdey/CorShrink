@@ -34,7 +34,7 @@ bootcorSE_calc <- function(data, nboot = 50,
     if(length(cor_method) > 1){
       stop("cor_method must be either `pearson`, `kendall` or `spearman`")
     }else{
-      if(!(cor_method %in% c("pearson", "spearman"))){
+      if(!(cor_method %in% c("pearson", "spearman", "kendall"))){
         stop("cor_method must be either `pearson`, `kendall` or `spearman`")
       }
     }

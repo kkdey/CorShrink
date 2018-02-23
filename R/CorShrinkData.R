@@ -18,7 +18,8 @@
 #'              then the function outputs the correlation plot for the original matrix only.
 #'              If \code{image = "corshrink"}, then the function outputs the correlation plot
 #'              for the CorShrink matrix only.If \code{image = "output"}, then the function
-#'              outputs the saved ggplot figure without displaying it. Defaults to "both".
+#'              outputs the saved ggplot figure without displaying it. If \code{image = "null"},
+#'              no image is output.Defaults to "both".
 #' @param tol The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 #'            positive definite matrix before applying PD completion.
 #' @param nboot The number of bootstrap samples if \code{sd_boot = TRUE}.
@@ -43,7 +44,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                           type = "cor",
                           cor_method,
                           thresh_up = 0.99, thresh_down = - 0.99,
-                          image = c("both", "original", "corshrink", "output"),
+                          image = c("both", "original", "corshrink", "output", "null"),
                           tol=1e-06,
                           nboot = 50,
                           image.control = list(),
@@ -56,7 +57,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
     if(length(cor_method) > 1){
       stop("cor_method must be either `pearson`, `kendall` or `spearman`")
     }else{
-      if(!(cor_method %in% c("pearson", "spearman"))){
+      if(!(cor_method %in% c("pearson", "spearman", "kendall"))){
         stop("cor_method must be either `pearson`, `kendall` or `spearman`")
       }
     }
@@ -66,7 +67,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
     stop("type can either be `cor` or `pcor`")
   }
 
-  cormat <- cor(data, use = "pairwise.complete.obs")
+  cormat <- cor(data, use = "pairwise.complete.obs", method = cor_method)
 
   if (!sd_boot){
     data2 <- data
@@ -96,12 +97,12 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                              image.control = image.control,
                              report_model = report_model,
                              ash.control = ash.control)
-      out$ash_cor_PD <- cor2pcor(out$ash_cor_PD)
+      out$ash_cor_PD <- corpcor::cor2pcor(out$ash_cor_PD)
     }
   }else{
     if(type == "pcor"){
       zscore_sd <- bootpcorSE_calc(data, cor_method = cor_method, nboot = nboot)
-      pcormat <- cor2pcor(cormat)
+      pcormat <- corpcor::cor2pcor(cormat)
       out <- CorShrinkMatrix(pcormat, nsamp=NULL, zscore_sd = zscore_sd,
                              thresh_up = thresh_up, thresh_down = thresh_down,
                              image = image,

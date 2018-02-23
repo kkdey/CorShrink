@@ -26,7 +26,8 @@
 #'              then the function outputs the correlation plot for the original matrix only.
 #'              If \code{image = "corshrink"}, then the function outputs the correlation plot
 #'              for the CorShrink matrix only.If \code{image = "output"}, then the function
-#'              outputs the saved ggplot figure without displaying it. Defaults to "both".
+#'              outputs the saved ggplot figure without displaying it. If \code{image = "null"},
+#'              no image is output. Defaults to "both".
 #' @param tol The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 #'            positive definite matrix before applying PD completion.
 #'
@@ -66,7 +67,7 @@
 CorShrinkMatrix <- function(cormat, nsamp = NULL,
                         zscore_sd = NULL,
                         thresh_up = 0.99, thresh_down = - 0.99,
-                        image = c("both", "original", "corshrink", "output"),
+                        image = c("both", "original", "corshrink", "output", "null"),
                         tol=1e-06,
                         image.control = list(),
                         report_model = FALSE,
@@ -233,6 +234,10 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
   if(image == "both"){
     image_original = TRUE
     image_corshrink = TRUE
+  }
+  if(image == "null"){
+    image_original = FALSE
+    image_corshrink = FALSE
   }
 
    if(image_original) {

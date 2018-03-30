@@ -97,7 +97,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                              image.control = image.control,
                              report_model = report_model,
                              ash.control = ash.control)
-      out$ash_cor_PD <- corpcor::cor2pcor(out$ash_cor_PD)
+      out$cor <- corpcor::cor2pcor(out$cor)
     }
   }else{
     if(type == "pcor"){

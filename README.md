@@ -38,7 +38,7 @@ The instructions for installing and loading the package are as follows.
 
 ```
 library(devtools)
-install_github("kkdey/CorShrink")
+install_github("kkdey/CorShrink", build_vignettes = TRUE)
 ```
 
 Then load the package with:
@@ -94,7 +94,7 @@ Walk through some more detailed examples in the
 [vignette](vignettes/corshrink.Rmd):
 
 ```R
-vignette("CorShrink")
+vignette("corshrink")
 ```
 
 ## Credits

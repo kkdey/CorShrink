@@ -93,7 +93,7 @@ The matrix format shrinkage is performed by the *CorShrinkMatrix* function while
 
 $$  R^{\star}_{ij} = \frac{exp \; (2 Z^{\star}_{ij}) - 1}{exp \; (2 Z^{\star}_{ij}) + 1} $$
   
-- If the user is attempting to estimate a correlation matrix ((R_{ij})) for a number of variables $(i,j)$, then a requisite condition is positive definiteness of the estimate. However, the $((R^{\star}_{ij}))$ matrix obtained above may not be positive definite. We work around this problem by choosing a psoitive definite matrix nearest to the above estimate (see  [@higham2002computing]). 
+- If the user is attempting to estimate a correlation matrix ((R_{ij})) for a number of variables $(i,j)$, then a requisite condition is positive definiteness of the estimate. However, the $((R^{\star}_{ij}))$ matrix obtained above may not be positive definite. We work around this problem by choosing a positive definite matrix $((R^{{\star}{\star}}_{ij}))$ nearest to the above estimate (see  [@higham2002computing]). 
 
 
 ---
@@ -125,11 +125,13 @@ We estimate the adaptively shrunk correlation matrix for this data using **CorSh
 out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "both")
 ```
 
-The function outputs a list with two elements which are two versions of CorShrink estimated matrices  - `ash_cor_only` and `ash_cor_PD`. `ash_cor_only` version may not be positive definite, while `ash_cor_PD` is the nearest positive definite approximation to `ash_cor_only` version.
+The function outputs a list with two elements which are two versions of CorShrink estimated matrices  - `cor` and `cor_before_PD`.`cor` is the nearest positive definite approximation ($R^{{\star}{\star}}$) to `cor_before_PD` version ($R^{{\star}}$) as described in the methods above. When `image = "both"`, the function plots the images for both these versions.
+
+To see whether the method works well, check if the these two versions are close to each other. 
 
 ```{r corshrink_output, eval = TRUE, warning = FALSE}
-out$ash_cor_only[1:5,1:5]
-out$ash_cor_PD[1:5, 1:5]
+out$cor_before_PD[1:5,1:5]
+out$cor[1:5, 1:5]
 ```
 
 ### *CorShrinkMatrix*
@@ -194,6 +196,8 @@ out2 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output",
 library(gridExtra)
 grid.arrange(out1$image, out2$image, nrow = 1)
 ```
+
+The `image = "output"` option just outputs the image for the shrunk matrix without plotting it.
 
 In general, *CorShrink* assumes a normal prior for the population Fisher z-scores. But under specific settings, a non-symmetric distribution , such as uniform or half-uniform could be a better fit. This can be achieved using the `mixcompdist` in `ash.control`. 
 

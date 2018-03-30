@@ -55,12 +55,11 @@
 #' @keywords adaptive shrinkage, correlation
 #' @importFrom reshape2 melt dcast
 #' @importFrom stats cor sd
-#' @importFrom ggcorrplot ggcorrplot
+#' @importFrom corrplot corrplot
 #' @importFrom gridExtra grid.arrange
 #' @importFrom utils modifyList
 #' @importFrom Matrix nearPD
 #' @importFrom ashr ash
-#' @importFrom ggplot2 theme_minimal
 #' @export
 
 
@@ -75,31 +74,29 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
 {
 
   if(length(image) > 1){
-    image <- "both"
+    image <- "null"
   }
 
-  image.control.default <- list(method = c("square", "circle"),
-                                type = c("full", "lower", "upper"),
-                                ggtheme = ggplot2::theme_minimal,
-                                title = "",
-                                show.legend = TRUE,
-                                legend.title = "Corr",
-                                show.diag = FALSE,
-                                colors = c("blue", "white", "red"),
-                                outline.color = "gray",
-                                hc.order = FALSE, hc.method = "complete", lab = FALSE,
-                                lab_col = "black", lab_size = 4, p.mat = NULL, sig.level = 0.05,
-                                insig = c("pch", "blank"), pch = 4, pch.col = "black", pch.cex = 5,
-                                tl.cex = 7, tl.col = "black", tl.srt = 45)
-  # image.control.default <- list(x.las = 2,
-  #                               x.cex = 0.7,
-  #                               y.las = 2,
-  #                               y.cex = 0.7,
-  #                               main_original = "sample corr matrix",
-  #                               main_corshrink = "CorShrink matrix",
-  #                               cex.main = 1,
-  #                               col=c(rev(rgb(seq(1,0,length=1000),1,seq(1,0,length=1000))),
-  #                                     rgb(1,seq(1,0,length=1000),seq(1,0,length=1000))))
+  image.control.default <- list(method = c("circle", "square", "ellipse", "number", "shade",
+                                 "color", "pie"), type = c("full", "lower", "upper"), add = FALSE,
+                                col = NULL, bg = "white", title = "", is.corr = TRUE, diag = TRUE,
+                                outline = FALSE, mar = c(0, 0, 0, 0), addgrid.col = NULL,
+                                addCoef.col = NULL, addCoefasPercent = FALSE,
+                                order = c("original", "AOE", "FPC", "hclust", "alphabet"),
+                                hclust.method = c("complete", "ward",
+                                                  "ward.D", "ward.D2", "single", "average",
+                                                  "mcquitty", "median", "centroid"),
+                                addrect = NULL, rect.col = "black", rect.lwd = 2, tl.pos = NULL,
+                                tl.cex = 1, tl.col = "black", tl.offset = 0.4, tl.srt = 90,
+                                cl.pos = NULL, cl.lim = NULL, cl.length = NULL, cl.cex = 0.8,
+                                cl.ratio = 0.15, cl.align.text = "c", cl.offset = 0.5, number.cex = 1,
+                                number.font = 2, number.digits = NULL, addshade = c("negative",
+                                "positive", "all"), shade.lwd = 1, shade.col = "white", p.mat = NULL,
+                                sig.level = 0.05, insig = c("pch", "p-value", "blank", "n", "label_sig"),
+                                pch = 4, pch.col = "black", pch.cex = 3, plotCI = c("n", "square",
+                               "circle", "rect"), lowCI.mat = NULL, uppCI.mat = NULL, na.label = "?",
+                                na.label.col = "white", win.asp = 1)
+
   image.control <- utils::modifyList(image.control.default, image.control)
 
   if(is.null(zscore_sd) && is.null(nsamp)){
@@ -241,12 +238,12 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
   }
 
    if(image_original) {
-      out1 <- do.call(ggcorrplot::ggcorrplot, append(list(corr = as.matrix(cormat)),
+      out1 <- do.call(corrplot::corrplot, append(list(corr = as.matrix(cormat)),
                                             image.control))
    }
 
     if(image_corshrink){
-      out2 <- do.call(ggcorrplot::ggcorrplot, append(list(corr = as.matrix(ash_cor_PD)),
+      out2 <- do.call(corrplot::corrplot, append(list(corr = as.matrix(ash_cor_PD)),
                                              image.control))
     }
 
@@ -260,11 +257,11 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
   }
 
   if(report_model){
-    ll <- list("ash_cor_only"= ash_cor_only,
-               "ash_cor_PD"= ash_cor_PD,
+    ll <- list("cor_before_PD"= ash_cor_only,
+               "cor"= ash_cor_PD,
                "model" = fit)
   }else{
-    ll <- list("ash_cor_only"= ash_cor_only, "ash_cor_PD"= ash_cor_PD)
+    ll <- list("cor_before_PD"= ash_cor_only, "cor"= ash_cor_PD)
   }
 
    if(image == "both"){

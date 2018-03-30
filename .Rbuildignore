@@ -8,3 +8,5 @@
 ^packrat/
 ^LICENSE$
 ^doc/
+^doc$
+^\.git

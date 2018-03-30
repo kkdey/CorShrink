@@ -1,0 +1,9 @@
+packrat/lib*/
+.Rproj.user
+packrat/src/*
+packrat/lib-R/*
+packrat/lib-R/
+packrat/lib-R/KernSmooth
+packrat/lib-R
+packrat/lib-R/utils
+packrat/src/

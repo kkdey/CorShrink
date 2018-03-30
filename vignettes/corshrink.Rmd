@@ -1,0 +1,233 @@
+---
+title: "Adaptive Shrinkage of correlations using *CorShrink*"
+shorttitle: "Corshrink Adaptive Shrinkage"
+author:
+  - name: Kushal K Dey
+    affiliation:
+        - Department of Statistics, University of Chicago
+  - name: Matthew Stephens
+    affiliation:
+        - Department of Statistics, University of Chicago
+        - Department of Human Genetics, University of Chicago
+email: kkdey@uchicago.edu
+package: CorShrink
+abstract: >
+ Estimation of correlation or covariance matrix, especially in settings where the number of samples n is much smaller than the number of features p, has been a much studied problem in statistics. However, these popular approaches are not well suited for handling large scale missing data. Here we propose an alternative approach, *CorShrink*, for covariance or correlation estimation that adapts to varying degree of missingness in observations corresponding to each pair of features. We show the different formulations of *Corshrink* and its flexibility to different types of data formats through examples. 
+output:
+  BiocStyle::html_document:
+  toc: TRUE
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8} ---
+  date: "`r Sys.Date()`"
+bibliography: corshrink.bib
+---
+
+```{r knitr, echo=FALSE, results="hide"}
+library("knitr")
+opts_chunk$set(tidy=FALSE,tidy.opts=list(width.cutoff=30),dev="png",fig.show="hide",
+               fig.width=4,fig.height=7,
+               message=FALSE, warning = FALSE)
+```
+
+
+```{r style, eval=TRUE, echo=FALSE, results='asis'}
+BiocStyle::markdown()
+```
+
+# Introduction
+
+Estimation of covariance or correlation matrices has widespread usage in a broad spectrum of statistical applications. The most commonly used estimator, namely the sample covariance or correlation matrix, is rank deficient and hence unstable in cases where the dimensionality of the problem (p) is greater than the number of samples (n). This problem has driven statisticians to suggest various alternative estimators in \textit{small n, large p} settings. Several estimators of correlation matrix have been proposed in such settings and their theoretical properties and performance comparisons have been studied comprehensively [@touloumis2015nonparametric, @ledoit2003improved, @bickel2008, @rothman2009]. Some of these methods are already available as R packages - `r CRANpkg("corpcor")` [@schafer2004empirical], `r CRANpkg("glasso")` [@friedman2008sparse], `r CRANpkg("PDSCE")`[@rothman2009] etc. 
+
+These approaches, however,  are not  well suited for handling large scale missingness in data. Also, some of these methods work well under some specific sets of assumptions about the underlying matrix, for e.g. - thresholding estimators assume a banded structure of the correlation matrix. In this package, ee introduce a method *CorShrink* that adapts to varying degree of missingness in observations corresponding to each pair of features. Also, *CorShrink* can be applied directly to data consisting of missing values, as well as to derived quantities like  vectors and matrices of correlations between features, and allows for two formulations - an asymptotic approach and a resampling based approach. Even in examples with no missing data, CorShrink estimated correlations are visibly closer to the true correlations compared to the standard methods. *CorShrink* also can be applied to other correlation-like quantities such as partial correlations, rank correlations and cosine similarity values from word2vec models. 
+ 
+---
+
+# CorShrink Installation
+
+**CorShrink** is a companion package to `r CRANpkg("ashr")` R package [@stephens2016false]. Before installing **CorShrink**, please make sure you have the latest version of `r CRANpkg("ashr")`.
+
+```{r install_ash, eval=FALSE}
+devtools::install_github("stephens999/ashr")
+```
+
+The other dependencies of this package include `r CRANpkg("SQUAREM")`, `r CRANpkg("reshape2")` and `r CRANpkg("Matrix")`. Next we install **CorShrink**. 
+
+```{r install_corshrink_CRAN, eval=FALSE}
+install.packages("CorShrink")
+```
+
+The development version can be installed from Github as well.
+
+```{r install_corshrink_github, eval=FALSE}
+library(devtools)
+install_github("kkdey/CorShrink")
+```
+
+Then load the package with:
+
+```{r load_countclust, cache=FALSE, eval=TRUE,warning=FALSE}
+library(CorShrink)
+```
+
+---
+
+# Methods 
+
+The main steps in **CorShrink** are as follows 
+
+- Convert the correlation between variables $i$ and $j$, $R_{ij}$ into Fisher z-score $Z_{ij}$ by the following transformation.
+
+$$  Z_{ij} = 0.5 \log \left (\frac{1 + R_{ij}}{1 - R_{ij}} \right )  $$
+
+- Estimate from data, the standard errors ($s_{ij}$) of these Z-scores $Z_{ij}$. This can be done in two ways in **CorShrink**. One approach uses an asymptotic normal approximation, where the standard errors are $s_{ij} = \frac{1}{n_{ij} - 3}$, with $n_{ij}$ being the number of complete observations between pair $(i,j)$ that generates the correlation $R_{ij}$. The other approach performs a re-sampling of the observations for the $(i,j)$ pair and obtains a Bootstrap estimate of the standard errors from the re-sampled  $Z_{ij}$. 
+
+- Apply adaptive shrinkage (*ash* due [@stephens2016false]) on the pairs $(Z_{ij}, s_{ij})$  either across all $i$ and $j$ pairs (matrix format) or along all $i$ for one $j$, or along all $j$ for one $i$ (vector formats). 
+
+$$  Z^{\star}_{ij}  : = ash \; (Z_{ij}, s_{ij})   $$
+ 
+The matrix format shrinkage is performed by the *CorShrinkMatrix* function while the vector format shrinkage is performed by the *CorShrinkVector* function. 
+
+- Reverse transform the posterior mean of the shrunk Fisher z-scores from the previous step.
+
+$$  R^{\star}_{ij} = \frac{exp \; (2 Z^{\star}_{ij}) - 1}{exp \; (2 Z^{\star}_{ij}) + 1} $$
+  
+- If the user is attempting to estimate a correlation matrix ((R_{ij})) for a number of variables $(i,j)$, then a requisite condition is positive definiteness of the estimate. However, the $((R^{\star}_{ij}))$ matrix obtained above may not be positive definite. We work around this problem by choosing a psoitive definite matrix nearest to the above estimate (see  [@higham2002computing]). 
+
+
+---
+
+
+
+# Illustration
+
+We load an example data matrix - the person (544) by tissue samples (53) gene expression data for the gene *ENSG00000166819* collected from the [Genotype Tissue Expression (GTEx) Project](https://www.gtexportal.org/home/) .
+
+```{r load_data, eval=TRUE, warning = FALSE}
+data("sample_by_feature_data")
+```
+
+Just by checking the first few rows and columns, we see that the data contains many missing values. The data is 
+
+```{r top_data, eval=TRUE, warning = FALSE}
+sample_by_feature_data[1:5,1:5]
+```
+
+## Standard version  *CorShrink*
+
+
+### *CorShrinkData*
+
+We estimate the adaptively shrunk correlation matrix for this data using **CorShrink**.
+
+```{r corshrink_data, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
+out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "both")
+```
+
+The function outputs a list with two elements which are two versions of CorShrink estimated matrices  - `ash_cor_only` and `ash_cor_PD`. `ash_cor_only` version may not be positive definite, while `ash_cor_PD` is the nearest positive definite approximation to `ash_cor_only` version.
+
+```{r corshrink_output, eval = TRUE, warning = FALSE}
+out$ash_cor_only[1:5,1:5]
+out$ash_cor_PD[1:5, 1:5]
+```
+
+### *CorShrinkMatrix*
+
+**CorShrink** takes as input not just the samples by features data matrix but also a matrix of pairwise correlations with a matrix of number of samples for each pair contributing to the correlation.
+
+```{r corshrinkmat, eval=TRUE, warning = FALSE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
+data("pairwise_corr_matrix")
+data("common_samples")
+out <- CorShrinkMatrix(pairwise_corr_matrix, common_samples, image = "both")
+```
+
+### *CorShrinkVector*
+
+**CorShrink** can be applied to vectors of correlations as well.
+
+```{r corshrink_vec, eval=TRUE, warning = FALSE, message = FALSE}
+cor_vec <- c(-0.56, -0.4, 0.02, 0.2, 0.9, 0.8, 0.3, 0.1, 0.4)
+nsamp_vec <- c(10, 20, 30, 4, 50, 60, 20, 10, 3)
+out <- CorShrinkVector(corvec = cor_vec, nsamp_vec = nsamp_vec)
+out
+```
+
+Note that the correlations computed from adequate amount of data as for the 5th and 6th entries above, the amount of shrinkage is minimal, while it is substantial for the 4th and 9th entries which correspond to small number of samples.
+
+## Re-sampling version  *CorShrink*
+
+We have so far looked at *CorShrinkData*, *CorShrinkMatrix* and *CorShrinkVector*, three functions that provide adaptive shrinkage of correlations at the level of the data matrix, matrix of correlations and vector of correlations respectively. In the above examples, we have used the asymptotic version of our algorithm (see Methods). Next we show example usage of a resampling based version of *CorShrink*.
+
+### *CorShrinkData* - resampling
+
+```{r corshrink_data_boot, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
+out <- CorShrinkData(sample_by_feature_data, sd_boot = TRUE, image = "both")
+```
+
+The algorithm works by first computing a Bootstrap estimate of the standard error of the Fisher z-scores for each pair and then using this estimate together with the correlations to shrink the latter. 
+
+### *CorShrinkMatrix* - resampling
+
+The breakdown can be formulated at the level of a correlation matrix as follows.
+
+```{r corshrink_mat_boot, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
+zscoreSDmat <- bootcorSE_calc(sample_by_feature_data, verbose = FALSE)
+out <- CorShrinkMatrix(pairwise_corr_matrix, zscore_sd = zscoreSDmat, image = "both")
+```
+
+---
+
+# Extras
+
+So far, in all our examples, we assumed that the estimated correlations between any pair of variables is shrunk towards 0. But *CorShrink* allows the user to choose a non-zero shrinkage target, estimated from the data, using the `mode` option in `ash.control` input.
+
+One can choose a fixed non-zero target in `mode` as well. 
+
+```{r extras_1, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
+out1 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
+                      image.control = list(title = "CorShrink (target = 0)", lab_size = 2))
+out2 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
+                     ash.control = list(mode = "estimate"),
+                     image.control = list(title = "CorShrink (target = estimated)", lab_size = 2))
+
+library(gridExtra)
+grid.arrange(out1$image, out2$image, nrow = 1)
+```
+
+In general, *CorShrink* assumes a normal prior for the population Fisher z-scores. But under specific settings, a non-symmetric distribution , such as uniform or half-uniform could be a better fit. This can be achieved using the `mixcompdist` in `ash.control`. 
+
+```{r extras_2, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
+out1 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
+                     ash.control = list(mixcompdist = "normal"))
+out2 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
+                     ash.control = list(mixcompdist = "uniform"))
+out3 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
+                     ash.control = list(mixcompdist = "halfuniform"))
+out4 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output",  
+                     ash.control = list(mixcompdist = "+uniform"))
+
+library(gridExtra)
+grid.arrange(out1$image, out2$image, out3$image, out4$image, nrow = 2)
+```
+
+
+---
+
+# Acknowledgements
+
+We would like to thank the GTEx Consortium, John Blischak, Sarah Urbut, Chiaowen Joyce Hsiao, Peter Carbonetto and all members of the Stephens Lab. 
+
+---
+
+# Session Info
+
+```{r session_info, eval=TRUE}
+sessionInfo()
+```
+
+---
+
+# References
+
+

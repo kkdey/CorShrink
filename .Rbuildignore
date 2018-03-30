@@ -1,0 +1,10 @@
+^packrat$
+^tests$
+^\.Rprofile$
+^.*\.Rproj$
+^\.Rproj\.user$
+^TODO\.txt$
+^\.travis\.yml
+^packrat/
+^LICENSE$
+^doc/

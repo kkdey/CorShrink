@@ -1,0 +1,12 @@
+citHeader("To cite the CorShink package in publications use:")
+
+citEntry(entry   = "Article",
+         title   = "False discovery rates: a new deal",
+	 author  = "Matthew Stephens",
+	 year    = "2016",
+	 journal = "Biostatistics",
+         volume  = 18,
+         number  = 2,
+	 textVersion = paste("Matthew Stephens (2016). False discovery",
+             "rates: a new deal. Biostatistics 18(2), pages 275-294."))
+						      

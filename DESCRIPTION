@@ -1,0 +1,41 @@
+Package: CorShrink
+Type: Package
+Encoding: UTF-8
+Title: Adaptive Shrinkage of Correlation and Covariance Matrices
+Version: 0.1-3
+Date: 2018-02-20
+Authors@R: c(person("Kushal","Dey",role=c("aut","cre"),
+                    email="kkdey@uchicago.edu"),
+             person("Matthew","Stephens",role="aut"),
+	     person("Peter","Carbonetto",role="ctb"))
+Maintainer: Kushal Dey <kkdey@uchicago.edu>
+Description: Performs adaptive shrinkage of correlation and covariance
+    matrices using a mixture model prior over the Fisher
+    z-transformation of the correlations. A separate shrinkage
+    intensity may be specifiedfor each cell of the correlation or the
+    covariance table.
+Depends:
+    R (>= 3.2),
+Imports:
+    ashr,
+    SQUAREM,
+    reshape2,
+    methods,
+    Matrix,
+    gridExtra,
+    ggcorrplot,
+    corpcor,
+    ggplot2
+Suggests:
+    knitr,
+    BiocStyle,
+    glasso,
+    roxygen2,
+    devtools
+URL: https://github.com/kkdey/CorShrink
+BugReports: http://github.com/kkdey/CorShrink/issues
+License: GPL (>= 2)
+NeedsCompilation: no
+LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1.9000

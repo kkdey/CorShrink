@@ -77,17 +77,17 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
     image <- "null"
   }
 
-  image.control.default <- list(method = c("circle", "square", "ellipse", "number", "shade",
-                                 "color", "pie"), type = c("full", "lower", "upper"), add = FALSE,
-                                col = NULL, bg = "white", title = "", is.corr = TRUE, diag = TRUE,
+  image.control.default <- list(method = "color", type =  "upper", add = FALSE,
+                                col = colorRampPalette(c("blue", "white", "red"))(200), bg = "white",
+                                title = "", is.corr = TRUE, diag = FALSE,
                                 outline = FALSE, mar = c(0, 0, 0, 0), addgrid.col = NULL,
                                 addCoef.col = NULL, addCoefasPercent = FALSE,
                                 order = c("original", "AOE", "FPC", "hclust", "alphabet"),
                                 hclust.method = c("complete", "ward",
                                                   "ward.D", "ward.D2", "single", "average",
                                                   "mcquitty", "median", "centroid"),
-                                addrect = NULL, rect.col = "black", rect.lwd = 2, tl.pos = NULL,
-                                tl.cex = 1, tl.col = "black", tl.offset = 0.4, tl.srt = 90,
+                                addrect = NULL, rect.col = "white", rect.lwd = 2, tl.pos = "td",
+                                tl.cex = 0.8, tl.col = "black", tl.offset = 0.4, tl.srt = 90,
                                 cl.pos = NULL, cl.lim = NULL, cl.length = NULL, cl.cex = 0.8,
                                 cl.ratio = 0.15, cl.align.text = "c", cl.offset = 0.5, number.cex = 1,
                                 number.font = 2, number.digits = NULL, addshade = c("negative",
@@ -229,6 +229,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
     image_corshrink = TRUE
   }
   if(image == "both"){
+    par(mfrow=c(1,2))
     image_original = TRUE
     image_corshrink = TRUE
   }
@@ -238,12 +239,12 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
   }
 
    if(image_original) {
-      out1 <- do.call(corrplot::corrplot, append(list(corr = as.matrix(cormat)),
+      do.call(corrplot::corrplot, append(list(corr = as.matrix(cormat)),
                                             image.control))
    }
 
     if(image_corshrink){
-      out2 <- do.call(corrplot::corrplot, append(list(corr = as.matrix(ash_cor_PD)),
+      do.call(corrplot::corrplot, append(list(corr = as.matrix(ash_cor_PD)),
                                              image.control))
     }
 
@@ -264,15 +265,15 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
     ll <- list("cor_before_PD"= ash_cor_only, "cor"= ash_cor_PD)
   }
 
-   if(image == "both"){
-     gridExtra::grid.arrange(out1, out2, nrow = 1)
-   }else if (image == "original"){
-     print(out1)
-   }else if (image == "corshrink"){
-     print(out2)
-   }else if (image == "output"){
-     ll[["image"]] = out2
-   }
+   # if(image == "both"){
+   #   gridExtra::grid.arrange(out1, out2, nrow = 1)
+   # }else if (image == "original"){
+   #   print(out1)
+   # }else if (image == "corshrink"){
+   #   print(out2)
+   # }else if (image == "output"){
+   #   ll[["image"]] = out2
+   # }
 
   return(ll)
 }

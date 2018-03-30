@@ -187,14 +187,12 @@ So far, in all our examples, we assumed that the estimated correlations between 
 One can choose a fixed non-zero target in `mode` as well. 
 
 ```{r extras_1, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
-out1 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
-                      image.control = list(title = "CorShrink (target = 0)", lab_size = 2))
-out2 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
-                     ash.control = list(mode = "estimate"),
-                     image.control = list(title = "CorShrink (target = estimated)", lab_size = 2))
 
-library(gridExtra)
-grid.arrange(out1$image, out2$image, nrow = 1)
+par(mfrow=c(1,2))
+out1 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "corshrink",             image.control = list(title = "CorShrink (target = 0)", lab_size = 2))
+out2 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "corshrink",                      ash.control = list(mode = "estimate"),
+    image.control = list(title = "CorShrink (target = estimated)", lab_size = 2))
+
 ```
 
 The `image = "output"` option just outputs the image for the shrunk matrix without plotting it.
@@ -202,17 +200,16 @@ The `image = "output"` option just outputs the image for the shrunk matrix witho
 In general, *CorShrink* assumes a normal prior for the population Fisher z-scores. But under specific settings, a non-symmetric distribution , such as uniform or half-uniform could be a better fit. This can be achieved using the `mixcompdist` in `ash.control`. 
 
 ```{r extras_2, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
-out1 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
+par(mfrow=c(2,2))
+out1 <- CorShrinkData(sample_by_feature_data,sd_boot = FALSE, image ="corshrink", 
                      ash.control = list(mixcompdist = "normal"))
-out2 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
+out2 <- CorShrinkData(sample_by_feature_data,sd_boot = FALSE, image ="corshrink", 
                      ash.control = list(mixcompdist = "uniform"))
-out3 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output", 
+out3 <- CorShrinkData(sample_by_feature_data,sd_boot = FALSE, image ="corshrink", 
                      ash.control = list(mixcompdist = "halfuniform"))
-out4 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "output",  
+out4 <- CorShrinkData(sample_by_feature_data,sd_boot = FALSE, image ="corshrink",  
                      ash.control = list(mixcompdist = "+uniform"))
 
-library(gridExtra)
-grid.arrange(out1$image, out2$image, out3$image, out4$image, nrow = 2)
 ```
 
 

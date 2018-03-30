@@ -121,8 +121,9 @@ sample_by_feature_data[1:5,1:5]
 
 We estimate the adaptively shrunk correlation matrix for this data using **CorShrink**.
 
-```{r corshrink_data, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
-out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "both")
+```{r corshrink_data, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=13}
+out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "both",
+                     image.control = list(tl.cex = 0.4))
 ```
 
 The function outputs a list with two elements which are two versions of CorShrink estimated matrices  - `cor` and `cor_before_PD`.`cor` is the nearest positive definite approximation ($R^{{\star}{\star}}$) to `cor_before_PD` version ($R^{{\star}}$) as described in the methods above. When `image = "both"`, the function plots the images for both these versions.
@@ -141,7 +142,8 @@ out$cor[1:5, 1:5]
 ```{r corshrinkmat, eval=TRUE, warning = FALSE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
 data("pairwise_corr_matrix")
 data("common_samples")
-out <- CorShrinkMatrix(pairwise_corr_matrix, common_samples, image = "both")
+out <- CorShrinkMatrix(pairwise_corr_matrix, common_samples, image = "both",
+                       image.control = list(tl.cex = 0.4))
 ```
 
 ### *CorShrinkVector*
@@ -164,7 +166,8 @@ We have so far looked at *CorShrinkData*, *CorShrinkMatrix* and *CorShrinkVector
 ### *CorShrinkData* - resampling
 
 ```{r corshrink_data_boot, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
-out <- CorShrinkData(sample_by_feature_data, sd_boot = TRUE, image = "both")
+out <- CorShrinkData(sample_by_feature_data, sd_boot = TRUE, image = "both",
+                     image.control = list(tl.cex = 0.4))
 ```
 
 The algorithm works by first computing a Bootstrap estimate of the standard error of the Fisher z-scores for each pair and then using this estimate together with the correlations to shrink the latter. 
@@ -175,7 +178,8 @@ The breakdown can be formulated at the level of a correlation matrix as follows.
 
 ```{r corshrink_mat_boot, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
 zscoreSDmat <- bootcorSE_calc(sample_by_feature_data, verbose = FALSE)
-out <- CorShrinkMatrix(pairwise_corr_matrix, zscore_sd = zscoreSDmat, image = "both")
+out <- CorShrinkMatrix(pairwise_corr_matrix, zscore_sd = zscoreSDmat, image = "both",
+                       image.control = list(tl.cex = 0.4))
 ```
 
 ---
@@ -189,9 +193,9 @@ One can choose a fixed non-zero target in `mode` as well.
 ```{r extras_1, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
 
 par(mfrow=c(1,2))
-out1 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "corshrink",             image.control = list(title = "CorShrink (target = 0)", lab_size = 2))
+out1 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "corshrink",             image.control = list(title = "CorShrink (target = 0)", tl.cex = 0.4))
 out2 <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "corshrink",                      ash.control = list(mode = "estimate"),
-    image.control = list(title = "CorShrink (target = estimated)", lab_size = 2))
+    image.control = list(title = "CorShrink (target = estimated)", tl.cex = 0.4))
 
 ```
 
@@ -202,13 +206,17 @@ In general, *CorShrink* assumes a normal prior for the population Fisher z-score
 ```{r extras_2, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=144, fig.width=13, fig.height=10}
 par(mfrow=c(2,2))
 out1 <- CorShrinkData(sample_by_feature_data,sd_boot = FALSE, image ="corshrink", 
-                     ash.control = list(mixcompdist = "normal"))
+                     ash.control = list(mixcompdist = "normal"),
+                     image.control = list(tl.cex = 0.4))
 out2 <- CorShrinkData(sample_by_feature_data,sd_boot = FALSE, image ="corshrink", 
-                     ash.control = list(mixcompdist = "uniform"))
+                     ash.control = list(mixcompdist = "uniform"),
+                     image.control = list(tl.cex = 0.4))
 out3 <- CorShrinkData(sample_by_feature_data,sd_boot = FALSE, image ="corshrink", 
-                     ash.control = list(mixcompdist = "halfuniform"))
+                     ash.control = list(mixcompdist = "halfuniform"),
+                     image.control = list(tl.cex = 0.4))
 out4 <- CorShrinkData(sample_by_feature_data,sd_boot = FALSE, image ="corshrink",  
-                     ash.control = list(mixcompdist = "+uniform"))
+                     ash.control = list(mixcompdist = "+uniform"),
+                     image.control = list(tl.cex = 0.4))
 
 ```
 

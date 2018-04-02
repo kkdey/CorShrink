@@ -60,6 +60,8 @@
 #' @importFrom utils modifyList
 #' @importFrom Matrix nearPD
 #' @importFrom ashr ash
+#' @importFrom grDevices colorRampPalette
+#' @importFrom graphics par
 #' @export
 
 

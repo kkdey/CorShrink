@@ -123,7 +123,7 @@ We estimate the adaptively shrunk correlation matrix for this data using **CorSh
 
 ```{r corshrink_data, eval=TRUE, warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=50, fig.width=10, fig.height=10}
 out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "both",
-                     image.control = list(tl.cex = 0.5,  mar = c(0, 0, 0, 0)))
+                     image.control = list(tl.cex = 0.5))
 ```
 
 The function outputs a list with two elements which are two versions of CorShrink estimated matrices  - `cor` and `cor_before_PD`.`cor` is the nearest positive definite approximation ($R^{{\star}{\star}}$) to `cor_before_PD` version ($R^{{\star}}$) as described in the methods above. When `image = "both"`, the function plots the images for both these versions.

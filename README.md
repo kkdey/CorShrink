@@ -71,11 +71,9 @@ GTEX-1122O      1.522667       1.674467          4.188002
 
 We use **CorShrink** to estimate the correlation matrix taking account of the missing observations and compare the result with the matrix of pairwise correlations generated from complete observations for each pair of features. 
 
-
 ```
-par(mfrow=c(1,2))
-out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE,
-                     image_original = TRUE, image_corshrink = TRUE)                            
+out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "both",
+                    image.control = list(tl.cex = 0.2))                            
 ```
 <img src="inst/doc/plot1.png" alt="Structure Plot" height="500" width="1000">
 
@@ -83,9 +81,8 @@ out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE,
 The above approach uses an asymototic version of CorShrink. Alternatively, one can use a re-sampling or Bootstrapping approach.
 
 ```
-par(mfrow=c(1,2))
-out <- CorShrinkData(sample_by_feature_data, sd_boot = TRUE, 
-                     image_original = TRUE, image_corshrink = TRUE)
+out <- CorShrinkData(sample_by_feature_data, sd_boot = TRUE, image = "both",
+                    image.control = list(tl.cex = 0.2))
 ```
 
 <img src="inst/doc/plot2.png" alt="Structure Plot" height="500" width="1000">

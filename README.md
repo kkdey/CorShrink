@@ -73,7 +73,7 @@ We use **CorShrink** to estimate the correlation matrix taking account of the mi
 
 ```
 out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "both",
-                    image.control = list(tl.cex = 0.8))                            
+                    image.control = list(tl.cex = 0.2))                            
 ```
 <img src="inst/doc/plot1.png" alt="Structure Plot" height="800" width="800">
 

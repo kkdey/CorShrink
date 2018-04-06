@@ -75,7 +75,7 @@ We use **CorShrink** to estimate the correlation matrix taking account of the mi
 out <- CorShrinkData(sample_by_feature_data, sd_boot = FALSE, image = "both",
                     image.control = list(tl.cex = 0.2))                            
 ```
-<img src="inst/doc/plot1.png" alt="Structure Plot" height="800" width="800">
+<img src="inst/doc/plot1.png" alt="Structure Plot" height="400" width="400">
 
 
 The above approach uses an asymototic version of CorShrink. Alternatively, one can use a re-sampling or Bootstrapping approach.
@@ -85,7 +85,7 @@ out <- CorShrinkData(sample_by_feature_data, sd_boot = TRUE, image = "both",
                     image.control = list(tl.cex = 0.2))
 ```
 
-<img src="inst/doc/plot2.png" alt="Structure Plot" height="800" width="800">
+<img src="inst/doc/plot2.png" alt="Structure Plot" height="400" width="400">
 
 Walk through some more detailed examples in the
 [vignette](vignettes/corshrink.Rmd):

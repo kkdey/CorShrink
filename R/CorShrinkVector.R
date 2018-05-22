@@ -39,6 +39,8 @@
 #' @importFrom ashr ash
 #' @importFrom stats cor sd
 #' @importFrom utils modifyList
+#' @import methods
+#' @import SQUAREM
 #' @export
 CorShrinkVector <- function (corvec, nsamp_vec,
                              zscore_sd_vec = NULL,

@@ -14,8 +14,9 @@ package: CorShrink
 abstract: >
  Estimation of correlation or covariance matrix, especially in settings where the number of samples n is much smaller than the number of features p, has been a much studied problem in statistics. However, these popular approaches are not well suited for handling large scale missing data. Here we propose an alternative approach, *CorShrink*, for covariance or correlation estimation that adapts to varying degree of missingness in observations corresponding to each pair of features. We show the different formulations of *Corshrink* and its flexibility to different types of data formats through examples. 
 output:
-  BiocStyle::html_document:
-  toc: TRUE
+  html_document:
+    toc: true
+    toc_float: true
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -31,14 +32,9 @@ opts_chunk$set(tidy=FALSE,tidy.opts=list(width.cutoff=30),dev="png",fig.show="hi
                message=FALSE, warning = FALSE)
 ```
 
-
-```{r style, eval=TRUE, echo=FALSE, results='asis'}
-BiocStyle::markdown()
-```
-
 # Introduction
 
-Estimation of covariance or correlation matrices has widespread usage in a broad spectrum of statistical applications. The most commonly used estimator, namely the sample covariance or correlation matrix, is rank deficient and hence unstable in cases where the dimensionality of the problem (p) is greater than the number of samples (n). This problem has driven statisticians to suggest various alternative estimators in \textit{small n, large p} settings. Several estimators of correlation matrix have been proposed in such settings and their theoretical properties and performance comparisons have been studied comprehensively [@touloumis2015nonparametric, @ledoit2003improved, @bickel2008, @rothman2009]. Some of these methods are already available as R packages - `r CRANpkg("corpcor")` [@schafer2004empirical], `r CRANpkg("glasso")` [@friedman2008sparse], `r CRANpkg("PDSCE")`[@rothman2009] etc. 
+Estimation of covariance or correlation matrices has widespread usage in a broad spectrum of statistical applications. The most commonly used estimator, namely the sample covariance or correlation matrix, is rank deficient and hence unstable in cases where the dimensionality of the problem (p) is greater than the number of samples (n). This problem has driven statisticians to suggest various alternative estimators in \textit{small n, large p} settings. Several estimators of correlation matrix have been proposed in such settings and their theoretical properties and performance comparisons have been studied comprehensively [@touloumis2015nonparametric, @ledoit2003improved, @bickel2008, @rothman2009]. Some of these methods are already available as R packages - **corpcor** [@schafer2004empirical], **glasso** [@friedman2008sparse], **PDSCE** [@rothman2009] etc. 
 
 These approaches, however,  are not  well suited for handling large scale missingness in data. Also, some of these methods work well under some specific sets of assumptions about the underlying matrix, for e.g. - thresholding estimators assume a banded structure of the correlation matrix. In this package, ee introduce a method *CorShrink* that adapts to varying degree of missingness in observations corresponding to each pair of features. Also, *CorShrink* can be applied directly to data consisting of missing values, as well as to derived quantities like  vectors and matrices of correlations between features, and allows for two formulations - an asymptotic approach and a resampling based approach. Even in examples with no missing data, CorShrink estimated correlations are visibly closer to the true correlations compared to the standard methods. *CorShrink* also can be applied to other correlation-like quantities such as partial correlations, rank correlations and cosine similarity values from word2vec models. 
  
@@ -46,13 +42,13 @@ These approaches, however,  are not  well suited for handling large scale missin
 
 # CorShrink Installation
 
-**CorShrink** is a companion package to `r CRANpkg("ashr")` R package [@stephens2016false]. Before installing **CorShrink**, please make sure you have the latest version of `r CRANpkg("ashr")`.
+**CorShrink** is a companion package to **ashr** R package [@stephens2016false]. Before installing **CorShrink**, please make sure you have the latest version of **ashr**.
 
 ```{r install_ash, eval=FALSE}
 devtools::install_github("stephens999/ashr")
 ```
 
-The other dependencies of this package include `r CRANpkg("SQUAREM")`, `r CRANpkg("reshape2")` and `r CRANpkg("Matrix")`. Next we install **CorShrink**. 
+The other dependencies of this package include **SQUAREM**, **reshape2** and **Matrix**. Next we install **CorShrink**. 
 
 ```{r install_corshrink_CRAN, eval=FALSE}
 install.packages("CorShrink")

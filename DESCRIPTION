@@ -27,7 +27,6 @@ Imports:
     corpcor
 Suggests:
     knitr,
-    BiocStyle,
     glasso,
     roxygen2,
     devtools

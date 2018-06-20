@@ -19,19 +19,8 @@
 #'              in \code{CorShrink}.
 #' @param thresh_up Upper threshold for correlations in \code{cormat}. Defaults to 0.99
 #' @param thresh_down Lower threshold for correlations in \code{cormat}. Defaults to -0.99
-#' @param image character. options for plotting the original or the corshrink matrix.
-#'              If \code{image = "both"}, then the function outputs both the plot
-#'              for original and shrunk correlationmatrix. If \code{image = "original"},
-#'              then the function outputs the correlation plot for the original matrix only.
-#'              If \code{image = "corshrink"}, then the function outputs the correlation plot
-#'              for the CorShrink matrix only.If \code{image = "output"}, then the function
-#'              outputs the saved ggplot figure without displaying it. If \code{image = "null"},
-#'              no image is output. Defaults to "both".
 #' @param tol The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 #'            positive definite matrix before applying PD completion.
-#' @param image.control Control parameters for the image when
-#'                      \code{image_original = TRUE} and/or \code{image_corshrink = TRUE}.
-#'
 #' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
 #'                      Defaults to FALSE.
 #' @param ash.control The control parameters for adaptive shrinkage
@@ -122,22 +111,22 @@ cor2pcor1 <- function(data){
 
 cor2pcor2 <- function(data, num_bags = 50){
   pS_bag <- 0
-  for(num in 1:number_bags){
+  for(num in 1:num_bags){
     data_samp <- data[sample(1:dim(data)[1], dim(data)[1], replace = TRUE), ]
     S_bag <- cor(data_samp)
     pS_bag <- pS_bag + corpcor::cor2pcor(S_bag)
   }
-  pS_bag <- pS_bag/number_bags
+  pS_bag <- pS_bag/num_bags
   return(pS_bag)
 }
 
 cor2pcor3 <- function(data, num_bags = 50){
   S_bag <- 0
-  for(num in 1:number_bags){
+  for(num in 1:num_bags){
     data_samp <- data[sample(1:dim(data)[1], dim(data)[1], replace = TRUE), ]
     S_bag <- S_bag + cor(data_samp)
   }
-  pS_bag <- cor2pcor((S_bag/number_bags))
+  pS_bag <- cor2pcor((S_bag/num_bags))
   return(pS_bag)
 }
 

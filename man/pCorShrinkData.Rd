@@ -37,18 +37,6 @@ positive definite matrix before applying PD completion.}
 Defaults to FALSE.}
 
 \item{ash.control}{The control parameters for adaptive shrinkage}
-
-\item{image}{character. options for plotting the original or the corshrink matrix.
-If \code{image = "both"}, then the function outputs both the plot
-for original and shrunk correlationmatrix. If \code{image = "original"},
-then the function outputs the correlation plot for the original matrix only.
-If \code{image = "corshrink"}, then the function outputs the correlation plot
-for the CorShrink matrix only.If \code{image = "output"}, then the function
-outputs the saved ggplot figure without displaying it. If \code{image = "null"},
-no image is output. Defaults to "both".}
-
-\item{image.control}{Control parameters for the image when
-\code{image_original = TRUE} and/or \code{image_corshrink = TRUE}.}
 }
 \value{
 If \code{report_model = FALSE}, returns the adaptively shrunk

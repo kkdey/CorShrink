@@ -34,7 +34,15 @@ A companion package to the [ashr](https://github.com/stephens999/ashr) package b
 
 ## Quick Start
 
-The instructions for installing and loading the package are as follows.
+The instructions for installing the package are as follows.
+
+*For CRAN version*:
+
+```
+install.packages("CorShrink")
+```
+
+*For the development version*: 
 
 ```
 library(devtools)

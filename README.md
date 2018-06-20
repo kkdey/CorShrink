@@ -3,7 +3,6 @@
 [![Build Status](https://cranlogs.r-pkg.org/badges/grand-total/CorShrink)](https://cranlogs.r-pkg.org/badges/grand-total/CorShrink)
 [![Build Status](https://cranlogs.r-pkg.org/badges/CorShrink)](https://cranlogs.r-pkg.org/badges/CorShrink)
 [![Build Status](https://cranlogs.r-pkg.org/badges/last-day/CorShrink)](https://cranlogs.r-pkg.org/badges/last-day/CorShrink)
-[![Build Status](https://travis-ci.org/kkdey/CorShrink.svg?branch=master)](https://travis-ci.org/kkdey/CorShrink.svg?branch=master)
 
 
 R package for adaptive correlation and covariance matrix shrinkage.

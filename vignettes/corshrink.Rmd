@@ -45,7 +45,7 @@ These approaches, however,  are not  well suited for handling large scale missin
 **CorShrink** is a companion package to **ashr** R package [@stephens2016false]. Before installing **CorShrink**, please make sure you have the latest version of **ashr**.
 
 ```{r install_ash, eval=FALSE}
-devtools::install_github("stephens999/ashr")
+install.packages("ashr")
 ```
 
 The other dependencies of this package include **SQUAREM**, **reshape2** and **Matrix**. Next we install **CorShrink**. 

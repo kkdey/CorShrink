@@ -29,8 +29,8 @@ band.mat <- function(a, p, K=1, permu=c(1:p)){
 }
 
 # simulation parameters
-n = 200
-p = 50
+n = 50
+p = 200
 obj = band.mat(a=0.5, p, K = 1)
 
 library(corrplot)
@@ -48,7 +48,10 @@ Sig.half = obj$Sigma.half
 Ome.true = obj$Omega
 X.mat = make.data(Sig.half, n, p, seed = 1000)
 
-pcor2 <- pCorShrinkData(X.mat, ash.control = list(mixcompdist="normal", control = list(maxiter=1000)))
+pcor2 <- pCorShrinkData(X.mat,
+                        reg_type = "lm",
+                        glmnet_alpha = 1,
+                        ash.control = list(mixcompdist="normal", control = list(maxiter=1000)))
 corrplot(as.matrix(pcor2), diag = FALSE,
          col = colorRampPalette(col2)(200),
          tl.pos = "td", tl.cex = 0.9, tl.col = "black",

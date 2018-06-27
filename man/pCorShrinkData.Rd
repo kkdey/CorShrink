@@ -2,57 +2,46 @@
 % Please edit documentation in R/pCorShrinkData.R
 \name{pCorShrinkData}
 \alias{pCorShrinkData}
-\title{Adaptive shrinkage of a partial correlation matrix}
+\title{Adaptive shrinkage of partial correlations from a data matrix}
 \usage{
-pCorShrinkData(data, type = c("no_bag", "bag_cor", "bag_pcor"), nbags = 10,
-  nboot = 50, thresh_up = 0.99, thresh_down = -0.99, tol = 1e-06,
-  report_model = FALSE, ash.control = list())
+pCorShrinkData(dat, permu_type = c("random", "ordered"), thresh_up = 0.99,
+  thresh_down = 0.01, ash.control = list())
 }
 \arguments{
-\item{data}{The samples by features data matrix. May contain NA values.}
+\item{dat}{The samples by features data matrix. Does not permit NA entries in X.}
 
-\item{type}{The type of bagging method used, if at all, for estimating the
-partial corelation matrix. The three possible types are -
-\code{no_bag}, \code{bag_cor} and \code{bag_pcor} - indicating
-if bagging is at all used, or if is performed at the level of
-correlations before taking partial correlation matroix on the
-bagged correlation values, or at the level of partial correlations
-directly.}
+\item{permu_type}{Determines if the columns of the data matrix (the features)
+are permuted randomly before blocking in the ISEE algorithm
+[see reference] or not.Takes one of two character input values
+- "random" and "ordered" - depending on if the columns are permuted
+or not.}
 
-\item{nbags}{If \code{type} not equal to \code{no_bag}, how many bootstrap
-samples are generated to get the bagging estimate.}
+\item{thresh_up}{Upper threshold for correlations. Defaults to 0.99}
 
-\item{nboot}{The number of bootstrap samples used to compute the bootstrap
-standard errors of the partial correlations used for shrinking
-in \code{CorShrink}.}
-
-\item{thresh_up}{Upper threshold for correlations in \code{cormat}. Defaults to 0.99}
-
-\item{thresh_down}{Lower threshold for correlations in \code{cormat}. Defaults to -0.99}
-
-\item{tol}{The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
-positive definite matrix before applying PD completion.}
-
-\item{report_model}{if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
-Defaults to FALSE.}
+\item{thresh_down}{Lower threshold for correlations. Defaults to -0.99.}
 
 \item{ash.control}{The control parameters for adaptive shrinkage}
 }
 \value{
-If \code{report_model = FALSE}, returns the adaptively shrunk
-        partial correlation matrix. If \code{report_model = TRUE}, then the
-        function also returns all the details of the adaptive shrinkage model
-        output.
+Returns an adaptively shrunk version of the inverse covariance matrix and
+        the partial correlation matrix estimate.
 }
 \description{
-This function performs adaptive shrinkage of a matrix of
-partial correlations using a similar model as \code{CorShrinkMatrix}, but
-with the option of being aided by bagging on the data matrix.
+Performs adaptive shrinkage of the sample inverse covariances and
+consequently partial correlation matrix starting from a data matrix ( no NA
+permitted unlike \code{CorShrinkData}). The procedure of shrinkage combines
+inverse covariance derivations from the ISEE algorithm of [Fan and Lv, 2016]
+with the \code{CorShrink} formulation.
 }
 \references{
 False Discovery Rates: A New Deal. Matthew Stephens bioRxiv 038216;
              doi: http://dx.doi.org/10.1101/038216
+             Fan, Y. and Lv, J., 2016. Innovated scalable efficient estimation
+             in ultra-large Gaussian graphical models. The Annals of Statistics, 44(5), pp.2098-2126.
 }
 \keyword{adaptive}
 \keyword{correlation}
+\keyword{covariance,}
+\keyword{inverse}
+\keyword{partial}
 \keyword{shrinkage,}

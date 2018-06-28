@@ -21,6 +21,8 @@
 #'
 #' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs
 #'                      the shrunken vector. Defaults to FALSE.
+#' @param maxiter The maximum number of iterations run for the adaptive shrinkage EM algorithm.
+#'                 Default is 1000.
 #' @param ash.control The control parameters for adaptive shrinkage
 #'
 #' @return If \code{report_model = FALSE}, returns an adaptively shrunk version
@@ -46,6 +48,7 @@ CorShrinkVector <- function (corvec, nsamp_vec,
                              zscore_sd_vec = NULL,
                              thresh_up = 0.99, thresh_down = - 0.99,
                              report_model = FALSE,
+                             maxiter = 1000,
                              ash.control = list()){
 
 
@@ -81,7 +84,7 @@ CorShrinkVector <- function (corvec, nsamp_vec,
                              outputlevel = 2, alpha = 0,
                              df = NULL, control=list(K = 1, method=3,
                              square=TRUE, step.min0=1, step.max0=1, mstep=4, kr=1,
-                             objfn.inc=1,tol=1.e-05, maxiter=100, trace=FALSE))
+                             objfn.inc=1,tol=1.e-05, maxiter=maxiter, trace=FALSE))
 
   ash.control <- utils::modifyList(ash.control.default, ash.control)
 

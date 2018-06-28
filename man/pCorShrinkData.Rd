@@ -4,8 +4,9 @@
 \alias{pCorShrinkData}
 \title{Adaptive shrinkage of partial correlations from a data matrix}
 \usage{
-pCorShrinkData(dat, permu_type = c("random", "ordered"), thresh_up = 0.99,
-  thresh_down = 0.01, ash.control = list())
+pCorShrinkData(dat, permu_type = c("random", "ordered"), reg_type = "lm",
+  glmnet_alpha = NULL, glmnet_nfolds = 5, thresh_up = 0.99,
+  thresh_down = -0.99, maxiter = 1000, ash.control = list())
 }
 \arguments{
 \item{dat}{The samples by features data matrix. Does not permit NA entries in X.}
@@ -16,9 +17,29 @@ are permuted randomly before blocking in the ISEE algorithm
 - "random" and "ordered" - depending on if the columns are permuted
 or not.}
 
+\item{reg_type}{Either equals \code{lm} or \code{glmnet} indicating the type of regression
+used for the ISEE algorithm. If the number of samples is less
+than the number of features, the \code{reg_type} automatically
+reverts to \code{glmnet}.}
+
+\item{glmnet_alpha}{The alpha parameter ( a value between 0 and 1) as in the argument \code{alpha}
+in \code{glmnet} or \code{cv.glmnet} function of the glmnet
+package. When \code{glmnet_alpha=1}, it assumes a Lasso
+(L1) penalty on the regression and for  \code{glmnet_alpha=0},
+ it assumes the ridge (L2) penalty. Only applicable when
+ \code{reg_type="glmnet"}. Defaults to 1.}
+
+\item{glmnet_nfolds}{The number of folds of cross validation carried out in
+the \code{cv.glmnet} function of the glmnet package as
+part of the regression model estimation when
+ \code{reg_type="glmnet"}. Defaults to 5.}
+
 \item{thresh_up}{Upper threshold for correlations. Defaults to 0.99}
 
 \item{thresh_down}{Lower threshold for correlations. Defaults to -0.99.}
+
+\item{maxiter}{The maximum number of iterations run for the adaptive shrinkage EM algorithm.
+Default is 1000.}
 
 \item{ash.control}{The control parameters for adaptive shrinkage}
 }

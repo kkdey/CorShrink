@@ -24,8 +24,10 @@
 #'            positive definite matrix before applying PD completion.
 #' @param nboot The number of bootstrap samples if \code{sd_boot = TRUE}.
 #' @param image.control Control parameters for the image when \code{image = TRUE}.
-#' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
-#'                      Defaults to FALSE.
+#' @param report_model  if TRUE, outputs the full adaptive shrinkage output,
+#'                      else outputs the shrunken vector. Defaults to FALSE.
+#' @param maxiter The maximum number of iterations run for the adaptive shrinkage EM algorithm.
+#'                 Default is 1000.
 #' @param ash.control The control parameters for adaptive shrinkage
 #'
 #' @return Returns an adaptively shrunk version of the sample correlations matrix.
@@ -49,6 +51,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                           nboot = 50,
                           image.control = list(),
                           report_model = FALSE,
+                          maxiter = 1000,
                           ash.control = list()){
 
   if(missing(cor_method)){
@@ -88,6 +91,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                              tol=tol,
                              image.control = image.control,
                              report_model = report_model,
+                             maxiter = maxiter,
                              ash.control = ash.control)
     }else if (type == "pcor"){
       out <- CorShrinkMatrix(cormat, nsamp, zscore_sd = NULL,
@@ -96,6 +100,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                              tol=tol,
                              image.control = image.control,
                              report_model = report_model,
+                             maxiter = maxiter,
                              ash.control = ash.control)
       out$cor <- corpcor::cor2pcor(out$cor)
     }
@@ -109,6 +114,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                              tol=tol,
                              image.control = image.control,
                              report_model = report_model,
+                             maxiter = maxiter,
                              ash.control = ash.control)
     }else if (type == "cor"){
       zscore_sd <- bootcorSE_calc(data, cor_method = cor_method, nboot = nboot)
@@ -118,6 +124,7 @@ CorShrinkData <- function(data,  sd_boot = FALSE,
                              tol=tol,
                              image.control = image.control,
                              report_model = report_model,
+                             maxiter = maxiter,
                              ash.control = ash.control)
     }
   }

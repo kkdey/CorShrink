@@ -36,6 +36,8 @@
 #'
 #' @param report_model  if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
 #'                      Defaults to FALSE.
+#' @param maxiter The maximum number of iterations run for the adaptive shrinkage EM algorithm.
+#'                Default is 1000.
 #' @param ash.control The control parameters for adaptive shrinkage
 #'
 #' @return If \code{report_model = FALSE}, returns a list with adaptively shrunk version
@@ -72,6 +74,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                         tol=1e-06,
                         image.control = list(),
                         report_model = FALSE,
+                        maxiter = 1000,
                         ash.control = list())
 {
 
@@ -132,7 +135,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                              outputlevel = 2, alpha = 0,
                              df = NULL, control = list(K = 1,
                              method=3, square=TRUE, step.min0=1, step.max0=1,
-                             mstep=4, kr=1, objfn.inc=1,tol=1.e-05, maxiter=100, trace=FALSE))
+                             mstep=4, kr=1, objfn.inc=1,tol=1.e-05, maxiter=maxiter, trace=FALSE))
   ash.control <- modifyList(ash.control.default, ash.control)
 
   ##################   vectorise the correlation matrix  ###################

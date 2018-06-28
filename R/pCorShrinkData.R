@@ -16,9 +16,20 @@
 #'                 used for the ISEE algorithm. If the number of samples is less
 #'                 than the number of features, the \code{reg_type} automatically
 #'                 reverts to \code{glmnet}.
-#'
+#' @param glmnet_alpha The alpha parameter ( a value between 0 and 1) as in the argument \code{alpha}
+#'                     in \code{glmnet} or \code{cv.glmnet} function of the glmnet
+#'                     package. When \code{glmnet_alpha=1}, it assumes a Lasso
+#'                     (L1) penalty on the regression and for  \code{glmnet_alpha=0},
+#'                      it assumes the ridge (L2) penalty. Only applicable when
+#'                      \code{reg_type="glmnet"}. Defaults to 1.
+#' @param glmnet_nfolds The number of folds of cross validation carried out in
+#'                      the \code{cv.glmnet} function of the glmnet package as
+#'                      part of the regression model estimation when
+#'                       \code{reg_type="glmnet"}. Defaults to 5.
 #' @param thresh_up Upper threshold for correlations. Defaults to 0.99
 #' @param thresh_down Lower threshold for correlations. Defaults to -0.99.
+#' @param maxiter The maximum number of iterations run for the adaptive shrinkage EM algorithm.
+#'                 Default is 1000.
 #' @param ash.control The control parameters for adaptive shrinkage
 #'
 #' @return Returns an adaptively shrunk version of the inverse covariance matrix and
@@ -43,6 +54,7 @@ pCorShrinkData <- function(dat,
                            glmnet_nfolds = 5,
                            thresh_up = 0.99,
                            thresh_down = -0.99,
+                           maxiter = 1000,
                            ash.control = list()){
 
   if(nrow(dat) < ncol(dat) & reg_type == "lm"){
@@ -75,6 +87,7 @@ pCorShrinkData <- function(dat,
   i.index <- seq(1,ncol(dat)-1,by=K)
   dat_tilde = matrix(0, nrow=nrow(dat), ncol=ncol(dat))
   p = ncol(dat)
+  n = nrow(dat)
 
   for (k in 1:length(i.index)){
     i = i.index[k]
@@ -110,6 +123,7 @@ pCorShrinkData <- function(dat,
   out <- CorShrinkData(dat_tilde, image = "null", sd_boot = FALSE,
                        thresh_up = thresh_up,
                        thresh_down = thresh_down,
+                       maxiter = maxiter,
                        ash.control = ash.control)
   pcorShrink <- -as.matrix(out$cor)
   diag(pcorShrink) <- 1

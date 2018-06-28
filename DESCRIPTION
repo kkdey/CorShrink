@@ -18,6 +18,7 @@ Depends:
     R (>= 3.2),
 Imports:
     ashr,
+    glmnet,
     SQUAREM,
     reshape2,
     methods,

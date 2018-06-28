@@ -5,7 +5,8 @@
 \title{Adaptive shrinkage of a vector of correlations}
 \usage{
 CorShrinkVector(corvec, nsamp_vec, zscore_sd_vec = NULL, thresh_up = 0.99,
-  thresh_down = -0.99, report_model = FALSE, ash.control = list())
+  thresh_down = -0.99, report_model = FALSE, maxiter = 1000,
+  ash.control = list())
 }
 \arguments{
 \item{corvec}{A vector of sample correlations (may contain NAs)}
@@ -25,6 +26,9 @@ Fisher z-scores is used using \code{nsamp_vec}.}
 
 \item{report_model}{if TRUE, outputs the full adaptive shrinkage output, else outputs
 the shrunken vector. Defaults to FALSE.}
+
+\item{maxiter}{The maximum number of iterations run for the adaptive shrinkage EM algorithm.
+Default is 1000.}
 
 \item{ash.control}{The control parameters for adaptive shrinkage}
 }

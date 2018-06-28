@@ -7,7 +7,7 @@
 CorShrinkMatrix(cormat, nsamp = NULL, zscore_sd = NULL, thresh_up = 0.99,
   thresh_down = -0.99, image = c("both", "original", "corshrink", "output",
   "null"), tol = 1e-06, image.control = list(), report_model = FALSE,
-  ash.control = list())
+  maxiter = 1000, ash.control = list())
 }
 \arguments{
 \item{cormat}{A matrix of pairwise correlations - not necessarily a correlation matrix.
@@ -45,6 +45,9 @@ positive definite matrix before applying PD completion.}
 
 \item{report_model}{if TRUE, outputs the full adaptive shrinkage output, else outputs the shrunken vector.
 Defaults to FALSE.}
+
+\item{maxiter}{The maximum number of iterations run for the adaptive shrinkage EM algorithm.
+Default is 1000.}
 
 \item{ash.control}{The control parameters for adaptive shrinkage}
 }

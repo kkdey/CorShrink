@@ -178,6 +178,58 @@ out <- CorShrinkMatrix(pairwise_corr_matrix, zscore_sd = zscoreSDmat, image = "b
                        image.control = list(tl.cex = 0.8))
 ```
 
+## *pCorShrink*
+
+We can use the *pCorShrinkData* function to adaptively shrink partial correlations. This approach is 
+analogous to GLASSO, CLIME and other sparse graphical model methods, but **pCorShrinkData** shrinks the edge weights in the graph to 0 adaptively.
+
+As per current implementation *pCorShrinkData* does not handle missing observations in the data matrix. So, we demonstrate the use of this method on a fully observed simulated data.
+
+### Simulated setting
+
+```{r warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=50, fig.width=18, fig.height=15}
+library(Matrix)
+n <- 500
+P <- 100
+block <- 10
+mat <- 0.3*diag(1,block) + 0.7*rep(1,block) %*% t(rep(1, block))
+Sigma <-   Matrix::bdiag(mat, mat, mat, mat, mat, mat, mat, mat, mat, mat)
+corSigma <- cov2cor(Sigma)
+pcorSigma <- corpcor::cor2pcor(corSigma)  ##  true partial correlation matrix
+```
+
+### Generate Data
+
+```{r}
+##################  Generate data   ################
+
+data <- MASS::mvrnorm(n,rep(0,P),Sigma)
+```
+
+### pCorShrinkData
+
+```{r warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=50, fig.width=18, fig.height=15}
+out1 <- pCorShrinkData(data, reg_type = "lm")
+```
+
+### Visualization
+
+```{r warning = FALSE, message=FALSE, fig.align = "left", fig.show="asis", dpi=50, fig.width=10,  fig.height=8}
+library(corrplot)
+col2 <- c("blue", "white", "red")
+par(mfrow=c(1,2))
+corrplot::corrplot(pcorSigma, diag = FALSE,
+         col = colorRampPalette(col2)(200),
+         tl.pos = "td", tl.cex = 0.2, tl.col = "black",
+         rect.col = "white",na.label.col = "white", mar=c(2,2,2,2),
+         method = "color", type = "upper", title = "original")
+corrplot::corrplot(out1, diag = FALSE,
+         col = colorRampPalette(col2)(200),
+         tl.pos = "td", tl.cex = 0.2, tl.col = "black",
+         rect.col = "white",na.label.col = "white", mar=c(2,2,2,2),
+         method = "color", type = "upper", title = "pCorShrink")
+```
+
 ---
 
 # Extras

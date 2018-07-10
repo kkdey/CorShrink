@@ -2,7 +2,7 @@ Package: CorShrink
 Type: Package
 Encoding: UTF-8
 Title: Adaptive Shrinkage of Correlation and Covariance Matrices
-Version: 0.1-3
+Version: 0.1-4
 Date: 2018-02-20
 Authors@R: c(person("Kushal","Dey",role=c("aut","cre"),
                     email="kkdey@uchicago.edu"),
@@ -25,7 +25,8 @@ Imports:
     Matrix,
     gridExtra,
     corrplot,
-    corpcor
+    corpcor,
+    MASS
 Suggests:
     knitr,
     glasso,

@@ -43,6 +43,7 @@
 #' @importFrom stats cor sd lm coef
 #' @importFrom corpcor cor2pcor
 #' @importFrom glmnet cv.glmnet
+#' @importFrom MASS mvrnorm
 #' @export
 #'
 

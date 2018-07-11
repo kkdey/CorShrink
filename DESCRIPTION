@@ -2,7 +2,7 @@ Package: CorShrink
 Type: Package
 Encoding: UTF-8
 Title: Adaptive Shrinkage of Correlation and Covariance Matrices
-Version: 0.1-4
+Version: 0.1-6
 Date: 2018-02-20
 Authors@R: c(person("Kushal","Dey",role=c("aut","cre"),
                     email="kkdey@uchicago.edu"),
@@ -11,9 +11,10 @@ Authors@R: c(person("Kushal","Dey",role=c("aut","cre"),
 Maintainer: Kushal Dey <kkdey@uchicago.edu>
 Description: Performs adaptive shrinkage of correlation and covariance
     matrices using a mixture model prior over the Fisher
-    z-transformation of the correlations. A separate shrinkage
-    intensity may be specifiedfor each cell of the correlation or the
-    covariance table.
+    z-transformation of the correlations. It allows separate shrinkage
+    intensity for each cell of the correlation matrix. Can also we flexibly 
+    extended to correlation like quantities such as cosine similarities in
+    word2vec models and to partial correlations in conditional graph estimation.
 Depends:
     R (>= 3.2),
 Imports:

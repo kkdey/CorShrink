@@ -3,7 +3,7 @@ Type: Package
 Encoding: UTF-8
 Title: Adaptive Shrinkage of Correlation and Covariance Matrices
 Version: 0.1-6
-Date: 2018-02-20
+Date: 2018-07-12
 Author: c(person("Kushal","Dey",role=c("aut","cre"), email="kkdey@uchicago.edu"),
           person("Matthew","Stephens",role="aut"),
 	        person("Peter","Carbonetto",role="ctb"))
@@ -13,7 +13,8 @@ Description: Performs adaptive shrinkage of correlation and covariance
     correlations. It allows separate shrinkage intensity for each cell of the 
     correlation matrix. Can also we flexibly  extended to correlation like 
     quantities such as cosine similarities in word2vec models and to partial 
-    correlations in conditional graph estimation.
+    correlations in conditional graph estimation. For details on methods, refer
+    to Stephens (2017) <doi:https://doi.org/10.1093/biostatistics/kxw041>.
 Depends:
     R (>= 3.2),
 Imports:

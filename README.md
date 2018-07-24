@@ -21,7 +21,7 @@ License](http://www.gnu.org/licenses/gpl.html). See the
 ## Citing this work
 
 If you find that this R package is useful for your work, please cite
-the following paper: 
+the following papers: 
 
 >Stephens, M. 2016. False Discovery Rates: A New Deal. doi: http://dx.doi.org/10.1101/038216
 
@@ -100,6 +100,9 @@ Walk through some more detailed examples in the
 ```R
 vignette("corshrink")
 ```
+
+If you want to reproduce the analysis from our [paper](https://www.biorxiv.org/content/early/2018/07/13/368316), please check 
+the codes and available data [here](https://kkdey.github.io/CorShrink-pages/workflow_project.html).
 
 ## Credits
 

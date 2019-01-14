@@ -21,6 +21,7 @@ Imports:
     ashr,
     glmnet,
     SQUAREM,
+    CVXR,
     reshape2,
     methods,
     Matrix,
@@ -39,4 +40,4 @@ License: GPL (>= 2)
 NeedsCompilation: no
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.1

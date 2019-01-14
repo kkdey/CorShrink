@@ -4,9 +4,9 @@
 \alias{CorShrinkVector}
 \title{Adaptive shrinkage of a vector of correlations}
 \usage{
-CorShrinkVector(corvec, nsamp_vec, zscore_sd_vec = NULL, thresh_up = 0.99,
-  thresh_down = -0.99, report_model = FALSE, maxiter = 1000,
-  ash.control = list())
+CorShrinkVector(corvec, nsamp_vec, zscore_sd_vec = NULL,
+  thresh_up = 0.99, thresh_down = -0.99, report_model = FALSE,
+  maxiter = 1000, ash.control = list())
 }
 \arguments{
 \item{corvec}{A vector of sample correlations (may contain NAs)}

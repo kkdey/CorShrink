@@ -4,9 +4,9 @@
 \alias{pCorShrinkData2}
 \title{Adaptive shrinkage of a partial correlation matrix}
 \usage{
-pCorShrinkData2(data, type = c("no_bag", "bag_cor", "bag_pcor"), nbags = 10,
-  nboot = 50, thresh_up = 0.99, thresh_down = -0.99, tol = 1e-06,
-  report_model = FALSE, ash.control = list())
+pCorShrinkData2(data, type = c("no_bag", "bag_cor", "bag_pcor"),
+  nbags = 10, nboot = 50, thresh_up = 0.99, thresh_down = -0.99,
+  tol = 1e-06, report_model = FALSE, ash.control = list())
 }
 \arguments{
 \item{data}{The samples by features data matrix. May contain NA values.}

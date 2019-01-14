@@ -4,9 +4,10 @@
 \alias{pCorShrinkData}
 \title{Adaptive shrinkage of partial correlations from a data matrix}
 \usage{
-pCorShrinkData(dat, permu_type = c("random", "ordered"), reg_type = "lm",
-  glmnet_alpha = NULL, glmnet_nfolds = 5, thresh_up = 0.99,
-  thresh_down = -0.99, maxiter = 1000, ash.control = list())
+pCorShrinkData(dat, permu_type = c("random", "ordered"),
+  reg_type = "lm", glmnet_alpha = NULL, glmnet_nfolds = 5,
+  thresh_up = 0.99, thresh_down = -0.99, maxiter = 1000,
+  ash.control = list())
 }
 \arguments{
 \item{dat}{The samples by features data matrix. Does not permit NA entries in X.}

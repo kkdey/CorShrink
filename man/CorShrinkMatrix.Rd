@@ -4,10 +4,11 @@
 \alias{CorShrinkMatrix}
 \title{Adaptive shrinkage of a matrix of pairwise correlations.}
 \usage{
-CorShrinkMatrix(cormat, nsamp = NULL, zscore_sd = NULL, thresh_up = 0.99,
-  thresh_down = -0.99, image = c("both", "original", "corshrink", "output",
-  "null"), tol = 1e-06, image.control = list(), report_model = FALSE,
-  maxiter = 1000, ash.control = list())
+CorShrinkMatrix(cormat, nsamp = NULL, zscore_sd = NULL,
+  thresh_up = 0.99, thresh_down = -0.99, image = c("both",
+  "original", "corshrink", "output", "null"), tol = 1e-06,
+  image.control = list(), report_model = FALSE, maxiter = 1000,
+  ash.control = list())
 }
 \arguments{
 \item{cormat}{A matrix of pairwise correlations - not necessarily a correlation matrix.

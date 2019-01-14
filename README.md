@@ -23,7 +23,8 @@ License](http://www.gnu.org/licenses/gpl.html). See the
 If you find that this R package is useful for your work, please cite
 the following papers: 
 
->Stephens, M. 2016. False Discovery Rates: A New Deal. doi: http://dx.doi.org/10.1101/038216
+Dey, Kushal K and Stephens, Matthew. CorShrink : Empirical Bayes shrinkage estimation of correlations, with applications.
+2018. bioRxiv. Cold Spring Harbor Laboratory. 10.1101/368316. https://www.biorxiv.org/content/early/2018/07/24/368316.full.pdf
 
 
 ## Methods Overview

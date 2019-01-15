@@ -1,14 +1,18 @@
-#' @title Box-Shrinkage of partial correlations from a data matrix with missing data
-#' @description Performs a box shrinkage of partial correlations from a data matrix with missing data
+#' @title Adaptive regularized GLASSO of partial correlations from a data matrix with missing data
+#' @description Performs an adaptove regularized GLASSO of partial correlations from a data matrix with missing data
 #' using the Fisher Z-score formulation
 #'
 #' @param data_with_missing The samples by features data matrix. May contain NA values.
-#' @param alpha The shrinkage intensity
-#' @param lambda The weighting of the constraint in the shrinkage. Default lambda taken to be 1.
+#' @param alpha The tuning parameter
+#' @param expo The exponent on the scaling used in the adaptive regularization of tuning parameter
+#' @param shift The shift in the scaling used in adaptive regularization of tuning parameter
+#' @param lambda The weight on the constraint for sample size bias
+#' @param max_iter The maximum number of iterations for the adaptive GLASSO run.
+#' @param epsilon The tolerance level for the relative error specifying when to stop
 #'
 #' @examples
 #' data("sample_by_feature_data")
-#' out = iCorShrinkData(sample_by_feature_data, alpha = 0.1)
+#' out = iCorShrink2Data(sample_by_feature_data, alpha = 0.1)
 #' corrplot::corrplot(as.matrix(out), diag = FALSE,
 #'         col = colorRampPalette(c("blue", "white", "red"))(200),
 #'         tl.pos = "td", tl.cex = 0.4, tl.col = "black",
@@ -21,9 +25,13 @@
 #' @importFrom stats cov cor sd cov2cor
 #' @export
 
-iCorShrinkData <- function(data_with_missing,
-                       alpha,
-                       lambda = 1){
+iCorShrink2Data <- function(data_with_missing,
+                            alpha,
+                            expo = 0.05,
+                            shift = 0.01,
+                            lambda = 0.8,
+                            max_iter = 10,
+                            epsilon = 0.001){
 
   library(CVXR)
   if(missing(alpha)){
@@ -55,7 +63,7 @@ iCorShrinkData <- function(data_with_missing,
   pairwise_zscores = apply(pairwise_cor, c(1,2), function(x) return (0.5*log((1+x)/(1-x))))
   diag(pairwise_zscores) = 0
 
-   ################  Bound on the covariances   ##########################
+  ################  Bound on the covariances   ##########################
 
   bound1 = 12*exp(2*pairwise_zscores)/((exp(2*pairwise_zscores) + 1)^2)
   zscores_sd_1 = sqrt(1/(common_samples - 1) + 2/(common_samples - 1)^2)
@@ -69,17 +77,30 @@ iCorShrinkData <- function(data_with_missing,
   diag(delta) = 0
   delta_cov = diag(sigma_vals) %*% delta %*% diag(sigma_vals)
 
-  Omega <- Semidef(dim(common_samples)[1])
-  scale <- abs(alpha) + lambda*delta_cov
-  obj = Minimize(-log_det(Omega) + matrix_trace(Omega %*% pairwise_cov) + sum(mul_elemwise(scale, abs(Omega))))
-  prob <- Problem(obj)
-  result <- solve(prob)
-  R_hat <- base::solve(result$getValue(Omega))
-  Omega_hat <- result$getValue(Omega)
-  Omega_hat[abs(Omega_hat) <= 1e-4] <- 0
+
+  #################################  Use adaptive regularized GLASSO  ############################
+
+  Weight = matrix(1, nrow(delta_cov), ncol(delta_cov))
+  Omega_hat = diag(nrow(delta_cov))
+  for(iter in 1:max_iter){
+    Omega_hat_old = Omega_hat
+    Omega <- Semidef(dim(common_samples)[1])
+    scale <- Weight*abs(alpha) + lambda*delta_cov
+    obj = Minimize(-log_det(Omega) + matrix_trace(Omega %*% pairwise_cov) + sum(mul_elemwise(scale, abs(Omega))))
+    prob <- Problem(obj)
+    result <- solve(prob)
+    R_hat <- base::solve(result$getValue(Omega))
+    Omega_hat <- result$getValue(Omega)
+    rel_error = sqrt(sum((Omega_hat - Omega_hat_old)^2))/sqrt(sum(Omega_hat^2))
+    cat("The relative error in estimated Inverse correlation matrix between last two runs is", rel_error, "\n")
+    Weight = 1/((abs(Omega_hat))^{expo} + shift)
+    if(rel_error < 1e-03){
+      break
+    }
+  }
+  cat("Finished iterations!")
   PR_hat = -cov2cor(as.matrix(Omega_hat))
   diag(PR_hat) = 1
   return(PR_hat)
 }
-
 

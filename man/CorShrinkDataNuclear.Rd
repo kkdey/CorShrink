@@ -28,13 +28,13 @@ Performs a nuclear norm penalization of the coavriance matrix.
 }
 \examples{
 data("sample_by_feature_data")
-out = CorShrinkDataNuclear(sample_by_feature_data, method = "GD", alpha = 1, stepsize = 1e-04, max_iter = 50)
+out = CorShrinkDataNuclear(sample_by_feature_data, method = "GD", stepsize = 1e-04, max_iter = 50)
 corrplot::corrplot(as.matrix(out$estR), diag = FALSE,
         col = colorRampPalette(c("blue", "white", "red"))(200),
         tl.pos = "td", tl.cex = 0.4, tl.col = "black",
         rect.col = "white",na.label.col = "white",
         method = "color", type = "upper")
-out = CorShrinkDataNuclear(sample_by_feature_data, method = "ADAM", alpha = 1, stepsize = 1e-2, max_iter = 50)
+out = CorShrinkDataNuclear(sample_by_feature_data, method = "ADAM", stepsize = 1e-2, max_iter = 50)
 corrplot::corrplot(as.matrix(out$estR), diag = FALSE,
         col = colorRampPalette(c("blue", "white", "red"))(200),
         tl.pos = "td", tl.cex = 0.4, tl.col = "black",

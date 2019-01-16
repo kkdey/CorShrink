@@ -2,6 +2,7 @@
 
 export(CorShrink2Data)
 export(CorShrink2DataLoss)
+export(CorShrink2DataSlack)
 export(CorShrinkData)
 export(CorShrinkDataNuclear)
 export(CorShrinkMatrix)

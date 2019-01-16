@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' data("sample_by_feature_data")
-#' out = iCorShrink2Data(sample_by_feature_data, alpha = 0.1)
+#' out = iCorShrink2Data(sample_by_feature_data, alpha = 0.1, max_iter = 3)
 #' corrplot::corrplot(as.matrix(out), diag = FALSE,
 #'         col = colorRampPalette(c("blue", "white", "red"))(200),
 #'         tl.pos = "td", tl.cex = 0.4, tl.col = "black",

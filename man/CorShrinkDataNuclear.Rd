@@ -4,19 +4,17 @@
 \alias{CorShrinkDataNuclear}
 \title{Nuclear norm penalization of the covariance matrix}
 \usage{
-CorShrinkDataNuclear(data_with_missing, method, alpha = 0.01,
-  stepsize = 0.001, max_iter = 1000, tol = 1e-04, verbose = TRUE)
+CorShrinkDataNuclear(data_with_missing, alpha = 0.01, stepsize = 1,
+  max_iter = 1000, tol = 1e-04, verbose = TRUE)
 }
 \arguments{
 \item{data_with_missing}{The samples by features data matrix. May contain NA values.}
 
-\item{method}{Either gradient descent (GD) or ADAM method of optimization.}
+\item{alpha}{The tuning parameter for the gradient descent(GD) iteration update.}
 
-\item{alpha}{The tuning parameter for the gradientdescent/ADAM iteration update.}
+\item{stepsize}{The stepsize for the gradient descent algorithms.}
 
-\item{stepsize}{The stepsize for the ADAM or gradient descent algorithms.}
-
-\item{max_iter}{The maximum number of iterations for the ADAM/GD.}
+\item{max_iter}{The maximum number of iterations for the GD.}
 
 \item{tol}{The tolerance level when to stop the iterations.}
 
@@ -28,18 +26,13 @@ Performs a nuclear norm penalization of the coavriance matrix.
 }
 \examples{
 data("sample_by_feature_data")
-out = CorShrinkDataNuclear(sample_by_feature_data, method = "GD", stepsize = 1e-04, max_iter = 50)
+out = CorShrinkDataNuclear(sample_by_feature_data, stepsize = 0.01, max_iter = 50)
 corrplot::corrplot(as.matrix(out$estR), diag = FALSE,
         col = colorRampPalette(c("blue", "white", "red"))(200),
         tl.pos = "td", tl.cex = 0.4, tl.col = "black",
         rect.col = "white",na.label.col = "white",
         method = "color", type = "upper")
-out = CorShrinkDataNuclear(sample_by_feature_data, method = "ADAM", stepsize = 1e-2, max_iter = 50)
-corrplot::corrplot(as.matrix(out$estR), diag = FALSE,
-        col = colorRampPalette(c("blue", "white", "red"))(200),
-        tl.pos = "td", tl.cex = 0.4, tl.col = "black",
-        rect.col = "white",na.label.col = "white",
-        method = "color", type = "upper")
+
 }
 \keyword{box}
 \keyword{correlation}

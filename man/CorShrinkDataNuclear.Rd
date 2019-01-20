@@ -26,7 +26,8 @@ Performs a nuclear norm penalization of the coavriance matrix.
 }
 \examples{
 data("sample_by_feature_data")
-out = CorShrinkDataNuclear(sample_by_feature_data, stepsize = 0.01, max_iter = 50)
+out = CorShrinkDataNuclear(sample_by_feature_data, stepsize = 1, max_iter = 100)
+plot(svd(out$estS)$d)
 corrplot::corrplot(as.matrix(out$estR), diag = FALSE,
         col = colorRampPalette(c("blue", "white", "red"))(200),
         tl.pos = "td", tl.cex = 0.4, tl.col = "black",

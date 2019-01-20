@@ -11,7 +11,8 @@
 #'
 #' @examples
 #' data("sample_by_feature_data")
-#' out = CorShrinkDataNuclear(sample_by_feature_data, stepsize = 0.01, max_iter = 50)
+#' out = CorShrinkDataNuclear(sample_by_feature_data, stepsize = 1, max_iter = 100)
+#' plot(svd(out$estS)$d)
 #' corrplot::corrplot(as.matrix(out$estR), diag = FALSE,
 #'         col = colorRampPalette(c("blue", "white", "red"))(200),
 #'         tl.pos = "td", tl.cex = 0.4, tl.col = "black",
@@ -62,19 +63,13 @@ CorShrinkDataNuclear <- function(data_with_missing,
 
   estimate_cor = pairwise_cor + bias_cor
   ########################  Optimization (ADAM or Gradient Descent)  ###########################
-
   Sigma = diag(sigma_vals) %*% diag(dim(data_with_missing)[2]) %*% diag(sigma_vals)
   estimate_cov = diag(sigma_vals) %*% estimate_cor %*% diag(sigma_vals)
   sd_cov = diag(sigma_vals) %*% sd_cor %*% diag(sigma_vals)
   inverse_sd_cov = 1/sd_cov
   diag(inverse_sd_cov) = 0
 
-  mt= 0
-  vt = 0
-  beta1=0.9
-  beta2 = 0.99
-
-  kappa <- 1/max(2*inverse_sd_cov)
+  kappa <- 1/max(2*abs(inverse_sd_cov)^2)
 
   for(iter in 1:max_iter){
     objective = sum((Sigma - estimate_cov)^2*inverse_sd_cov^2) + alpha*sum(diag(Sigma))
@@ -83,14 +78,20 @@ CorShrinkDataNuclear <- function(data_with_missing,
     }
     gradient = 2*(Sigma - estimate_cov)*inverse_sd_cov^2 + alpha*diag(dim(Sigma)[1])
     Sigma_tilde = Sigma - stepsize*kappa*gradient
-    Sigma_tilde_tilde = as.matrix(Matrix::nearPD(Sigma_tilde)$mat)
+    Sigma_tilde = (Sigma_tilde + t(Sigma_tilde))/2
+    eig_decomp = eigen(Sigma_tilde)
+    Sigma_tilde_tilde = eig_decomp$vectors %*% diag(pmax(eig_decomp$values, 1e-08)) %*% t(eig_decomp$vectors)
     rel_measure = sum((Sigma_tilde_tilde - Sigma)^2)
     Sigma= Sigma_tilde_tilde
     if(rel_measure < tol){
       break
     }
   }
+  sigma2 = mean(diag(estimate_cov)- diag(Sigma))
+  if(sigma2 > 0){
+    Sigma = Sigma + diag(sigma2, nrow(Sigma))
+  }
   R = cov2cor(Sigma)
-  ll = list("estS" = Sigma, "estR" = R,  "obj" = objective)
+  ll = list("estS" = Sigma, "estR" = R,  "obj" = objective, "noise_var" = sigma2)
   return(ll)
 }

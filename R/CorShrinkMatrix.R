@@ -30,7 +30,7 @@
 #'              no image is output. Defaults to "both".
 #' @param tol The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 #'            positive definite matrix before applying PD completion.
-#'
+#' @param dosym If TRUE, will return a symmetric correlation matrix, otherwise symmetry may be slightly off.
 #' @param image.control Control parameters for the image when
 #'                      \code{image_original = TRUE} and/or \code{image_corshrink = TRUE}.
 #'
@@ -72,6 +72,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                         thresh_up = 0.99, thresh_down = - 0.99,
                         image = c("both", "original", "corshrink", "output", "null"),
                         tol=1e-06,
+                        dosym=TRUE,
                         image.control = list(),
                         report_model = FALSE,
                         maxiter = 1000,
@@ -207,9 +208,9 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
 
   ###############  Positive definite matrix completion of corShrink #############
 
-  pd_completion <- Matrix::nearPD(as.matrix(ash_cor_only), conv.tol=tol);
+  pd_completion <- Matrix::nearPD(as.matrix(ash_cor_only), conv.tol=tol, doSym = TRUE);
   ash_cor_PD <- sweep(pd_completion$mat,diag(as.matrix(pd_completion$mat)), MARGIN=1,"/")
-
+  if(dosym){ash_cor_PD = (ash_cor_PD + t(ash_cor_PD))/2}
 
   if(is.null(rownames(cormat))){
     rownames(cormat) <- 1:dim(cormat)[1]

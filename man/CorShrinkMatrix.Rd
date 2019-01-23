@@ -7,8 +7,8 @@
 CorShrinkMatrix(cormat, nsamp = NULL, zscore_sd = NULL,
   thresh_up = 0.99, thresh_down = -0.99, image = c("both",
   "original", "corshrink", "output", "null"), tol = 1e-06,
-  image.control = list(), report_model = FALSE, maxiter = 1000,
-  ash.control = list())
+  dosym = TRUE, image.control = list(), report_model = FALSE,
+  maxiter = 1000, ash.control = list())
 }
 \arguments{
 \item{cormat}{A matrix of pairwise correlations - not necessarily a correlation matrix.
@@ -40,6 +40,8 @@ no image is output. Defaults to "both".}
 
 \item{tol}{The tolerance chosen to check how far apart the CorShrink matrix is from the nearest
 positive definite matrix before applying PD completion.}
+
+\item{dosym}{If TRUE, will return a symmetric correlation matrix, otherwise symmetry may be slightly off.}
 
 \item{image.control}{Control parameters for the image when
 \code{image_original = TRUE} and/or \code{image_corshrink = TRUE}.}

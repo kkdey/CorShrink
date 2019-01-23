@@ -36,7 +36,7 @@
 #'
 #' @examples
 #' data("sample_by_feature_data")
-#' out <- CorShrinkData(sample_by_feature_data, image = "both")
+#' out <- CorShrinkData(sample_by_feature_data, image = "null")
 #'
 #' @keywords adaptive shrinkage, correlation
 #' @importFrom stats cor sd

@@ -60,7 +60,7 @@ from a data matrix (possibly containing NAs).
 }
 \examples{
 data("sample_by_feature_data")
-out <- CorShrinkData(sample_by_feature_data, image = "both")
+out <- CorShrinkData(sample_by_feature_data, image = "null")
 
 }
 \references{

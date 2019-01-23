@@ -72,7 +72,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
                         thresh_up = 0.99, thresh_down = - 0.99,
                         image = c("both", "original", "corshrink", "output", "null"),
                         tol=1e-06,
-                        dosym=TRUE,
+                        dosym=FALSE,
                         image.control = list(),
                         report_model = FALSE,
                         maxiter = 1000,
@@ -208,7 +208,7 @@ CorShrinkMatrix <- function(cormat, nsamp = NULL,
 
   ###############  Positive definite matrix completion of corShrink #############
 
-  pd_completion <- Matrix::nearPD(as.matrix(ash_cor_only), conv.tol=tol, doSym = TRUE);
+  pd_completion <- Matrix::nearPD(as.matrix(ash_cor_only), conv.tol=tol, doSym = TRUE, corr=TRUE);
   ash_cor_PD <- sweep(pd_completion$mat,diag(as.matrix(pd_completion$mat)), MARGIN=1,"/")
   if(dosym){ash_cor_PD = (ash_cor_PD + t(ash_cor_PD))/2}
 

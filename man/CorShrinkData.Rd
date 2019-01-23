@@ -6,9 +6,9 @@
 \usage{
 CorShrinkData(data, sd_boot = FALSE, type = "cor", cor_method,
   thresh_up = 0.99, thresh_down = -0.99, image = c("both",
-  "original", "corshrink", "output", "null"), tol = 1e-06, nboot = 50,
-  image.control = list(), report_model = FALSE, maxiter = 1000,
-  ash.control = list())
+  "original", "corshrink", "output", "null"), tol = 1e-06,
+  dosym = TRUE, nboot = 50, image.control = list(),
+  report_model = FALSE, maxiter = 1000, ash.control = list())
 }
 \arguments{
 \item{data}{The samples by features data matrix. May contain NA values.}
